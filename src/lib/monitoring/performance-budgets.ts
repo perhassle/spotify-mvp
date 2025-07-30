@@ -222,7 +222,7 @@ export function calculatePerformanceScore(metrics: Record<string, number>): numb
   let totalScore = 0;
   let totalWeight = 0;
 
-  Object.entries(weights).forEach(([metric, weight]) => {
+  Object.entries(weights).forEach(([metric, weight]: [string, number]) => {
     if (metric in metrics) {
       const value = metrics[metric];
       if (value === undefined) return; // Skip if no value

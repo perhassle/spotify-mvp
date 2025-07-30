@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useRef, useCallback, useState } from 'react';
+import type { DependencyList } from 'react';
 import { clientLogger } from '../client-logger';
 import { reportCustomMetric } from './web-vitals';
 
@@ -176,7 +177,7 @@ export function useInteractionTracking(
 export function useDataFetchPerformance<T>(
   fetchName: string,
   fetcher: () => Promise<T>,
-  dependencies: React.DependencyList = []
+  dependencies: DependencyList = []
 ): {
   data: T | null;
   loading: boolean;
