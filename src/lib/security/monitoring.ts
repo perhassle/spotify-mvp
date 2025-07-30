@@ -165,7 +165,7 @@ export function extractRequestMetadata(request: NextRequest): {
   return {
     ipAddress: request.headers.get('x-forwarded-for') || 
                request.headers.get('x-real-ip') || 
-               request.ip,
+               'unknown',
     userAgent: request.headers.get('user-agent') || undefined,
     path: request.nextUrl.pathname,
     method: request.method,
@@ -330,7 +330,7 @@ export async function getSecurityHealth(): Promise<SecurityHealth> {
     overallStatus = 'critical';
     checks.push({
       name: 'Critical Events',
-      status: 'fail',
+      status: 'fail' as const,
       message: `${critical24h.length} critical events in last 24h`,
     });
   }
@@ -344,7 +344,7 @@ export async function getSecurityHealth(): Promise<SecurityHealth> {
     overallStatus = overallStatus === 'critical' ? 'critical' : 'warning';
     checks.push({
       name: 'Brute Force Protection',
-      status: 'fail',
+      status: 'fail' as const,
       message: `${bruteForceEvents.length} brute force attempts detected`,
     });
   }
