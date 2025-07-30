@@ -21,7 +21,8 @@ describe('Auth Validation Schemas', () => {
       const result = loginSchema.safeParse(invalidData);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toContain('email');
+        expect(result.error?.issues?.length).toBeGreaterThan(0);
+        expect(result.error?.issues?.[0]?.path).toContain('email');
       }
     });
 
@@ -34,7 +35,8 @@ describe('Auth Validation Schemas', () => {
       const result = loginSchema.safeParse(invalidData);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toContain('password');
+        expect(result.error?.issues?.length).toBeGreaterThan(0);
+        expect(result.error?.issues?.[0]?.path).toContain('password');
       }
     });
   });
@@ -65,7 +67,8 @@ describe('Auth Validation Schemas', () => {
       const result = registrationSchema.safeParse(invalidData);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].message).toContain('Passwords must match');
+        expect(result.error?.issues?.length).toBeGreaterThan(0);
+        expect(result.error?.issues?.[0]?.message).toContain('Passwords must match');
       }
     });
 
@@ -81,7 +84,8 @@ describe('Auth Validation Schemas', () => {
       const result = registrationSchema.safeParse(invalidData);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toContain('password');
+        expect(result.error?.issues?.length).toBeGreaterThan(0);
+        expect(result.error?.issues?.[0]?.path).toContain('password');
       }
     });
 
@@ -97,7 +101,8 @@ describe('Auth Validation Schemas', () => {
       const result = registrationSchema.safeParse(invalidData);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toContain('username');
+        expect(result.error?.issues?.length).toBeGreaterThan(0);
+        expect(result.error?.issues?.[0]?.path).toContain('username');
       }
     });
   });
