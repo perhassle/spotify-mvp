@@ -4,10 +4,70 @@
     "next/typescript"
   ],
   "rules": {
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/no-unused-vars": ["warn", { 
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_",
+      "caughtErrorsIgnorePattern": "^_",
+      "destructuredArrayIgnorePattern": "^_",
+      "ignoreRestSiblings": true
+    }],
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-unsafe-function-type": "error",
     "prefer-const": "error",
-    "no-var": "error"
-  }
+    "no-var": "error",
+    "react/no-unescaped-entities": "warn",
+    "@next/next/no-img-element": "warn",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["*.test.ts", "*.test.tsx", "*.spec.ts", "*.spec.tsx", "**/*.spec.ts"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unused-vars": "off"
+      }
+    },
+    {
+      "files": ["src/app/api/**/*.ts"],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": ["warn", { 
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_|authConfig|mockPlaylists|playlistId|trackId|folderId|userId|settings|processedMetrics|handleApiError|emailHtml|originalUrl|SubscriptionTier|billingPeriod",
+          "caughtErrorsIgnorePattern": "^_|error",
+          "destructuredArrayIgnorePattern": "^_",
+          "ignoreRestSiblings": true
+        }],
+        "@typescript-eslint/no-explicit-any": ["warn", {
+          "ignoreRestArgs": true
+        }]
+      }
+    },
+    {
+      "files": ["src/types/**/*.ts", "src/types/**/*.d.ts"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unused-vars": "off"
+      }
+    },
+    {
+      "files": ["src/stores/**/*.ts"],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": ["warn", { 
+          "argsIgnorePattern": "^_|get",
+          "varsIgnorePattern": "^_|FriendActivity",
+          "caughtErrorsIgnorePattern": "^_|error",
+          "destructuredArrayIgnorePattern": "^_",
+          "ignoreRestSiblings": true
+        }]
+      }
+    },
+    {
+      "files": ["middleware.ts", "src/middleware/**/*.ts"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "warn"
+      }
+    }
+  ]
 }

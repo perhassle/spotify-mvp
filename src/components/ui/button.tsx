@@ -21,11 +21,11 @@ const buttonVariants = cva(
           "bg-spotify-green text-white hover:bg-spotify-green-light hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-spotify-green/25",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        xl: "h-12 rounded-lg px-10 text-base",
-        icon: "h-10 w-10",
+        default: "h-11 px-4 py-2 min-h-[44px]", // WCAG touch target
+        sm: "h-10 rounded-md px-3 min-h-[44px]", // WCAG touch target
+        lg: "h-12 rounded-md px-8 min-h-[44px]", // Already meets requirement
+        xl: "h-14 rounded-lg px-10 text-base min-h-[44px]", // Already meets requirement
+        icon: "h-11 w-11 min-h-[44px] min-w-[44px]", // WCAG touch target
       },
     },
     defaultVariants: {
@@ -45,13 +45,9 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, isLoading, children, disabled, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        disabled={disabled || isLoading}
-        {...props}
-      >
+    
+    const content = (
+      <>
         {isLoading && (
           <svg
             className="mr-2 h-4 w-4 animate-spin"
@@ -75,7 +71,36 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           </svg>
         )}
         {children}
-      </Comp>
+      </>
+    );
+
+    if (asChild) {
+      return (
+        <Slot
+          className={cn(buttonVariants({ variant, size, className }))}
+          ref={ref}
+          {...props}
+        >
+          {React.isValidElement(children) ? 
+            React.cloneElement(children as React.ReactElement<any>, { 
+              disabled: disabled || isLoading,
+              children: content 
+            }) : 
+            children
+          }
+        </Slot>
+      );
+    }
+
+    return (
+      <button
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        disabled={disabled || isLoading}
+        {...props}
+      >
+        {content}
+      </button>
     );
   },
 );

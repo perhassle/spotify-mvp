@@ -1,0 +1,312 @@
+/**
+ * Sentry configuration for error tracking and performance monitoring
+ * This file sets up Sentry integration when enabled
+ */
+
+import { ErrorCategory, ErrorSeverity } from './error-monitoring';
+
+// Type definition for Sentry options
+interface BrowserOptions {
+  dsn?: string;
+  environment?: string;
+  release?: string;
+  autoSessionTracking?: boolean;
+  sessionTrackingIntervalMillis?: number;
+  tracesSampleRate?: number;
+  tracePropagationTargets?: (string | RegExp)[];
+  sampleRate?: number;
+  integrations?: (integrations: any[]) => any[];
+  beforeSend?: (event: any, hint: any) => any;
+  beforeSendTransaction?: (transaction: any) => any;
+  beforeBreadcrumb?: (breadcrumb: any) => any;
+  transportOptions?: {
+    maxRetries?: number;
+    headers?: Record<string, string>;
+  };
+  sendClientReports?: boolean;
+  replaysSessionSampleRate?: number;
+  replaysOnErrorSampleRate?: number;
+  initialScope?: {
+    tags?: Record<string, string>;
+    user?: Record<string, any>;
+  };
+}
+
+// Sentry configuration options
+export const sentryConfig: BrowserOptions = {
+  // DSN will be set from environment variable
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+
+  // Environment and release tracking
+  environment: process.env.NEXT_PUBLIC_ENVIRONMENT || process.env.NODE_ENV,
+  release: process.env.NEXT_PUBLIC_APP_VERSION,
+
+  // Session tracking
+  autoSessionTracking: true,
+  sessionTrackingIntervalMillis: 30000,
+
+  // Performance monitoring
+  tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
+  tracePropagationTargets: [
+    'localhost',
+    /^https:\/\/yourserver\.io\/api/,
+  ],
+
+  // Error sampling
+  sampleRate: process.env.NODE_ENV === 'production' ? 0.9 : 1.0,
+
+  // Integrations configuration
+  integrations: (integrations) => {
+    // Filter out default integrations if needed
+    return integrations.filter((integration) => {
+      // Keep all default integrations
+      return true;
+    });
+  },
+
+  // Before send hook for filtering/modifying events
+  beforeSend(event, hint) {
+    // Filter out specific errors
+    if (event.exception) {
+      const error = hint.originalException;
+      
+      // Filter browser extension errors
+      if (error && error.message && error.message.match(/extension:|chrome-extension:|moz-extension:/)) {
+        return null;
+      }
+
+      // Filter out non-application errors
+      if (event.exception.values?.[0]?.value?.includes('ResizeObserver loop')) {
+        return null;
+      }
+    }
+
+    // Add custom context
+    event.contexts = {
+      ...event.contexts,
+      custom: {
+        userAgent: navigator.userAgent,
+        viewport: {
+          width: window.innerWidth,
+          height: window.innerHeight,
+        },
+        screen: {
+          width: window.screen.width,
+          height: window.screen.height,
+        },
+      },
+    };
+
+    // Categorize errors using our error monitoring system
+    if (event.exception?.values?.[0]) {
+      const error = event.exception.values[0];
+      event.tags = {
+        ...event.tags,
+        error_category: categorizeError(error),
+        error_severity: determineErrorSeverity(error),
+      };
+    }
+
+    return event;
+  },
+
+  // Before send transaction for performance monitoring
+  beforeSendTransaction(transaction) {
+    // Filter out specific transactions
+    if (transaction.transaction === '/health') {
+      return null;
+    }
+
+    // Add custom measurements
+    if (window.performance && window.performance.memory) {
+      const memory = (window.performance as any).memory;
+      transaction.measurements = {
+        ...transaction.measurements,
+        'memory.used': { value: memory.usedJSHeapSize, unit: 'byte' },
+        'memory.total': { value: memory.totalJSHeapSize, unit: 'byte' },
+      };
+    }
+
+    return transaction;
+  },
+
+  // Breadcrumb filtering
+  beforeBreadcrumb(breadcrumb) {
+    // Filter out noisy breadcrumbs
+    if (breadcrumb.category === 'console' && breadcrumb.level === 'debug') {
+      return null;
+    }
+
+    // Add custom data to navigation breadcrumbs
+    if (breadcrumb.category === 'navigation') {
+      breadcrumb.data = {
+        ...breadcrumb.data,
+        timestamp: new Date().toISOString(),
+      };
+    }
+
+    return breadcrumb;
+  },
+
+  // Transport options
+  transportOptions: {
+    // Retry failed requests
+    maxRetries: 3,
+    // Custom headers
+    headers: {
+      'X-App-Name': 'spotify-mvp',
+    },
+  },
+
+  // Client reports
+  sendClientReports: true,
+
+  // Replay configuration (when enabled)
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0,
+
+  // Custom tags
+  initialScope: {
+    tags: {
+      component: 'unknown',
+      feature: 'unknown',
+    },
+    user: {
+      segment: 'unknown',
+    },
+  },
+};
+
+// Helper function to categorize errors (matching our error monitoring)
+function categorizeError(error: any): ErrorCategory {
+  const message = (error.value || '').toLowerCase();
+  
+  if (message.includes('network') || message.includes('fetch')) {
+    return ErrorCategory.NETWORK;
+  }
+  if (message.includes('validation') || message.includes('invalid')) {
+    return ErrorCategory.VALIDATION;
+  }
+  if (message.includes('permission') || message.includes('unauthorized')) {
+    return ErrorCategory.PERMISSION;
+  }
+  if (message.includes('chunk') || message.includes('loading')) {
+    return ErrorCategory.CHUNK_LOAD;
+  }
+  
+  return ErrorCategory.UNKNOWN;
+}
+
+// Helper function to determine error severity
+function determineErrorSeverity(error: any): ErrorSeverity {
+  const message = (error.value || '').toLowerCase();
+  
+  if (message.includes('critical') || message.includes('fatal')) {
+    return ErrorSeverity.CRITICAL;
+  }
+  if (message.includes('error') || message.includes('exception')) {
+    return ErrorSeverity.HIGH;
+  }
+  if (message.includes('warning') || message.includes('warn')) {
+    return ErrorSeverity.MEDIUM;
+  }
+  
+  return ErrorSeverity.LOW;
+}
+
+// Sentry initialization helper
+export function initSentry(): void {
+  if (!process.env.NEXT_PUBLIC_SENTRY_DSN) {
+    console.log('Sentry DSN not configured, skipping initialization');
+    return;
+  }
+
+  // Dynamic import to avoid loading Sentry if not configured
+  import('@sentry/nextjs').then(({ init, setUser, setTag }) => {
+    init(sentryConfig);
+
+    // Set initial user context if available
+    const user = getUserFromSession();
+    if (user) {
+      setUser({
+        id: user.id,
+        email: user.email,
+        username: user.username,
+      });
+    }
+
+    // Set build info
+    setTag('build_time', process.env.NEXT_PUBLIC_BUILD_TIME || 'unknown');
+    setTag('commit_sha', process.env.NEXT_PUBLIC_COMMIT_SHA || 'unknown');
+  });
+}
+
+// Helper to get user from session (implement based on your auth)
+function getUserFromSession(): any {
+  // This should be implemented based on your authentication system
+  // For example, reading from a auth store or session storage
+  return null;
+}
+
+// Export types for use in other files
+export type { BrowserOptions };
+
+// Utility functions for Sentry integration
+export const sentryUtils = {
+  // Set user context
+  setUser(user: { id: string; email?: string; username?: string; [key: string]: any }) {
+    if (typeof window !== 'undefined' && window.Sentry) {
+      window.Sentry.setUser(user);
+    }
+  },
+
+  // Clear user context
+  clearUser() {
+    if (typeof window !== 'undefined' && window.Sentry) {
+      window.Sentry.setUser(null);
+    }
+  },
+
+  // Set custom tags
+  setTags(tags: Record<string, string>) {
+    if (typeof window !== 'undefined' && window.Sentry) {
+      Object.entries(tags).forEach(([key, value]) => {
+        window.Sentry.setTag(key, value);
+      });
+    }
+  },
+
+  // Add breadcrumb
+  addBreadcrumb(breadcrumb: {
+    message: string;
+    category?: string;
+    level?: 'debug' | 'info' | 'warning' | 'error';
+    data?: any;
+  }) {
+    if (typeof window !== 'undefined' && window.Sentry) {
+      window.Sentry.addBreadcrumb(breadcrumb);
+    }
+  },
+
+  // Capture custom event
+  captureEvent(message: string, level: 'info' | 'warning' | 'error' = 'info') {
+    if (typeof window !== 'undefined' && window.Sentry) {
+      window.Sentry.captureMessage(message, level);
+    }
+  },
+
+  // Start transaction for performance monitoring
+  startTransaction(name: string, op: string) {
+    if (typeof window !== 'undefined' && window.Sentry) {
+      return window.Sentry.startTransaction({ name, op });
+    }
+    return null;
+  },
+};
+
+// Extend window type for Sentry
+declare global {
+  interface Window {
+    Sentry?: any;
+  }
+}
