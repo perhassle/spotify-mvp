@@ -5,14 +5,27 @@ import { loadStripe, Stripe as StripeJS } from '@stripe/stripe-js';
  * Stripe configuration and initialization
  */
 
-// Server-side Stripe instance
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('STRIPE_SECRET_KEY is not defined in environment variables');
-}
+// Server-side Stripe instance (lazy initialization)
+let stripeInstance: Stripe | null = null;
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2025-06-30.basil',
-  typescript: true,
+export const getStripeServer = (): Stripe => {
+  if (!stripeInstance) {
+    if (!process.env.STRIPE_SECRET_KEY) {
+      throw new Error('STRIPE_SECRET_KEY is not defined in environment variables');
+    }
+    stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2025-06-30.basil',
+      typescript: true,
+    });
+  }
+  return stripeInstance;
+};
+
+// Backward compatibility - export stripe as a getter
+export const stripe = new Proxy({} as Stripe, {
+  get(target, prop) {
+    return getStripeServer()[prop as keyof Stripe];
+  }
 });
 
 // Client-side Stripe promise

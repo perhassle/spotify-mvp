@@ -354,6 +354,9 @@ class RealUserMonitoring {
   }
 
   private getDeviceType(): 'mobile' | 'tablet' | 'desktop' {
+    if (typeof window === 'undefined') {
+      return 'desktop'; // Default for SSR
+    }
     const width = window.innerWidth;
     if (width < 768) return 'mobile';
     if (width < 1024) return 'tablet';
@@ -361,17 +364,20 @@ class RealUserMonitoring {
   }
 
   private getConnectionType(): string | undefined {
+    if (typeof navigator === 'undefined') {
+      return undefined; // Default for SSR
+    }
     const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
     return connection?.effectiveType;
   }
 
   private getFirstPaint(): number {
-    if (window.performance && window.performance.getEntriesByType) {
-      const paintEntries = window.performance.getEntriesByType('paint');
-      const firstPaint = paintEntries.find(entry => entry.name === 'first-paint');
-      return firstPaint ? Math.round(firstPaint.startTime) : 0;
+    if (typeof window === 'undefined' || !window.performance || !window.performance.getEntriesByType) {
+      return 0; // Default for SSR
     }
-    return 0;
+    const paintEntries = window.performance.getEntriesByType('paint');
+    const firstPaint = paintEntries.find(entry => entry.name === 'first-paint');
+    return firstPaint ? Math.round(firstPaint.startTime) : 0;
   }
 
   private getNavigationType(type: number): string {
@@ -420,8 +426,18 @@ class RealUserMonitoring {
   }
 }
 
-// Create singleton instance
-export const rum = new RealUserMonitoring();
+// Create singleton instance (lazy initialization for SSR compatibility)
+let rumInstance: RealUserMonitoring | null = null;
+
+export const getRUM = (): RealUserMonitoring | null => {
+  if (typeof window === 'undefined') {
+    return null; // Return null for SSR
+  }
+  if (!rumInstance) {
+    rumInstance = new RealUserMonitoring();
+  }
+  return rumInstance;
+};
 
 // Export for custom usage
 export { RealUserMonitoring, type RUMSession, type RUMConfig };

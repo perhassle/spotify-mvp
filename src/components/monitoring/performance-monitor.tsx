@@ -7,7 +7,7 @@
 
 import { useEffect } from 'react';
 import { webVitalsMonitor } from '@/lib/monitoring/web-vitals';
-import { rum } from '@/lib/monitoring/rum';
+import { getRUM } from '@/lib/monitoring/rum';
 import { usePathname } from 'next/navigation';
 import { clientLogger } from '@/lib/client-logger';
 
@@ -36,11 +36,14 @@ export function PerformanceMonitor({
 
     // Initialize RUM
     if (enableRUM) {
-      rum.init();
-      if (userId) {
-        rum.setUser(userId);
+      const rumInstance = getRUM();
+      if (rumInstance) {
+        rumInstance.init();
+        if (userId) {
+          rumInstance.setUser(userId);
+        }
+        clientLogger.info('RUM initialized');
       }
-      clientLogger.info('RUM initialized');
     }
 
     // Track initial page metrics
@@ -71,10 +74,13 @@ export function PerformanceMonitor({
   // Track route changes
   useEffect(() => {
     if (enableRUM) {
-      rum.trackCustomMetric('route-change', Date.now(), {
-        pathname,
-        previousPath: document.referrer,
-      });
+      const rumInstance = getRUM();
+      if (rumInstance) {
+        rumInstance.trackCustomMetric('route-change', Date.now(), {
+          pathname,
+          previousPath: document.referrer,
+        });
+      }
     }
   }, [pathname, enableRUM]);
 
@@ -91,9 +97,12 @@ export function PerformanceMonitor({
           });
 
           if (enableRUM) {
-            rum.trackCustomMetric('long-task', entry.duration, {
-              startTime: entry.startTime,
-            });
+            const rumInstance = getRUM();
+            if (rumInstance) {
+              rumInstance.trackCustomMetric('long-task', entry.duration, {
+                startTime: entry.startTime,
+              });
+            }
           }
         }
       }

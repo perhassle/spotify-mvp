@@ -193,7 +193,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://api.stripe.com" />
       </head>
       <body className={`antialiased`}>{/* className={`${inter.className} antialiased`} */}
-        <ErrorBoundary onError={handleErrorBoundaryError}>
+        <ErrorBoundary onError={typeof window !== 'undefined' ? handleErrorBoundaryError : undefined}>
           <ErrorProvider>
             <ToastProvider>
               <MonitoringProvider
