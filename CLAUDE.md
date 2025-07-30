@@ -78,6 +78,20 @@ When implementing features, verify functionality by:
 - Use existing mock data services for development
 - If the site doesn't build, then always prioritize making sure the site builds. Otherwise, it's impossible to test the site.
 
+## Git Best Practices
+
+- **Always keep commits small and focused** - easier to review and revert if needed
+- **Commit frequently** - after each logical change or fix
+- **One type of change per commit** - don't mix feature additions with bug fixes
+- **Commit working code** - ensure the code builds before committing
+- **Examples of when to commit**:
+  - After fixing a specific TypeScript error across multiple files
+  - After implementing a single feature
+  - After fixing ESLint warnings in a component
+  - After updating types or interfaces
+  - After refactoring a specific module
+- **Never accumulate many unrelated changes** - makes it hard to track what changed and why
+
 ## Test Management
 
 - Place all tests and testresults structured in test-results
