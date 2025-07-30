@@ -19,6 +19,7 @@ jest.mock('@/lib/audio/advanced-audio-engine', () => ({
     getDuration: jest.fn().mockReturnValue(180),
     setupMediaSession: jest.fn(),
     resume: jest.fn(),
+    updateConfig: jest.fn(),
     isPlaying: false,
   }))
 }));
