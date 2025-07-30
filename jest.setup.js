@@ -68,6 +68,43 @@ global.AudioContext = jest.fn().mockImplementation(() => ({
   destination: {},
 }))
 
+// Mock Next.js Web API
+global.Request = class MockRequest {
+  constructor(input, init) {
+    this.url = input;
+    this.method = init?.method || 'GET';
+    this.headers = new Map(Object.entries(init?.headers || {}));
+    this.body = init?.body;
+  }
+  
+  async json() {
+    return JSON.parse(this.body || '{}');
+  }
+};
+
+global.Response = class MockResponse {
+  constructor(body, init) {
+    this.body = body;
+    this.status = init?.status || 200;
+    this.headers = new Map(Object.entries(init?.headers || {}));
+  }
+  
+  async json() {
+    return JSON.parse(this.body || '{}');
+  }
+};
+
+// Mock global crypto
+global.crypto = {
+  randomUUID: jest.fn().mockReturnValue('test-uuid'),
+  ...global.crypto
+};
+
+// Mock NextAuth functions
+jest.mock('next-auth', () => ({
+  getServerSession: jest.fn(),
+}));
+
 // Suppress console errors in tests
 const originalError = console.error
 beforeAll(() => {
