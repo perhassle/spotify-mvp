@@ -165,7 +165,7 @@ export function extractRequestMetadata(request: NextRequest): {
   return {
     ipAddress: request.headers.get('x-forwarded-for') || 
                request.headers.get('x-real-ip') || 
-               request.ip,
+               'unknown',
     userAgent: request.headers.get('user-agent') || undefined,
     path: request.nextUrl.pathname,
     method: request.method,
@@ -302,7 +302,7 @@ export interface SecurityHealth {
 }
 
 export async function getSecurityHealth(): Promise<SecurityHealth> {
-  const checks = [];
+  const checks: { name: string; status: 'pass' | 'fail'; message?: string }[] = [];
   let overallStatus: 'healthy' | 'warning' | 'critical' = 'healthy';
   
   // Check security headers
