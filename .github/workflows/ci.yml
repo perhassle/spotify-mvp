@@ -48,11 +48,6 @@ jobs:
 
       - name: Run unit tests
         run: npm run test:ci
-        env:
-          NEXTAUTH_SECRET: test-secret-key-for-ci-only
-          STRIPE_SECRET_KEY: sk_test_placeholder
-          STRIPE_PUBLISHABLE_KEY: pk_test_placeholder
-          STRIPE_WEBHOOK_SECRET: whsec_test_placeholder
 
       # TODO: Re-enable coverage reports when test coverage improves
       # - name: Upload coverage reports
