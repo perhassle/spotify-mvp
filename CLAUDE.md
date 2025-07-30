@@ -83,14 +83,19 @@ When implementing features, verify functionality by:
 - **Always keep commits small and focused** - easier to review and revert if needed
 - **Commit frequently** - after each logical change or fix
 - **One type of change per commit** - don't mix feature additions with bug fixes
-- **Commit working code** - ensure the code builds before committing
+- **ALWAYS verify before committing**:
+  1. Run `npm run build` - must complete without errors
+  2. Run `npm run dev` - site must load and function properly
+  3. Test the specific feature/fix you implemented
+  4. Only commit if everything works correctly
 - **Examples of when to commit**:
-  - After fixing a specific TypeScript error across multiple files
-  - After implementing a single feature
-  - After fixing ESLint warnings in a component
-  - After updating types or interfaces
-  - After refactoring a specific module
+  - After fixing a specific TypeScript error across multiple files AND verifying the build works
+  - After implementing a single feature AND testing it in the browser
+  - After fixing ESLint warnings in a component AND ensuring no regressions
+  - After updating types or interfaces AND confirming no type errors
+  - After refactoring a specific module AND testing functionality
 - **Never accumulate many unrelated changes** - makes it hard to track what changed and why
+- **Never commit broken code** - every commit should represent a working state
 
 ## Test Management
 
