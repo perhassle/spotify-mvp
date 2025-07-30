@@ -170,7 +170,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className="">{/* className={inter.variable} */}
       <head>
         {/* Structured Data */}
         <script
@@ -193,7 +193,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://api.stripe.com" />
       </head>
       <body className={`${inter.className} antialiased`}>
-        <ErrorBoundary>
+        <ErrorBoundary onError={typeof window !== 'undefined' ? handleErrorBoundaryError : undefined}>
           <ErrorProvider>
             <ToastProvider>
               <MonitoringProvider

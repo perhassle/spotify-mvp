@@ -228,7 +228,8 @@ test.describe('WCAG 2.2 Level AA Compliance', () => {
     await expect(main).toHaveCount(1);
     
     const nav = page.locator('nav, [role="navigation"]');
-    await expect(nav).toHaveCountGreaterThanOrEqual(1);
+    const navCount = await nav.count();
+    expect(navCount).toBeGreaterThanOrEqual(1);
     
     // Check for complementary content (sidebar)
     const complementary = page.locator('aside, [role="complementary"]');

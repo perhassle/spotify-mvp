@@ -5,19 +5,27 @@ import { loadStripe, Stripe as StripeJS } from '@stripe/stripe-js';
  * Stripe configuration and initialization
  */
 
-// Server-side Stripe instance
-// In test/CI environments, we'll use a dummy key since we're mocking
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY || (
-  process.env.NODE_ENV === 'test' || process.env.CI ? 'sk_test_dummy' : undefined
-);
+// Server-side Stripe instance (lazy initialization)
+let stripeInstance: Stripe | null = null;
 
-if (!stripeSecretKey) {
-  throw new Error('STRIPE_SECRET_KEY is not defined in environment variables');
-}
+export const getStripeServer = (): Stripe => {
+  if (!stripeInstance) {
+    if (!process.env.STRIPE_SECRET_KEY) {
+      throw new Error('STRIPE_SECRET_KEY is not defined in environment variables');
+    }
+    stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2025-06-30.basil',
+      typescript: true,
+    });
+  }
+  return stripeInstance;
+};
 
-export const stripe = new Stripe(stripeSecretKey, {
-  apiVersion: '2025-06-30.basil',
-  typescript: true,
+// Backward compatibility - export stripe as a getter
+export const stripe = new Proxy({} as Stripe, {
+  get(target, prop) {
+    return getStripeServer()[prop as keyof Stripe];
+  }
 });
 
 // Client-side Stripe promise

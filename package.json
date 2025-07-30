@@ -13,9 +13,12 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "audit": "npm audit --audit-level=high",
-    "audit:fix": "npm audit fix --force"
+    "audit:fix": "npm audit fix --force",
+    "gitflow": "./scripts/gitflow-helper.sh",
+    "validate:branch": "node -e \"const b=process.env.GITHUB_HEAD_REF||require('child_process').execSync('git branch --show-current').toString().trim();if(!b.match(/^(master|develop|feature\\/.+|release\\/v\\d+\\.\\d+\\.\\d+|hotfix\\/.+)$/)){console.error('Invalid branch name:',b);process.exit(1);}else{console.log('Valid branch:',b);}\""
   },
   "dependencies": {
+    "@hello-pangea/dnd": "^17.0.0",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.2.0",
     "@radix-ui/react-icons": "^1.3.0",
@@ -39,7 +42,6 @@
     "pino": "^8.19.0",
     "pino-pretty": "^11.0.0",
     "react": "^18.3.1",
-    "@hello-pangea/dnd": "^17.0.0",
     "react-dom": "^18.3.1",
     "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.61.1",

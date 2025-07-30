@@ -50,7 +50,7 @@ export default auth(async (req) => {
 
   // Apply CSRF protection for API routes
   if (nextUrl.pathname.startsWith('/api/')) {
-    const csrfResponse = await csrfProtection(loggedRequest);
+    const csrfResponse = await csrfProtection(req as NextRequest);
     if (csrfResponse) {
       return csrfResponse;
     }
@@ -66,10 +66,7 @@ export default auth(async (req) => {
 
   // Check endpoint access permissions
   if (nextUrl.pathname.startsWith('/api/')) {
-    const accessCheck = await checkEndpointAccess(
-      loggedRequest,
-      nextUrl.pathname
-    );
+    const accessCheck = await checkEndpointAccess(req as NextRequest, nextUrl.pathname);
     if (!accessCheck.allowed) {
       return NextResponse.json(
         { error: accessCheck.reason || 'Access denied' },

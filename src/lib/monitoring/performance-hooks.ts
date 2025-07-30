@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useRef, useCallback, useState } from 'react';
+import type { DependencyList } from 'react';
 import { clientLogger } from '../client-logger';
 import { reportCustomMetric } from './web-vitals';
 
@@ -42,13 +43,32 @@ export function useRenderPerformance(
     // Component mount
     if (renderCount.current === 0) {
       mountTime.current = startTime;
+      const currentRenderCount = renderCount.current; // Capture the value
       
       // Create performance mark
       if (performance.mark) {
         performance.mark(`${componentName}-mount-start`);
       }
-      
-      return () => {
+    } else {
+      // Component update
+      const updateDuration = startTime - lastRenderTime.current;
+      if (updateDuration > threshold) {
+        clientLogger.performance(`Component update: ${componentName}`, updateDuration, {
+          component: componentName,
+          renderCount: renderCount.current,
+          ...options.metadata,
+        });
+      }
+    }
+    
+    lastRenderTime.current = startTime;
+    renderCount.current++;
+  });
+
+  // Mount cleanup effect
+  useEffect(() => {
+    return () => {
+      if (renderCount.current > 0) {
         const mountDuration = performance.now() - mountTime.current;
         const currentRenderCount = renderCount.current;
         
@@ -73,23 +93,8 @@ export function useRenderPerformance(
             },
           });
         }
-      };
-    }
-    
-    // Component update
-    const updateDuration = startTime - lastRenderTime.current;
-    if (renderCount.current > 0 && updateDuration > threshold) {
-      clientLogger.performance(`Component update: ${componentName}`, updateDuration, {
-        component: componentName,
-        renderCount: renderCount.current,
-        ...options.metadata,
-      });
-    }
-    
-    lastRenderTime.current = startTime;
-    renderCount.current++;
-    
-    return undefined;
+      }
+    };
   }, [componentName, threshold, options.metadata, logLevel]);
 }
 
@@ -174,7 +179,7 @@ export function useInteractionTracking(
 export function useDataFetchPerformance<T>(
   fetchName: string,
   fetcher: () => Promise<T>,
-  dependencies: React.DependencyList = []
+  dependencies: DependencyList = []
 ): {
   data: T | null;
   loading: boolean;
@@ -232,7 +237,8 @@ export function useDataFetchPerformance<T>(
 
   useEffect(() => {
     performFetch();
-  }, dependencies);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [performFetch, ...dependencies]);
 
   return {
     data,

@@ -1,0 +1,108 @@
+name: GitFlow Validation
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+  create:
+
+jobs:
+  validate-branch-name:
+    name: Validate Branch Name
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch name
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branchName = context.ref.replace('refs/heads/', '');
+            const validPatterns = [
+              /^master$/,
+              /^develop$/,
+              /^feature\/[a-z0-9-]+$/,
+              /^release\/v\d+\.\d+\.\d+$/,
+              /^hotfix\/[a-z0-9-]+$/
+            ];
+            
+            const isValid = validPatterns.some(pattern => pattern.test(branchName));
+            
+            if (!isValid && !branchName.includes('/')) {
+              core.setFailed(`Branch name '${branchName}' does not follow GitFlow conventions. Valid patterns:
+                - feature/description
+                - release/vX.Y.Z
+                - hotfix/description`);
+            }
+
+  validate-pr-target:
+    name: Validate PR Target Branch
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Check PR source and target branches
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const sourceBranch = pr.head.ref;
+            const targetBranch = pr.base.ref;
+            
+            const validFlows = [
+              // Feature branches can only go to develop
+              { source: /^feature\//, target: 'develop' },
+              // Release branches can go to master or develop
+              { source: /^release\//, target: 'master' },
+              { source: /^release\//, target: 'develop' },
+              // Hotfix branches can go to master or develop
+              { source: /^hotfix\//, target: 'master' },
+              { source: /^hotfix\//, target: 'develop' }
+            ];
+            
+            const isValidFlow = validFlows.some(flow => 
+              flow.source.test(sourceBranch) && flow.target === targetBranch
+            );
+            
+            if (!isValidFlow) {
+              let errorMessage = `Invalid GitFlow: ${sourceBranch} -> ${targetBranch}\n\nValid flows:\n`;
+              
+              if (sourceBranch.startsWith('feature/')) {
+                errorMessage += '- feature/* branches must target develop';
+              } else if (sourceBranch.startsWith('release/')) {
+                errorMessage += '- release/* branches can target master or develop';
+              } else if (sourceBranch.startsWith('hotfix/')) {
+                errorMessage += '- hotfix/* branches can target master or develop';
+              } else {
+                errorMessage += '- Only feature/*, release/*, and hotfix/* branches can create PRs';
+              }
+              
+              core.setFailed(errorMessage);
+            }
+
+  validate-commit-messages:
+    name: Validate Commit Messages
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Check commit messages
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { execSync } = require('child_process');
+            
+            // Get all commits in this PR
+            const commits = execSync(`git log --format=%s origin/${context.payload.pull_request.base.ref}..HEAD`).toString().trim().split('\n');
+            
+            const conventionalCommitPattern = /^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(.+\))?: .+$/;
+            const invalidCommits = [];
+            
+            commits.forEach(commit => {
+              if (!conventionalCommitPattern.test(commit)) {
+                invalidCommits.push(commit);
+              }
+            });
+            
+            if (invalidCommits.length > 0) {
+              core.setFailed(`Invalid commit messages found:\n${invalidCommits.join('\n')}\n\nPlease use Conventional Commits format: type(scope): description`);
+            }

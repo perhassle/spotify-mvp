@@ -18,7 +18,8 @@ test.describe('WCAG Accessibility Audit', () => {
         
         // Check for basic semantic structure - allow multiple main elements on different pages
         const main = page.locator('main, [role="main"]');
-        await expect(main).toHaveCountGreaterThanOrEqual(1);
+        const mainCount = await main.count();
+        expect(mainCount).toBeGreaterThanOrEqual(1);
         
         // Check for navigation landmarks
         const nav = page.locator('nav, [role="navigation"]');
