@@ -7,6 +7,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { UserMenu } from "@/components/auth/user-menu";
 import { NotificationBell } from "@/components/social/notification-bell";
+import { SpotifyConnectButton } from "@/components/spotify/spotify-connect-button";
 import { 
   HomeIcon, 
   MagnifyingGlassIcon, 
@@ -305,6 +306,11 @@ export function Sidebar({ className }: SidebarProps) {
               )}
             </div>
           )}
+
+          {/* Spotify Connect */}
+          <div className="mb-4">
+            <SpotifyConnectButton />
+          </div>
 
           {/* User Menu */}
           <div className="mb-4">

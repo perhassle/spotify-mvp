@@ -14,7 +14,7 @@ import {
   Info
 } from 'lucide-react';
 import type { RecommendationScore, Track } from '@/types';
-import { musicDatabase } from '@/lib/data/music-database';
+import { dataService } from '@/lib/data/data-service';
 
 interface RecommendationCardProps {
   recommendation: RecommendationScore;
@@ -48,7 +48,7 @@ export function RecommendationCard({
   React.useEffect(() => {
     const loadTrack = async () => {
       try {
-        const trackData = await musicDatabase.getTrack(recommendation.trackId);
+        const trackData = await dataService.getTrack(recommendation.trackId);
         setTrack(trackData);
       } catch (error) {
         console.error('Failed to load track:', error);

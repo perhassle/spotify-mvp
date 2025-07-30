@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAlbumWithTracks } from '@/lib/data/album-service';
+import { dataService } from '@/lib/data/data-service';
 
 interface AlbumParams {
   id: string;
@@ -25,7 +25,7 @@ export async function GET(
     }
 
     // Use the service to get album details
-    const albumDetails = await getAlbumWithTracks(id);
+    const albumDetails = await dataService.getAlbumWithTracks(id);
 
     return NextResponse.json({
       success: true,

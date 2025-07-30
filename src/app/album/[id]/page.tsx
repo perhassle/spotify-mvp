@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import AlbumDetailClient from './album-detail-client';
-import { getAlbumWithTracks } from '@/lib/data/album-service';
+import { dataService } from '@/lib/data/data-service';
 
 interface AlbumPageProps {
   params: Promise<{
@@ -15,7 +15,7 @@ interface AlbumPageProps {
 export default async function AlbumPage({ params }: AlbumPageProps) {
   try {
     const resolvedParams = await params;
-    const album = await getAlbumWithTracks(resolvedParams.id);
+    const album = await dataService.getAlbumWithTracks(resolvedParams.id);
     
     return <AlbumDetailClient album={album} />;
   } catch (_error) {
@@ -30,7 +30,7 @@ export default async function AlbumPage({ params }: AlbumPageProps) {
 export async function generateMetadata({ params }: AlbumPageProps): Promise<Metadata> {
   try {
     const resolvedParams = await params;
-    const album = await getAlbumWithTracks(resolvedParams.id);
+    const album = await dataService.getAlbumWithTracks(resolvedParams.id);
     
     return {
       title: `${album.title} by ${album.artist.name} | Spotify MVP`,
