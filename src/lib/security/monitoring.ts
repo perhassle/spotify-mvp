@@ -302,7 +302,7 @@ export interface SecurityHealth {
 }
 
 export async function getSecurityHealth(): Promise<SecurityHealth> {
-  const checks = [];
+  const checks: { name: string; status: 'pass' | 'fail'; message?: string }[] = [];
   let overallStatus: 'healthy' | 'warning' | 'critical' = 'healthy';
   
   // Check security headers

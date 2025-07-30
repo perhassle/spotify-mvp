@@ -125,19 +125,4 @@ export async function csrfProtection(request: NextRequest): Promise<Response | n
   return null;
 }
 
-/**
- * Fetch wrapper with automatic CSRF token inclusion
- */
-export async function secureFetch(url: string, options: RequestInit = {}): Promise<Response> {
-  const token = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
-  
-  const secureOptions: RequestInit = {
-    ...options,
-    headers: {
-      ...options.headers,
-      [CSRF_HEADER_NAME]: token || '',
-    },
-  };
-  
-  return fetch(url, secureOptions);
-}
+// Client-side functions moved to csrf-client.tsx

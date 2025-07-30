@@ -68,7 +68,7 @@ export function MonitoredMusicPlayer() {
       {/* Memory usage display (Chrome only) */}
       {memoryInfo && (
         <div className="text-sm text-gray-500 mb-2">
-          Memory: {memoryInfo.used}MB / {memoryInfo.limit}MB ({memoryInfo.percentage}%)
+          Memory: {(memoryInfo as any).used}MB / {(memoryInfo as any).limit}MB ({(memoryInfo as any).percentage}%)
         </div>
       )}
 

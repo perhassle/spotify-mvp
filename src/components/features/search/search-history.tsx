@@ -1,6 +1,6 @@
 "use client";
 
-import { ClockIcon, XMarkIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { ClockIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useSearchStore } from "@/stores/search-store";
 import { cn } from "@/lib/utils";
 

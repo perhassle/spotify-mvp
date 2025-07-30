@@ -26,7 +26,7 @@ async function sendShareEmail(shareRequest: EmailShareRequest, shareUrl: string)
 }
 
 // Generate email template
-function generateEmailTemplate(shareRequest: EmailShareRequest, shareUrl: string, content: any): string {
+function generateEmailTemplate(shareRequest: EmailShareRequest, shareUrl: string, content: Awaited<ReturnType<typeof getShareableContent>>): string {
   const baseTemplate = `
     <!DOCTYPE html>
     <html>

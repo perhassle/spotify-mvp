@@ -13,9 +13,7 @@ import type {
   TrackFeatures,
   RecommendationAlgorithm,
   RecommendationContext,
-  TrendingData,
   PopularityData,
-  ColdStartStrategy,
 } from '@/types';
 import { musicDatabase } from '../data/music-database';
 import { UserProfileManager } from './user-profile-manager';
@@ -157,7 +155,7 @@ export class SpotifyRecommendationEngine implements RecommendationEngine {
   private selectAlgorithm(
     request: RecommendationRequest,
     userProfile: UserProfile | null,
-    context: RecommendationContext
+    _context: RecommendationContext
   ): RecommendationAlgorithm {
     // If algorithm is explicitly requested
     if (request.algorithm) {
@@ -296,7 +294,11 @@ export class SpotifyRecommendationEngine implements RecommendationEngine {
 
     return tracks
       .map(track => {
-        const score = this.calculateTimeContextualScore(track, timePreferences, context);
+        const score = this.calculateTimeContextualScore(track, {
+          ...timePreferences,
+          energyLevel: timePreferences.energyLevel === 'high' ? 0.8 : 
+                       timePreferences.energyLevel === 'medium' ? 0.5 : 0.2
+        }, context);
         
         return {
           trackId: track.id,
@@ -331,7 +333,7 @@ export class SpotifyRecommendationEngine implements RecommendationEngine {
       })
       .map(track => {
         const trackFeatures = this.contentAnalyzer.getTrackFeatures(track.id)!;
-        const score = this.calculateMoodScore(trackFeatures, userAudioPrefs, context);
+        const score = this.calculateMoodScore(trackFeatures, userAudioPrefs as unknown as Record<string, number>, context);
         
         return {
           trackId: track.id,
@@ -376,8 +378,8 @@ export class SpotifyRecommendationEngine implements RecommendationEngine {
 
   private calculateTimeContextualScore(
     track: Track,
-    timePreferences: any,
-    context: RecommendationContext
+    timePreferences: { preferredGenres: string[]; energyLevel: number },
+    _context: RecommendationContext
   ): number {
     let score = 0.5; // Base score
     
@@ -389,7 +391,7 @@ export class SpotifyRecommendationEngine implements RecommendationEngine {
     // Boost based on energy level match
     const trackFeatures = this.contentAnalyzer.getTrackFeatures(track.id);
     if (trackFeatures) {
-      const energyMatch = this.calculateEnergyMatch(trackFeatures.energy, timePreferences.energyLevel);
+      const energyMatch = 1 - Math.abs(trackFeatures.energy - timePreferences.energyLevel);
       score += energyMatch * 0.2;
     }
     
@@ -398,8 +400,8 @@ export class SpotifyRecommendationEngine implements RecommendationEngine {
 
   private calculateMoodScore(
     trackFeatures: TrackFeatures,
-    userAudioPrefs: any,
-    context: RecommendationContext
+    userAudioPrefs: Record<string, number>,
+    _context: RecommendationContext
   ): number {
     let score = 0;
     
@@ -408,8 +410,10 @@ export class SpotifyRecommendationEngine implements RecommendationEngine {
     features.forEach(feature => {
       const trackValue = trackFeatures[feature as keyof TrackFeatures] as number;
       const userPref = userAudioPrefs[feature];
-      const similarity = 1 - Math.abs(trackValue - userPref);
-      score += similarity * 0.25;
+      if (userPref !== undefined) {
+        const similarity = 1 - Math.abs(trackValue - userPref);
+        score += similarity * 0.25;
+      }
     });
     
     return Math.min(score, 1.0);
@@ -531,7 +535,7 @@ export class SpotifyRecommendationEngine implements RecommendationEngine {
     return this.userProfileManager.refreshUserProfile(userId);
   }
 
-  async getHomeFeed(userId: string, refresh = false): Promise<HomeFeed> {
+  async getHomeFeed(userId: string, _refresh = false): Promise<HomeFeed> {
     const startTime = Date.now();
     
     // Get user profile to determine personalization level

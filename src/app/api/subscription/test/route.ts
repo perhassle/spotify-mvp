@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe, STRIPE_PRODUCTS } from '@/lib/stripe/config';
+import { ApiError } from '@/types/common';
 
 /**
  * Test endpoint for validating Stripe integration
@@ -27,10 +28,11 @@ export async function GET(_request: NextRequest) {
         data: { available: balance.available, pending: balance.pending }
       });
     } catch (error) {
+      const apiError = error as ApiError;
       tests.push({
         name: 'Stripe Connection',
         status: 'failed',
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: apiError.message || 'Unknown error'
       });
     }
 
@@ -46,10 +48,11 @@ export async function GET(_request: NextRequest) {
         data: premiumMonthly
       });
     } catch (error) {
+      const apiError = error as ApiError;
       tests.push({
         name: 'Premium Monthly Price',
         status: 'failed',
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: apiError.message || 'Unknown error'
       });
     }
 
@@ -80,10 +83,11 @@ export async function GET(_request: NextRequest) {
         data: { customerId: customer.id }
       });
     } catch (error) {
+      const apiError = error as ApiError;
       tests.push({
         name: 'Customer Creation',
         status: 'failed',
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: apiError.message || 'Unknown error'
       });
     }
 
@@ -123,10 +127,11 @@ export async function GET(_request: NextRequest) {
     });
 
   } catch (error) {
+    const apiError = error as ApiError;
     return NextResponse.json(
       { 
         error: 'Test execution failed',
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: apiError.message || 'Unknown error'
       },
       { status: 500 }
     );
@@ -164,17 +169,23 @@ export async function POST(request: NextRequest) {
     }
 
   } catch (error) {
+    const apiError = error as ApiError;
     return NextResponse.json(
       { 
         error: 'Test execution failed',
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: apiError.message || 'Unknown error'
       },
       { status: 500 }
     );
   }
 }
 
-async function testCreatePaymentIntent(params: any) {
+interface TestCreatePaymentIntentParams {
+  subscriptionTier?: string;
+  billingPeriod?: string;
+}
+
+async function testCreatePaymentIntent(params: TestCreatePaymentIntentParams) {
   try {
     const { subscriptionTier = 'premium', billingPeriod = 'monthly' } = params;
     
@@ -198,15 +209,22 @@ async function testCreatePaymentIntent(params: any) {
     });
 
   } catch (error) {
+    const apiError = error as ApiError;
     return NextResponse.json({
       test: 'create_payment_intent',
       status: 'failed',
-      message: error instanceof Error ? error.message : 'Unknown error'
+      message: apiError.message || 'Unknown error'
     });
   }
 }
 
-async function testValidatePromoCode(params: any) {
+interface TestValidatePromoCodeParams {
+  code?: string;
+  subscriptionTier?: string;
+  billingPeriod?: string;
+}
+
+async function testValidatePromoCode(params: TestValidatePromoCodeParams) {
   try {
     const { code = 'WELCOME20', subscriptionTier = 'premium', billingPeriod = 'monthly' } = params;
     
@@ -226,15 +244,20 @@ async function testValidatePromoCode(params: any) {
     });
 
   } catch (error) {
+    const apiError = error as ApiError;
     return NextResponse.json({
       test: 'validate_promo_code',
       status: 'failed',
-      message: error instanceof Error ? error.message : 'Unknown error'
+      message: apiError.message || 'Unknown error'
     });
   }
 }
 
-async function testSimulateWebhook(params: any) {
+interface TestSimulateWebhookParams {
+  eventType?: string;
+}
+
+async function testSimulateWebhook(params: TestSimulateWebhookParams) {
   // This would simulate a webhook event in a real implementation
   // For now, just return a mock response
   return NextResponse.json({

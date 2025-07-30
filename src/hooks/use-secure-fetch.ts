@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { secureFetch } from '@/lib/security/csrf';
+import { secureFetch } from '@/lib/security/csrf-client';
 import { useRouter } from 'next/navigation';
 
 interface SecureFetchOptions extends RequestInit {

@@ -22,7 +22,7 @@ export default function NotFound() {
         </h1>
         <p className="text-xl text-neutral-400 mb-12 max-w-md mx-auto">
           Looks like this track got lost in the shuffle. 
-          Let's get you back to the music.
+          Let&apos;s get you back to the music.
         </p>
 
         {/* Action Buttons */}

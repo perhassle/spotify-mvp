@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { 
   Play, 
@@ -10,8 +11,6 @@ import {
   Lock, 
   Users,
   Share2,
-  Heart,
-  Download,
   Edit,
   Trash2
 } from 'lucide-react';
@@ -157,12 +156,13 @@ export default function PlaylistListItem({ playlist, index }: PlaylistListItemPr
         )}
 
         {/* Cover Image */}
-        <div className="w-12 h-12 rounded bg-zinc-800 flex-shrink-0 overflow-hidden">
+        <div className="w-12 h-12 rounded bg-zinc-800 flex-shrink-0 overflow-hidden relative">
           {playlist.imageUrl ? (
-            <img
+            <Image
               src={playlist.imageUrl}
               alt={playlist.name}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">

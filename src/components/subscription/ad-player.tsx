@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Play, Pause, Volume2, ExternalLink, X } from 'lucide-react';
 import { MockAd, User } from '@/types';
 import { adManager, AdUtils } from '@/lib/subscription/ad-manager';
@@ -27,7 +27,7 @@ export function AdPlayer({
 
   useEffect(() => {
     const handleAdEvent = (event: CustomEvent) => {
-      const { type, ad, playbackState } = event.detail;
+      const { type, ad } = event.detail;
       
       switch (type) {
         case 'adStart':
@@ -61,6 +61,12 @@ export function AdPlayer({
     };
   }, [onAdComplete]);
 
+  const handleAdComplete = useCallback(() => {
+    if (user && currentAd) {
+      adManager.completeAd(user, false);
+    }
+  }, [user, currentAd]);
+
   // Simulate ad progress
   useEffect(() => {
     if (!currentAd || !isPlaying) return;
@@ -91,13 +97,7 @@ export function AdPlayer({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [currentAd, isPlaying, canSkip, timeUntilSkippable]);
-
-  const handleAdComplete = () => {
-    if (user && currentAd) {
-      adManager.completeAd(user, false);
-    }
-  };
+  }, [currentAd, isPlaying, canSkip, timeUntilSkippable, handleAdComplete]);
 
   const handleAdSkip = () => {
     if (user && currentAd && canSkip) {
@@ -162,6 +162,7 @@ export function AdPlayer({
               className="w-20 h-20 rounded-lg bg-white/10 flex-shrink-0 cursor-pointer overflow-hidden"
               onClick={handleAdClick}
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={currentAd.imageUrl}
                 alt={currentAd.title}

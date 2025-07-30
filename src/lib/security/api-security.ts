@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { auth } from '@/auth';
+import { authConfig } from '@/lib/auth/config';
 import crypto from 'crypto';
 
 /**
@@ -70,7 +71,10 @@ export async function validateRequestSignature(request: NextRequest): Promise<bo
   const body = await request.clone().text();
   
   // Get API secret (in production, use per-client secrets)
-  const apiSecret = process.env.API_SECRET || 'default-secret';
+  const apiSecret = process.env.API_SECRET;
+  if (!apiSecret) {
+    return false;
+  }
   
   // Generate expected signature
   const expectedSignature = generateRequestSignature(

@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { auth } from '@/auth';
+import { authConfig } from '@/lib/auth/config';
 import crypto from 'crypto';
 
 /**
@@ -165,13 +166,12 @@ export class SecureSessionStorage {
    */
   static decrypt(encryptedData: string): string {
     const parts = encryptedData.split(':');
-    if (parts.length !== 3) {
+    if (parts.length !== 3 || !parts[0] || !parts[1] || !parts[2]) {
       throw new Error('Invalid encrypted data format');
     }
-    
-    const iv = Buffer.from(parts[0]!, 'hex');
-    const authTag = Buffer.from(parts[1]!, 'hex');
-    const encrypted = parts[2]!;
+    const iv = Buffer.from(parts[0], 'hex');
+    const authTag = Buffer.from(parts[1], 'hex');
+    const encrypted = parts[2];
     
     const decipher = crypto.createDecipheriv(
       'aes-256-gcm',
@@ -224,9 +224,8 @@ export function isSessionTimedOut(
 ): boolean {
   const timeout = SESSION_TIMEOUTS[sessionType];
   if (!timeout) {
-    throw new Error(`Invalid session type: ${sessionType}`);
+    return true; // If timeout not found, consider session timed out
   }
-  
   const now = Date.now();
   const lastActivityTime = lastActivity.getTime();
   

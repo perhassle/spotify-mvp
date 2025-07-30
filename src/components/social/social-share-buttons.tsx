@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { ShareIcon, LinkIcon, CheckIcon } from '@heroicons/react/24/outline';
+import { ShareIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/button';
-import { ShareableContent, SocialShareOptions } from '@/types';
+import { ShareableContent } from '@/types';
 
 interface SocialShareButtonsProps {
   content: ShareableContent;

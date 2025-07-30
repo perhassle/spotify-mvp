@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { 
   Play, 
   Pause, 
@@ -15,11 +16,7 @@ import {
   SortDesc,
   Grid3X3,
   List,
-  X,
-  Music,
-  Filter,
-  Calendar,
-  User
+  X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -235,14 +232,16 @@ export default function LikedSongsClient() {
               </h1>
 
               <p className="text-white/70 text-lg mb-4 max-w-2xl">
-                Songs you've liked will appear here
+                Songs you&apos;ve liked will appear here
               </p>
 
               <div className="flex items-center space-x-2 text-sm text-white/70">
-                <img
+                <Image
                   src={session.user.image || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=32&h=32&fit=crop&crop=face'}
                   alt={session.user.name || 'User'}
-                  className="w-6 h-6 rounded-full"
+                  width={24}
+                  height={24}
+                  className="rounded-full"
                 />
                 <span className="font-medium text-white">
                   {session.user.name}
@@ -493,10 +492,12 @@ export default function LikedSongsClient() {
 
                       {/* Track Info */}
                       <div className="col-span-5 flex items-center space-x-3 min-w-0">
-                        <img
+                        <Image
                           src={song.album.imageUrl || song.imageUrl || 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=40&h=40&fit=crop'}
                           alt={song.album.title}
-                          className="w-10 h-10 rounded flex-shrink-0"
+                          width={40}
+                          height={40}
+                          className="rounded flex-shrink-0"
                         />
                         <div className="min-w-0">
                           <h4 className={`font-medium truncate ${isCurrentTrack ? 'text-green-400' : 'text-white'}`}>

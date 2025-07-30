@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import LikedSongsClient from './liked-songs-client';
+import { LikedSongsSkeleton } from '@/components/skeletons/liked-songs-skeleton';
 
 export const metadata = {
   title: 'Liked Songs | Spotify MVP',
@@ -8,11 +9,7 @@ export const metadata = {
 
 export default function LikedSongsPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-500"></div>
-      </div>
-    }>
+    <Suspense fallback={<LikedSongsSkeleton />}>
       <LikedSongsClient />
     </Suspense>
   );

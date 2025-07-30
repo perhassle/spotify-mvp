@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { useState } from 'react';
+import Image from 'next/image';
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { 
   Play, 
-  Pause, 
   Heart, 
   X, 
-  Clock, 
   GripVertical,
   Music
 } from 'lucide-react';
@@ -158,10 +157,12 @@ export default function DraggableTrackList({
 
                       {/* Track Info */}
                       <div className="col-span-5 flex items-center space-x-3 min-w-0">
-                        <img
+                        <Image
                           src={track.album.imageUrl || track.imageUrl || 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=40&h=40&fit=crop'}
                           alt={track.album.title}
-                          className="w-10 h-10 rounded flex-shrink-0"
+                          width={40}
+                          height={40}
+                          className="rounded flex-shrink-0"
                         />
                         <div className="min-w-0">
                           <h4 className={`font-medium truncate ${isCurrentTrack ? 'text-green-400' : 'text-white'}`}>

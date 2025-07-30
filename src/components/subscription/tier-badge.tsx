@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Crown, Users, GraduationCap, Gift } from 'lucide-react';
-import { User, SubscriptionTier } from '@/types';
+import { User } from '@/types';
 import { TierManager } from '@/lib/subscription/tier-manager';
 
 interface TierBadgeProps {
@@ -177,7 +177,6 @@ interface FeaturesBadgeProps {
 export function FeaturesBadge({ user, showCount = true, className = '' }: FeaturesBadgeProps) {
   if (!user) return null;
 
-  const availableFeatures = TierManager.getAvailableFeatures(user);
   const lockedFeatures = TierManager.getLockedFeatures(user);
 
   if (lockedFeatures.length === 0) {

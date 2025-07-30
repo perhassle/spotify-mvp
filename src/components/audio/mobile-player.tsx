@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from 'next/image';
 import { usePlayerStore } from "@/stores/player-store";
 import { cn } from "@/lib/utils";
 import { formatDuration } from "@/lib/format-utils";
@@ -10,7 +11,6 @@ import {
   ForwardIcon,
   BackwardIcon,
   ChevronUpIcon,
-  HeartIcon,
   QueueListIcon,
 } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
@@ -62,10 +62,12 @@ export function MobilePlayer({ className }: MobilePlayerProps) {
           }}
         >
           {/* Album Art */}
-          <img
+          <Image
             src={currentTrack.imageUrl || currentTrack.album.imageUrl || "/placeholder.svg"}
             alt={`${currentTrack.title} album art`}
-            className="w-12 h-12 rounded mr-3 flex-shrink-0"
+            width={48}
+            height={48}
+            className="rounded mr-3 flex-shrink-0"
           />
 
           {/* Track Info */}
@@ -139,11 +141,14 @@ export function MobilePlayer({ className }: MobilePlayerProps) {
 
         {/* Album Art */}
         <div className="flex-1 flex items-center justify-center px-8">
-          <img
-            src={currentTrack.imageUrl || currentTrack.album.imageUrl || "/placeholder.svg"}
-            alt={`${currentTrack.title} album art`}
-            className="w-full max-w-sm aspect-square rounded-lg shadow-2xl"
-          />
+          <div className="relative w-full max-w-sm aspect-square">
+            <Image
+              src={currentTrack.imageUrl || currentTrack.album.imageUrl || "/placeholder.svg"}
+              alt={`${currentTrack.title} album art`}
+              fill
+              className="rounded-lg shadow-2xl object-cover"
+            />
+          </div>
         </div>
 
         {/* Track Info & Controls */}

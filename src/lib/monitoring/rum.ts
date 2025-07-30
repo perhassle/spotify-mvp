@@ -7,6 +7,22 @@ import { clientLogger } from '../client-logger';
 import { webVitalsMonitor } from './web-vitals';
 import { validateBudget, calculatePerformanceScore } from './performance-budgets';
 
+// Network Information API interface
+interface NetworkInformation {
+  effectiveType?: string;
+  rtt?: number;
+  downlink?: number;
+  addEventListener?: (type: string, listener: EventListener) => void;
+}
+
+// RUM metric data
+interface RUMMetric {
+  type: string;
+  timestamp: number;
+  sessionId: string;
+  data: Record<string, unknown>;
+}
+
 // RUM session data
 interface RUMSession {
   sessionId: string;
@@ -17,7 +33,7 @@ interface RUMSession {
   pageViews: number;
   interactions: number;
   errors: number;
-  metrics: Record<string, any>;
+  metrics: Record<string, unknown>;
 }
 
 // RUM configuration
@@ -32,7 +48,7 @@ interface RUMConfig {
 class RealUserMonitoring {
   private config: RUMConfig;
   private session: RUMSession;
-  private metricsQueue: any[] = [];
+  private metricsQueue: RUMMetric[] = [];
   private flushTimer: NodeJS.Timeout | null = null;
 
   constructor(config: Partial<RUMConfig> = {}) {
@@ -205,7 +221,7 @@ class RealUserMonitoring {
   }
 
   // Track page views (SPA navigation)
-  private trackPageView(): void {
+  public trackPageView(url?: string): void {
     const viewMetrics = {
       url: window.location.href,
       referrer: document.referrer,
@@ -223,13 +239,16 @@ class RealUserMonitoring {
     const observer = new PerformanceObserver((list) => {
       const entries = list.getEntries();
       
-      const resourceMetrics = entries.map(entry => ({
-        name: entry.name,
-        type: (entry as any).initiatorType || 'unknown',
-        duration: Math.round(entry.duration),
-        size: (entry as any).transferSize || 0,
-        cached: (entry as any).transferSize === 0,
-      }));
+      const resourceMetrics = entries.map(entry => {
+        const perfEntry = entry as PerformanceResourceTiming;
+        return {
+          name: entry.name,
+          type: perfEntry.initiatorType || 'unknown',
+          duration: Math.round(entry.duration),
+          size: perfEntry.transferSize || 0,
+          cached: perfEntry.transferSize === 0,
+        };
+      });
 
       // Group by type
       const byType = resourceMetrics.reduce((acc, resource) => {
@@ -263,7 +282,8 @@ class RealUserMonitoring {
 
   // Track connection changes
   private trackConnectionChanges(): void {
-    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    const nav = navigator as Navigator & { connection?: NetworkInformation; mozConnection?: NetworkInformation; webkitConnection?: NetworkInformation };
+    const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
     
     if (!connection) return;
 
@@ -273,16 +293,16 @@ class RealUserMonitoring {
         effectiveType: connection.effectiveType,
         downlink: connection.downlink,
         rtt: connection.rtt,
-        saveData: connection.saveData,
+        saveData: (connection as any).saveData,
       });
     };
 
-    connection.addEventListener('change', trackConnection);
+    connection.addEventListener?.('change', trackConnection);
     trackConnection(); // Initial tracking
   }
 
   // Record metric
-  private recordMetric(type: string, data: any): void {
+  private recordMetric(type: string, data: Record<string, unknown>): void {
     const metric = {
       type,
       data,
@@ -322,7 +342,7 @@ class RealUserMonitoring {
 
     try {
       // Calculate session performance score
-      const performanceScore = calculatePerformanceScore(this.session.metrics);
+      const performanceScore = calculatePerformanceScore(this.session.metrics as Record<string, number>);
 
       await fetch(this.config.endpoint, {
         method: 'POST',
@@ -361,7 +381,8 @@ class RealUserMonitoring {
   }
 
   private getConnectionType(): string | undefined {
-    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    const nav = navigator as Navigator & { connection?: NetworkInformation; mozConnection?: NetworkInformation; webkitConnection?: NetworkInformation };
+    const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
     return connection?.effectiveType;
   }
 
@@ -390,7 +411,7 @@ class RealUserMonitoring {
   }
 
   // Public API
-  public trackCustomMetric(name: string, value: number, metadata?: any): void {
+  public trackCustomMetric(name: string, value: number, metadata?: Record<string, unknown>): void {
     this.recordMetric('custom', {
       name,
       value,
@@ -398,7 +419,7 @@ class RealUserMonitoring {
     });
   }
 
-  public trackError(error: Error, context?: any): void {
+  public trackError(error: Error, context?: Record<string, unknown>): void {
     this.session.errors++;
     this.recordMetric('error', {
       message: error.message,
@@ -407,7 +428,7 @@ class RealUserMonitoring {
     });
   }
 
-  public setUser(userId: string, userData?: any): void {
+  public setUser(userId: string, userData?: Record<string, unknown>): void {
     this.session.userId = userId;
     this.recordMetric('user-identified', {
       userId,
@@ -420,8 +441,42 @@ class RealUserMonitoring {
   }
 }
 
-// Create singleton instance
-export const rum = new RealUserMonitoring();
+// Create singleton instance only in browser
+let rumInstance: RealUserMonitoring | null = null;
+
+export const rum = {
+  init() {
+    if (typeof window !== 'undefined' && !rumInstance) {
+      rumInstance = new RealUserMonitoring();
+      rumInstance.init();
+    }
+  },
+  
+  trackPageView(url?: string) {
+    if (rumInstance) {
+      rumInstance.trackPageView(url);
+    }
+  },
+  
+  trackError(error: Error, context?: Record<string, unknown>) {
+    if (rumInstance) {
+      rumInstance.trackError(error, context);
+    }
+  },
+  
+  trackCustomMetric(name: string, value: number, metadata?: Record<string, unknown>) {
+    if (rumInstance) {
+      rumInstance.trackCustomMetric(name, value, metadata);
+    }
+  },
+  
+  getSession() {
+    if (rumInstance) {
+      return rumInstance.getSession();
+    }
+    return null;
+  }
+};
 
 // Export for custom usage
 export { RealUserMonitoring, type RUMSession, type RUMConfig };

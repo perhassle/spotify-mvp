@@ -3,12 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   UserGroupIcon,
   MagnifyingGlassIcon,
   FunnelIcon,
   PlayIcon,
-  HeartIcon,
   CalendarIcon,
   MusicalNoteIcon
 } from '@heroicons/react/24/outline';
@@ -27,7 +27,7 @@ interface ExtendedFollowedArtist extends FollowedArtist {
 }
 
 export default function FollowingPageClient() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const { 
     followedArtists, 
     followingStats,
@@ -250,7 +250,7 @@ export default function FollowingPageClient() {
               <UserGroupIcon className="w-24 h-24 text-gray-600 mx-auto mb-6" />
               <h2 className="text-2xl font-semibold mb-4">No artists followed yet</h2>
               <p className="text-gray-400 mb-8 max-w-md mx-auto">
-                When you follow artists, you'll see them here along with updates about new releases, concerts, and more.
+                When you follow artists, you&apos;ll see them here along with updates about new releases, concerts, and more.
               </p>
               <Link href="/search">
                 <Button className="bg-green-600 hover:bg-green-700">
@@ -311,10 +311,12 @@ export default function FollowingPageClient() {
                         </div>
                         
                         {item.imageUrl && (
-                          <img
+                          <Image
                             src={item.imageUrl}
                             alt={item.title}
-                            className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
+                            width={80}
+                            height={80}
+                            className="rounded-lg object-cover flex-shrink-0"
                           />
                         )}
                       </div>
@@ -344,7 +346,7 @@ export default function FollowingPageClient() {
                 <div className="flex gap-2">
                   <select
                     value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value as any)}
+                    onChange={(e) => setSortBy(e.target.value as 'recent' | 'alphabetical' | 'popular')}
                     className="px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   >
                     <option value="recent">Recently Followed</option>
@@ -493,7 +495,7 @@ export default function FollowingPageClient() {
               {filteredAndSortedArtists.length === 0 && searchQuery && (
                 <div className="text-center py-12">
                   <MagnifyingGlassIcon className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                  <p className="text-gray-400">No artists found matching "{searchQuery}"</p>
+                  <p className="text-gray-400">No artists found matching &quot;{searchQuery}&quot;</p>
                 </div>
               )}
             </>
