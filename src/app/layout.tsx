@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-// import { Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { AppLayout } from "@/components/layout/app-layout";
 import { AuthProvider } from "@/lib/auth/provider";
@@ -12,11 +12,11 @@ import { MonitoringProvider } from "@/lib/monitoring/monitoring-provider";
 import { PerformanceMonitor } from "@/components/monitoring/performance-monitor";
 import { DevelopmentMonitoringToolbar } from "@/components/monitoring/monitoring-dashboard";
 
-// const inter = Inter({ 
-//   subsets: ["latin"],
-//   variable: "--font-inter",
-//   display: 'swap', // Optimize font loading
-// });
+const inter = Inter({ 
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: 'swap', // Optimize font loading
+});
 
 export const metadata: Metadata = {
   // Basic metadata
@@ -192,7 +192,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://api.stripe.com" />
       </head>
-      <body className={`antialiased`}>{/* className={`${inter.className} antialiased`} */}
+      <body className={`${inter.className} antialiased`}>
         <ErrorBoundary onError={typeof window !== 'undefined' ? handleErrorBoundaryError : undefined}>
           <ErrorProvider>
             <ToastProvider>
@@ -205,7 +205,7 @@ export default function RootLayout({
                 <PerformanceMonitor
                   enableRUM={true}
                   enableWebVitals={true}
-                  sampleRate={process.env.NODE_ENV === 'production' ? 0.1 : 1}
+                  _sampleRate={process.env.NODE_ENV === 'production' ? 0.1 : 1}
                 />
                 <AuthProvider>
                   <AppLayout>

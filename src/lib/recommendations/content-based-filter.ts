@@ -21,7 +21,7 @@ export class ContentBasedFilter {
     userProfile: UserProfile,
     context: RecommendationContext
   ): Promise<RecommendationScore[]> {
-    const recommendations: RecommendationScore[] = [];
+    const _recommendations: RecommendationScore[] = [];
 
     // Get recommendations based on different content aspects
     const genreBasedRecs = await this.getGenreBasedRecommendations(request, userProfile, context);
@@ -185,8 +185,8 @@ export class ContentBasedFilter {
       const trackFeatures = this.contentAnalyzer.getTrackFeatures(trackId);
       if (!trackFeatures) continue;
 
-      const score = this.calculateAudioFeatureScore(trackFeatures, userAudioPrefs, context);
-      const similarity = this.calculateFeatureSimilarity(trackFeatures, userAudioPrefs);
+      const score = this.calculateAudioFeatureScore(trackFeatures, userAudioPrefs as unknown as Record<string, number>, context);
+      const similarity = this.calculateFeatureSimilarity(trackFeatures, userAudioPrefs as unknown as Record<string, number>);
 
       if (score > 0.3) { // Only include tracks with reasonable similarity
         recommendations.push({
@@ -240,7 +240,7 @@ export class ContentBasedFilter {
     trackId: string,
     artistPref: ArtistPreference,
     currentArtistId: string,
-    context: RecommendationContext
+    _context: RecommendationContext
   ): number {
     let score = artistPref.score;
 
@@ -265,7 +265,7 @@ export class ContentBasedFilter {
 
   private calculateAudioFeatureScore(
     trackFeatures: TrackFeatures,
-    userAudioPrefs: any,
+    userAudioPrefs: Record<string, number>,
     context: RecommendationContext
   ): number {
     const features = ['danceability', 'energy', 'valence', 'acousticness'];
@@ -274,6 +274,7 @@ export class ContentBasedFilter {
     features.forEach(feature => {
       const trackValue = trackFeatures[feature as keyof TrackFeatures] as number;
       const userPref = userAudioPrefs[feature];
+      if (userPref === undefined) return;
       const similarity = 1 - Math.abs(trackValue - userPref);
       totalSimilarity += similarity;
     });
@@ -441,7 +442,7 @@ export class ContentBasedFilter {
   }
 
   // Mock data methods
-  private async getTracksByGenres(genres: string[]): Promise<string[]> {
+  private async getTracksByGenres(_genres: string[]): Promise<string[]> {
     // Mock implementation
     const tracks: string[] = [];
     for (let i = 1; i <= 50; i++) {

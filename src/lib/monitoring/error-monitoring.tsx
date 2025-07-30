@@ -37,7 +37,7 @@ interface ErrorContext {
   url?: string;
   userAgent?: string;
   timestamp?: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // Enhanced error information
@@ -265,7 +265,7 @@ class ErrorMonitor {
   }
 
   // Enhance error with additional context
-  private enhanceError(error: Error, additionalContext: any = {}): EnhancedError {
+  private enhanceError(error: Error, additionalContext: Record<string, unknown> = {}): EnhancedError {
     const category = this.categorizeError(error);
     const severity = this.determineErrorSeverity(error, category);
     
@@ -367,7 +367,7 @@ class ErrorMonitor {
       stats.topErrors.push({ key, count });
     });
 
-    stats.topErrors.sort((a: any, b: any) => b.count - a.count);
+    stats.topErrors.sort((a: { key: string; count: number }, b: { key: string; count: number }) => b.count - a.count);
     stats.topErrors = stats.topErrors.slice(0, 10);
 
     return stats;
@@ -391,7 +391,7 @@ export class ErrorBoundary extends React.Component<
   { children: React.ReactNode; fallback?: React.ComponentType<{ error: Error }> },
   { hasError: boolean; error: Error | null }
 > {
-  constructor(props: any) {
+  constructor(props: { children: React.ReactNode }) {
     super(props);
     this.state = { hasError: false, error: null };
   }

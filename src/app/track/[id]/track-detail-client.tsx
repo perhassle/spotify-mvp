@@ -10,8 +10,7 @@ import {
   ShareIcon,
   ClockIcon,
   CalendarIcon,
-  ChartBarIcon,
-  MusicalNoteIcon
+  ChartBarIcon
 } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOutlineIcon } from '@heroicons/react/24/outline';
 import { cn } from '@/lib/utils';
@@ -41,7 +40,7 @@ interface TrackDetailClientProps {
  * Client-side track detail component with related content
  */
 export default function TrackDetailClient({ track }: TrackDetailClientProps) {
-  const { currentTrack, isPlaying, play, pause, setQueue } = usePlayerStore();
+  const { currentTrack, isPlaying, play, pause } = usePlayerStore();
   const [isLiked, setIsLiked] = useState(false);
   const [likedTracks, setLikedTracks] = useState<Set<string>>(new Set());
   

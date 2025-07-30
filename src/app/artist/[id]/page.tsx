@@ -23,7 +23,7 @@ async function getArtistData(id: string) {
     
     const result = await response.json();
     return result.data;
-  } catch (error) {
+  } catch (_error) {
     throw new Error('Failed to fetch artist data');
   }
 }
@@ -37,8 +37,8 @@ export default async function ArtistPage({ params }: ArtistPageProps) {
     const artist = await getArtistData(resolvedParams.id);
     
     return <ArtistDetailClient artist={artist} />;
-  } catch (error) {
-    console.error('Error loading artist:', error);
+  } catch (_error) {
+    console.error('Error loading artist:', _error);
     notFound();
   }
 }
@@ -74,7 +74,7 @@ export async function generateMetadata({ params }: ArtistPageProps): Promise<Met
         images: artist.imageUrl ? [artist.imageUrl] : [],
       },
     };
-  } catch (error) {
+  } catch (_error) {
     return {
       title: 'Artist Not Found | Spotify MVP',
       description: 'The requested artist could not be found.',

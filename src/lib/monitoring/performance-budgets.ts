@@ -231,7 +231,7 @@ export function calculatePerformanceScore(metrics: Record<string, number>): numb
       const goodBudget = budgets.find(b => b.severity === 'warning');
       const poorBudget = budgets.find(b => b.severity === 'error');
 
-      if (goodBudget && poorBudget) {
+      if (goodBudget && poorBudget && value !== undefined) {
         let score = 0;
         if (value <= goodBudget.budget) {
           score = 100; // Good

@@ -15,14 +15,14 @@ interface PerformanceMonitorProps {
   userId?: string;
   enableRUM?: boolean;
   enableWebVitals?: boolean;
-  sampleRate?: number;
+  _sampleRate?: number;
 }
 
 export function PerformanceMonitor({
   userId,
   enableRUM = true,
   enableWebVitals = true,
-  sampleRate = 1,
+  _sampleRate = 1,
 }: PerformanceMonitorProps) {
   const pathname = usePathname();
 
@@ -110,7 +110,7 @@ export function PerformanceMonitor({
 
     try {
       observer.observe({ entryTypes: ['longtask'] });
-    } catch (e) {
+    } catch (_e) {
       // Long task observer not supported
     }
 
@@ -119,10 +119,11 @@ export function PerformanceMonitor({
 
   // Monitor memory usage (Chrome only)
   useEffect(() => {
-    const performance = window.performance as any;
+    const performance = window.performance as Performance & { memory?: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } };
     if (!performance.memory || process.env.NODE_ENV !== 'development') return;
 
     const checkMemory = () => {
+      if (!performance.memory) return;
       const { usedJSHeapSize, totalJSHeapSize, jsHeapSizeLimit } = performance.memory;
       const usagePercentage = (usedJSHeapSize / jsHeapSizeLimit) * 100;
 

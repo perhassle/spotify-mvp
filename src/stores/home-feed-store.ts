@@ -4,9 +4,7 @@ import type {
   HomeFeed,
   HomeFeedSection,
   HomeFeedSectionType,
-  RecommendationScore,
   UserBehavior,
-  User,
 } from "@/types";
 import { SpotifyRecommendationEngine } from "@/lib/recommendations/recommendation-engine";
 import { useAuthStore } from "./auth-store";

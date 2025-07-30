@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Play, Pause, Heart, MoreHorizontal, Plus } from 'lucide-react';
+import { Play, Heart, MoreHorizontal, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AddToPlaylistDropdown from '@/components/features/playlist/add-to-playlist-dropdown';
 import usePlayerStore from '@/stores/player-store';
@@ -76,6 +76,7 @@ export default function TrackCardWithPlaylist({
 
       {/* Track Image */}
       <div className="w-12 h-12 rounded overflow-hidden bg-zinc-800 flex-shrink-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={track.album.imageUrl || track.imageUrl || 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=48&h=48&fit=crop'}
           alt={track.album.title}

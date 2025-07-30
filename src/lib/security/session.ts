@@ -166,12 +166,12 @@ export class SecureSessionStorage {
    */
   static decrypt(encryptedData: string): string {
     const parts = encryptedData.split(':');
-    if (parts.length !== 3) {
+    if (parts.length !== 3 || !parts[0] || !parts[1] || !parts[2]) {
       throw new Error('Invalid encrypted data format');
     }
-    const iv = Buffer.from(parts[0]!, 'hex');
-    const authTag = Buffer.from(parts[1]!, 'hex');
-    const encrypted = parts[2]!;
+    const iv = Buffer.from(parts[0], 'hex');
+    const authTag = Buffer.from(parts[1], 'hex');
+    const encrypted = parts[2];
     
     const decipher = crypto.createDecipheriv(
       'aes-256-gcm',
@@ -197,7 +197,7 @@ export interface SessionTimeout {
   warning: number; // Warning before timeout in seconds
 }
 
-export const SESSION_TIMEOUTS = {
+export const SESSION_TIMEOUTS: Record<string, SessionTimeout> = {
   default: {
     absolute: 8 * 60 * 60, // 8 hours
     idle: 30 * 60, // 30 minutes
@@ -213,7 +213,7 @@ export const SESSION_TIMEOUTS = {
     idle: 15 * 60, // 15 minutes
     warning: 2 * 60, // 2 minutes warning
   },
-} as const;
+};
 
 /**
  * Check if session has timed out
@@ -222,7 +222,10 @@ export function isSessionTimedOut(
   lastActivity: Date,
   sessionType: keyof typeof SESSION_TIMEOUTS = 'default'
 ): boolean {
-  const timeout = SESSION_TIMEOUTS[sessionType] ?? SESSION_TIMEOUTS.default;
+  const timeout = SESSION_TIMEOUTS[sessionType];
+  if (!timeout) {
+    return true; // If timeout not found, consider session timed out
+  }
   const now = Date.now();
   const lastActivityTime = lastActivity.getTime();
   

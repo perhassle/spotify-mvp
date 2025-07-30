@@ -93,7 +93,7 @@ export function UpgradePrompt({
           <div className="px-6 pb-4">
             <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-lg p-4">
               <h3 className="font-semibold text-gray-900 mb-1">
-                What you'll get:
+                What you&apos;ll get:
               </h3>
               <p className="text-sm text-gray-600">
                 {getFeatureDescription(featureId)}

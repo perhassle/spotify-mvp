@@ -1,7 +1,6 @@
 import type {
   TrendingData,
   PopularityData,
-  Track,
 } from '@/types';
 
 export class TrendingAnalyzer {
@@ -116,7 +115,7 @@ export class TrendingAnalyzer {
     this.playCountHistory.set(trackId, filteredHistory);
   }
 
-  trackSkip(trackId: string, userId: string, skipPoint: number): void {
+  trackSkip(trackId: string, _userId: string, _skipPoint: number): void {
     const currentPopularity = this.popularityData.get(trackId);
     if (currentPopularity) {
       // Update skip rate
@@ -127,7 +126,7 @@ export class TrendingAnalyzer {
     }
   }
 
-  trackShare(trackId: string, userId: string): void {
+  trackShare(trackId: string, _userId: string): void {
     const currentPopularity = this.popularityData.get(trackId);
     if (currentPopularity) {
       currentPopularity.shareCount++;
@@ -135,7 +134,7 @@ export class TrendingAnalyzer {
     }
   }
 
-  trackPlaylistAddition(trackId: string, userId: string): void {
+  trackPlaylistAddition(trackId: string, _userId: string): void {
     const currentPopularity = this.popularityData.get(trackId);
     if (currentPopularity) {
       currentPopularity.playlistAdditions++;
@@ -210,7 +209,7 @@ export class TrendingAnalyzer {
     return recentPlays / previousPlays;
   }
 
-  private calculateTrendingRank(trackId: string, velocity: number): number {
+  private calculateTrendingRank(trackId: string, _velocity: number): number {
     // Get all trending tracks and rank by velocity
     const allTrending = Array.from(this.trendingData.values())
       .filter(data => data.trending)

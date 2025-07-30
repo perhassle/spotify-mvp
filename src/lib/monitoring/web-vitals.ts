@@ -6,6 +6,13 @@
 import { onCLS, onFCP, onLCP, onTTFB, onINP, Metric } from 'web-vitals';
 import { clientLogger } from '../client-logger';
 
+// Network Information API interface
+interface NetworkInformation {
+  effectiveType?: string;
+  rtt?: number;
+  downlink?: number;
+}
+
 // Web Vitals thresholds (in milliseconds or score)
 const THRESHOLDS = {
   LCP: { good: 2500, needsImprovement: 4000 }, // Largest Contentful Paint
@@ -216,8 +223,8 @@ class WebVitalsMonitor {
   }
 
   // Get connection information
-  private getConnectionInfo(): any {
-    const nav = navigator as any;
+  private getConnectionInfo(): { effectiveType?: string; rtt?: number; downlink?: number } | null {
+    const nav = navigator as Navigator & { connection?: NetworkInformation; mozConnection?: NetworkInformation; webkitConnection?: NetworkInformation };
     const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
     
     if (!connection) return null;
@@ -226,8 +233,8 @@ class WebVitalsMonitor {
       effectiveType: connection.effectiveType,
       downlink: connection.downlink,
       rtt: connection.rtt,
-      saveData: connection.saveData,
-    };
+      saveData: (connection as any).saveData,
+    } as any;
   }
 
   // Generate session ID
@@ -265,7 +272,7 @@ export const webVitalsMonitor = new WebVitalsMonitor();
 export { WebVitalsMonitor, type WebVitalsConfig, type VitalsData };
 
 // Utility function to report custom metrics
-export function reportCustomMetric(name: string, value: number, metadata?: any): void {
+export function reportCustomMetric(name: string, value: number, metadata?: Record<string, unknown>): void {
   clientLogger.info(`Custom Metric: ${name}`, {
     customMetric: {
       name,

@@ -5,7 +5,6 @@ import type {
   RecommendationScore,
   UserProfile,
   RecommendationContext,
-  Track,
 } from '@/types';
 import { musicDatabase } from '../data/music-database';
 import { TrendingAnalyzer } from './trending-analyzer';
@@ -69,7 +68,7 @@ export class ColdStartHandler {
   private selectColdStartStrategy(
     request: RecommendationRequest,
     userProfile: UserProfile | null,
-    context: RecommendationContext
+    _context: RecommendationContext
   ): ColdStartStrategy {
     const interactionCount = userProfile 
       ? userProfile.favoriteGenres.reduce((sum, g) => sum + g.playCount, 0)
@@ -125,7 +124,7 @@ export class ColdStartHandler {
   private async generatePopularityBasedRecommendations(
     request: RecommendationRequest,
     context: RecommendationContext,
-    strategy: ColdStartStrategy
+    _strategy: ColdStartStrategy
   ): Promise<RecommendationScore[]> {
     // Get popular tracks across all genres
     const popularTracks = await this.trendingAnalyzer.getPopularTracks(request.limit * 2);
@@ -179,7 +178,7 @@ export class ColdStartHandler {
   private async generateGenreExplorationRecommendations(
     request: RecommendationRequest,
     context: RecommendationContext,
-    strategy: ColdStartStrategy
+    _strategy: ColdStartStrategy
   ): Promise<RecommendationScore[]> {
     // Define popular genres for exploration
     const popularGenres = ['Pop', 'Rock', 'Hip Hop', 'Electronic', 'Indie', 'R&B', 'Country', 'Jazz'];
@@ -218,7 +217,7 @@ export class ColdStartHandler {
   private async generateOnboardingBasedRecommendations(
     request: RecommendationRequest,
     context: RecommendationContext,
-    strategy: ColdStartStrategy
+    _strategy: ColdStartStrategy
   ): Promise<RecommendationScore[]> {
     // Create onboarding playlists based on context and time
     const recommendations: RecommendationScore[] = [];
@@ -268,7 +267,7 @@ export class ColdStartHandler {
   private async generateDemographicBasedRecommendations(
     request: RecommendationRequest,
     context: RecommendationContext,
-    strategy: ColdStartStrategy
+    _strategy: ColdStartStrategy
   ): Promise<RecommendationScore[]> {
     // Mock demographic-based recommendations
     // In a real app, this would use demographic data (age, location, etc.)
@@ -482,7 +481,7 @@ export class ColdStartHandler {
   }
 
   // Method to get cold start onboarding recommendations for new users
-  async getOnboardingRecommendations(userId: string): Promise<{
+  async getOnboardingRecommendations(_userId: string): Promise<{
     genres: { name: string; tracks: RecommendationScore[] }[];
     moods: { name: string; tracks: RecommendationScore[] }[];
     activities: { name: string; tracks: RecommendationScore[] }[];

@@ -33,10 +33,14 @@ let stripePromise: Promise<StripeJS | null>;
 
 export const getStripe = () => {
   if (!stripePromise) {
-    if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
+    const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || (
+      process.env.NODE_ENV === 'test' || process.env.CI ? 'pk_test_dummy' : undefined
+    );
+    
+    if (!publishableKey) {
       throw new Error('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is not defined');
     }
-    stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+    stripePromise = loadStripe(publishableKey);
   }
   return stripePromise;
 };

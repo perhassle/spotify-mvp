@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { UserMenu } from "@/components/auth/user-menu";
 import { NotificationBell } from "@/components/social/notification-bell";
@@ -25,7 +25,6 @@ import {
   RectangleStackIcon as RectangleStackIconSolid,
   HeartIcon as HeartIconSolid,
   ClockIcon as ClockIconSolid,
-  StarIcon as StarIconSolid,
   UserGroupIcon as UserGroupIconSolid,
 } from "@heroicons/react/24/solid";
 import usePlaylistStore from "@/stores/playlist-store";
@@ -86,7 +85,6 @@ export function Sidebar({ className }: SidebarProps) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   
   const { 
-    playlists, 
     getUserPlaylists, 
     isLoading: playlistsLoading 
   } = usePlaylistStore();
@@ -241,11 +239,15 @@ export function Sidebar({ className }: SidebarProps) {
                         aria-label={`${playlist.name} playlist${isActive ? " (current page)" : ""}`}
                       >
                         {playlist.imageUrl ? (
-                          <img
-                            src={playlist.imageUrl}
-                            alt={playlist.name}
-                            className="h-4 w-4 rounded flex-shrink-0"
-                          />
+                          <>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={playlist.imageUrl}
+                              alt={playlist.name}
+                              className="h-4 w-4 rounded flex-shrink-0"
+                              loading="lazy"
+                            />
+                          </>
                         ) : (
                           <MusicalNoteIcon className="h-4 w-4 flex-shrink-0" />
                         )}
@@ -320,10 +322,10 @@ export function Sidebar({ className }: SidebarProps) {
       <CreatePlaylistModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        onSuccess={(playlistId) => {
+        onSuccess={(_playlistId) => {
           setIsCreateModalOpen(false);
           // Optional: Navigate to the new playlist
-          // router.push(`/playlist/${playlistId}`);
+          // router.push(`/playlist/${_playlistId}`);
         }}
       />
     </aside>

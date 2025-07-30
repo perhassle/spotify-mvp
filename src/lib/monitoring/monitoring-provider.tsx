@@ -8,6 +8,7 @@
 import { useEffect } from 'react';
 import { webVitalsMonitor } from './web-vitals';
 import { errorMonitor } from './error-monitoring';
+import { errorMonitor as productionErrorMonitor } from './production-error-monitor';
 import { usePathname } from 'next/navigation';
 import { clientLogger } from '../client-logger';
 
@@ -35,6 +36,16 @@ export function MonitoringProvider({
     // Initialize error monitoring
     if (enableErrorMonitoring) {
       errorMonitor.init();
+      
+      // Also initialize production error monitor if in production
+      if (process.env.NODE_ENV === 'production') {
+        productionErrorMonitor.captureError(new Error('Production monitoring initialized'), {
+          type: 'info',
+          userId,
+          userEmail
+        });
+      }
+      
       clientLogger.info('Error monitoring initialized');
     }
 
@@ -64,6 +75,9 @@ export function MonitoringProvider({
 
       // Update client logger context
       clientLogger.child({ userId, userEmail });
+      
+      // Update production error monitor
+      productionErrorMonitor.setUser(userContext);
 
       // Update Sentry user context
       if ((window as any).Sentry) {
@@ -136,7 +150,7 @@ export function MonitoringProvider({
 // Hook to use monitoring utilities
 export function useMonitoring() {
   return {
-    logEvent: (eventName: string, data?: any) => {
+    logEvent: (eventName: string, data?: Record<string, unknown>) => {
       clientLogger.info(`Event: ${eventName}`, { event: { name: eventName, ...data } });
       
       if ((window as any).Sentry) {
@@ -149,15 +163,15 @@ export function useMonitoring() {
       }
     },
     
-    logError: (error: Error, context?: any) => {
+    logError: (error: Error, context?: Record<string, unknown>) => {
       errorMonitor.captureError(error, context);
     },
     
-    logPerformance: (operation: string, duration: number, metadata?: any) => {
+    logPerformance: (operation: string, duration: number, metadata?: Record<string, unknown>) => {
       clientLogger.performance(operation, duration, metadata);
     },
     
-    setUserContext: (user: { id: string; email?: string; [key: string]: any }) => {
+    setUserContext: (user: { id: string; email?: string; [key: string]: unknown }) => {
       clientLogger.child({ userId: user.id, userEmail: user.email });
       
       if ((window as any).Sentry) {

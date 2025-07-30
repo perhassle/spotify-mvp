@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { 
   Play, 
@@ -10,8 +11,6 @@ import {
   Lock, 
   Users,
   Share2,
-  Heart,
-  Download,
   Edit,
   Trash2
 } from 'lucide-react';
@@ -111,10 +110,11 @@ export default function PlaylistCard({ playlist }: PlaylistCardProps) {
       {/* Cover Image */}
       <div className="relative aspect-square mb-4 rounded-lg overflow-hidden bg-zinc-800">
         {playlist.imageUrl ? (
-          <img
+          <Image
             src={playlist.imageUrl}
             alt={playlist.name}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">

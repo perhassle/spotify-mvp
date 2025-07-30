@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   XMarkIcon,
   LinkIcon,
@@ -95,13 +95,6 @@ export function ShareModal({ className = '' }: ShareModalProps) {
   const [copiedEmbed, setCopiedEmbed] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
-  // Generate share link when modal opens
-  useEffect(() => {
-    if (isOpen && content && !shareUrl) {
-      generateShareLink();
-    }
-  }, [isOpen, content]);
-
   // Handle escape key and click outside
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -127,7 +120,7 @@ export function ShareModal({ className = '' }: ShareModalProps) {
     };
   }, [isOpen, closeShareModal]);
 
-  const generateShareLink = async () => {
+  const generateShareLink = useCallback(async () => {
     if (!content) return;
 
     setIsGeneratingLink(true);
@@ -155,7 +148,14 @@ export function ShareModal({ className = '' }: ShareModalProps) {
     } finally {
       setIsGeneratingLink(false);
     }
-  };
+  }, [content, customMessage, embedOptions]);
+
+  // Generate share link when modal opens
+  useEffect(() => {
+    if (isOpen && content && !shareUrl) {
+      generateShareLink();
+    }
+  }, [isOpen, content, shareUrl, generateShareLink]);
 
   const handleCopyLink = async () => {
     if (!shareUrl) return;
@@ -190,7 +190,7 @@ export function ShareModal({ className = '' }: ShareModalProps) {
     setIsSharing(true);
 
     const shareOptions: SocialShareOptions = {
-      platform: platformId as any,
+      platform: platformId as 'twitter' | 'facebook' | 'instagram' | 'linkedin' | 'whatsapp' | 'telegram',
       title: content.title,
       description: content.description || `Check out ${content.title}`,
       imageUrl: content.imageUrl,
@@ -201,7 +201,7 @@ export function ShareModal({ className = '' }: ShareModalProps) {
     // Generate platform-specific share URLs
     let shareUrlPlatform = '';
     const encodedUrl = encodeURIComponent(shareUrl);
-    const encodedTitle = encodeURIComponent(content.title);
+    const _encodedTitle = encodeURIComponent(content.title);
     const encodedText = encodeURIComponent(shareOptions.description || '');
 
     switch (platformId) {
@@ -326,6 +326,7 @@ export function ShareModal({ className = '' }: ShareModalProps) {
         <div className="p-6 border-b border-gray-700">
           <div className="flex items-center gap-4">
             {content.imageUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={content.imageUrl}
                 alt={content.title}
@@ -350,7 +351,7 @@ export function ShareModal({ className = '' }: ShareModalProps) {
           ].map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id as 'social' | 'copy' | 'email' | 'embed')}
               className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium transition-colors ${
                 activeTab === tab.id
                   ? 'text-green-400 border-b-2 border-green-400'

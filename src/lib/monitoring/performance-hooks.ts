@@ -8,13 +8,20 @@ import { clientLogger } from '../client-logger';
 import { reportCustomMetric } from './web-vitals';
 
 // Performance mark types
-type PerformanceMarkType = 'component-mount' | 'component-update' | 'interaction' | 'data-fetch';
+type _PerformanceMarkType = 'component-mount' | 'component-update' | 'interaction' | 'data-fetch';
+
+// Memory info interface
+interface PerformanceMemory {
+  usedJSHeapSize?: number;
+  totalJSHeapSize?: number;
+  jsHeapSizeLimit?: number;
+}
 
 // Performance monitoring options
 interface PerformanceOptions {
   threshold?: number; // Log only if duration exceeds threshold (ms)
   logLevel?: 'info' | 'warn';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -44,6 +51,7 @@ export function useRenderPerformance(
       
       return () => {
         const mountDuration = performance.now() - mountTime.current;
+        const currentRenderCount = renderCount.current;
         
         if (performance.mark && performance.measure) {
           performance.mark(`${componentName}-mount-end`);
@@ -94,18 +102,18 @@ export function useInteractionTracking(
   interactionName: string,
   options: PerformanceOptions = {}
 ): {
-  trackInteraction: <T extends (...args: any[]) => any>(
+  trackInteraction: <T extends (...args: unknown[]) => unknown>(
     handler: T,
-    metadata?: Record<string, any>
+    metadata?: Record<string, unknown>
   ) => T;
 } {
   const { threshold = 100 } = options;
 
-  const trackInteraction = useCallback(<T extends (...args: any[]) => any>(
+  const trackInteraction = useCallback(<T extends (...args: unknown[]) => unknown>(
     handler: T,
-    metadata?: Record<string, any>
+    metadata?: Record<string, unknown>
   ): T => {
-    return ((...args: any[]) => {
+    return ((...args: unknown[]) => {
       const startTime = performance.now();
       const markName = `interaction-${interactionName}-${Date.now()}`;
       
@@ -346,8 +354,8 @@ export function useLongTaskMonitoring(
 export function useMemoryMonitoring(
   componentName: string,
   interval: number = 10000 // Check every 10 seconds
-): { memoryInfo: any } {
-  const [memoryInfo, setMemoryInfo] = useState<any>(null);
+): { memoryInfo: PerformanceMemory | null } {
+  const [memoryInfo, setMemoryInfo] = useState<PerformanceMemory | null>(null);
 
   useEffect(() => {
     // Check if memory API is available (Chrome only)
@@ -363,7 +371,7 @@ export function useMemoryMonitoring(
         percentage: Math.round((usedJSHeapSize / jsHeapSizeLimit) * 100),
       };
 
-      setMemoryInfo(memoryUsage);
+      setMemoryInfo(memoryUsage as any);
 
       // Log if memory usage is high
       if (memoryUsage.percentage > 90) {

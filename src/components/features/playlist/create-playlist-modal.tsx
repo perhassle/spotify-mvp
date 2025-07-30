@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
+import Image from 'next/image';
 import { useForm, Controller } from 'react-hook-form';
 import { useDropzone } from 'react-dropzone';
-import { X, Upload, Image, Lock, Users, Globe, Loader2 } from 'lucide-react';
+import { X, Upload, ImageIcon, Users, Globe, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import usePlaylistStore from '@/stores/playlist-store';
@@ -176,10 +177,11 @@ export default function CreatePlaylistModal({
             
             {coverImagePreview ? (
               <div className="relative w-48 h-48 mx-auto">
-                <img
+                <Image
                   src={coverImagePreview}
                   alt="Playlist cover preview"
-                  className="w-full h-full object-cover rounded-lg"
+                  fill
+                  className="object-cover rounded-lg"
                 />
                 <Button
                   type="button"
@@ -212,7 +214,7 @@ export default function CreatePlaylistModal({
                     </>
                   ) : (
                     <>
-                      <Image className="w-12 h-12 mb-2" />
+                      <ImageIcon className="w-12 h-12 mb-2" />
                       <p className="text-sm text-center">
                         Drag & drop an image, or click to select
                       </p>

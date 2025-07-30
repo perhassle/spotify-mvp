@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authDB } from '@/lib/auth/database';
 import { forgotPasswordSchema } from '@/lib/auth/validation';
+import { ApiError } from '@/types/common';
 
 export async function POST(request: NextRequest) {
   try {
@@ -51,8 +52,9 @@ export async function POST(request: NextRequest) {
       ...(process.env.NODE_ENV === 'development' && { resetToken })
     });
 
-  } catch (error: any) {
-    console.error('Forgot password error:', error);
+  } catch (error) {
+    const apiError = error as ApiError;
+    console.error('Forgot password error:', apiError);
     
     return NextResponse.json(
       { 

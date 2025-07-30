@@ -4,6 +4,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
+import { WebVital } from '@/types/common';
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,7 +23,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Process metrics for analysis
-    const processedMetrics = metrics.map((metric: any) => ({
+    const processedMetrics = metrics.map((metric: WebVital) => ({
       ...metric,
       processed: true,
       receivedAt: Date.now(),
@@ -35,7 +36,7 @@ export async function POST(request: NextRequest) {
     // 4. Alert on poor performance
 
     // Check for poor performance and log warnings
-    metrics.forEach((metric: any) => {
+    metrics.forEach((metric: WebVital) => {
       if (metric.rating === 'poor') {
         logger.warn(`Poor Web Vital detected: ${metric.name}`, {
           metric,
@@ -50,7 +51,7 @@ export async function POST(request: NextRequest) {
       sessionId,
     });
   } catch (error) {
-    logger.error('Failed to process Web Vitals', error);
+    logger.error('Failed to process Web Vitals', error as Error);
     
     return NextResponse.json(
       { error: 'Failed to process metrics' },

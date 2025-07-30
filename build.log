@@ -1,0 +1,491 @@
+
+> spotify-mvp@0.1.0 build
+> next build
+
+   ▲ Next.js 15.4.4
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · serverActions
+     · webVitalsAttribution
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 2000ms
+   Linting and checking validity of types ...
+
+./src/app/api/subscription/create/route.ts
+55:39  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/api/subscription/manage/route.ts
+60:51  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+69:42  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+182:53  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/api/subscription/webhook/route.ts
+194:19  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+195:47  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+195:92  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+195:124  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+219:19  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+220:47  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+220:92  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+220:124  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/playlist/[id]/page.tsx
+11:9  Warning: 'resolvedParams' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/app/playlist/[id]/playlist-detail-client.tsx
+196:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+227:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/app/playlists/playlists-page-client.tsx
+14:3  Warning: 'FolderPlus' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+31:10  Warning: 'Playlist' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+93:9  Warning: 'formatDuration' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+324:21  Warning: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+324:32  Warning: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+
+./src/app/share/[type]/[id]/page.tsx
+49:9  Warning: 'resolvedSearchParams' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/app/share/[type]/[id]/share-preview-client.tsx
+11:3  Warning: 'ShareIcon' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+12:3  Warning: 'ArrowDownTrayIcon' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+13:3  Warning: 'UserPlusIcon' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+17:3  Warning: 'UserIcon' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+55:6  Warning: React Hook useEffect has missing dependencies: 'fetchContent' and 'trackView'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+95:14  Warning: 'error' is defined but never used. Allowed unused caught errors must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/app/subscription/success/subscription-success-client.tsx
+13:17  Warning: 'updateUser' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/components/audio/mobile-player.tsx
+64:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+141:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/auth/user-menu.tsx
+86:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/demo/audio-demo.tsx
+237:5  Warning: 'queue' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/components/demo/logger-demo.tsx
+4:10  Warning: 'clientLogger' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/components/features/playlist/add-to-playlist-dropdown.tsx
+42:5  Warning: 'playlists' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+135:61  Warning: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  react/no-unescaped-entities
+135:74  Warning: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  react/no-unescaped-entities
+236:27  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/features/playlist/create-playlist-modal.tsx
+6:28  Warning: 'Lock' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+179:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+215:23  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+./src/components/features/playlist/draggable-track-list.tsx
+7:3  Warning: 'Pause' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+10:3  Warning: 'Clock' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+161:25  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/features/playlist/playlist-card.tsx
+13:3  Warning: 'Heart' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+14:3  Warning: 'Download' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+114:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/features/playlist/playlist-list-item.tsx
+13:3  Warning: 'Heart' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+14:3  Warning: 'Download' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+162:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/features/search/search-history.tsx
+3:32  Warning: 'MagnifyingGlassIcon' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/components/features/search/search-input.tsx
+180:13  Warning: Elements with the ARIA role "combobox" must have the following attributes defined: aria-controls,aria-expanded  jsx-a11y/role-has-required-aria-props
+
+./src/components/features/search/search-states.tsx
+85:25  Warning: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+86:50  Warning: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  react/no-unescaped-entities
+86:58  Warning: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  react/no-unescaped-entities
+
+./src/components/features/search/track-card-with-playlist.tsx
+4:16  Warning: 'Pause' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+79:9  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/home/home-feed-section.tsx
+259:6  Warning: React Hook React.useEffect has missing dependencies: 'checkScrollButtons' and 'scrollContainerRef'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/home/recommendation-card.tsx
+30:3  Warning: 'userId' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+34:38  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+166:34  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+246:32  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/layout/app-layout.tsx
+8:10  Warning: 'Suspense' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/components/layout/music-player.tsx
+21:10  Warning: 'SkipCounter' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+48:5  Warning: 'nextTrack' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+57:5  Warning: 'getSkipStatus' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/components/layout/sidebar.tsx
+6:20  Warning: 'useEffect' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+28:15  Warning: 'StarIconSolid' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+89:5  Warning: 'playlists' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+244:27  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+323:21  Warning: 'playlistId' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/components/monitoring/monitoring-dashboard.tsx
+13:11  Warning: 'MetricCard' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+22:61  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+23:63  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+144:63  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+170:43  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+170:87  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/monitoring/performance-monitor.tsx
+25:3  Warning: 'sampleRate' is assigned a value but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+104:14  Warning: 'e' is defined but never used. Allowed unused caught errors must match /^_/u.  @typescript-eslint/no-unused-vars
+113:47  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/premium/offline-downloads.tsx
+251:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+344:14  Warning: 'error' is defined but never used. Allowed unused caught errors must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/components/queue/enhanced-queue.tsx
+3:28  Warning: 'useEffect' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/components/social/follow-button.tsx
+36:6  Warning: React Hook useEffect has a missing dependency: 'fetchFollowStatus'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/social/notification-bell.tsx
+8:3  Warning: 'CheckIcon' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/components/social/share-modal.tsx
+75:5  Warning: 'selectedPlatforms' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+81:5  Warning: 'addSelectedPlatform' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+82:5  Warning: 'removeSelectedPlatform' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+84:5  Warning: 'removeEmailRecipient' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+103:6  Warning: React Hook useEffect has missing dependencies: 'generateShareLink' and 'shareUrl'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+193:31  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+204:11  Warning: 'encodedTitle' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+329:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+353:53  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/social/social-share-buttons.tsx
+4:21  Warning: 'LinkIcon' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+6:28  Warning: 'SocialShareOptions' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/components/subscription/ad-player.tsx
+30:25  Warning: 'playbackState' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+94:6  Warning: React Hook useEffect has a missing dependency: 'handleAdComplete'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+165:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/subscription/checkout-form.tsx
+10:10  Warning: 'cn' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+27:3  Warning: 'clientSecret' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/components/subscription/pricing-page.tsx
+5:21  Warning: 'XMarkIcon' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/components/subscription/subscription-dashboard.tsx
+252:50  Warning: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+268:47  Warning: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+
+./src/components/subscription/tier-badge.tsx
+5:16  Warning: 'SubscriptionTier' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+180:9  Warning: 'availableFeatures' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/components/subscription/upgrade-prompt.tsx
+96:25  Warning: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+
+./src/components/ui/button.tsx
+47:11  Warning: 'Comp' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+85:63  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/hooks/use-secure-fetch.ts
+68:16  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+188:64  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+210:13  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+226:13  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/api-client.ts
+2:10  Warning: 'parseError' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+105:53  Warning: 'requestId' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+128:21  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+190:17  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+197:18  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+199:12  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+212:17  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+214:12  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+227:19  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+229:12  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+242:20  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+249:20  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+273:35  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/api-error-handler.ts
+21:29  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+29:15  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+47:51  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+63:55  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+76:59  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+80:48  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+89:43  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+98:40  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+115:15  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+202:54  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+202:72  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+233:28  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/audio/advanced-audio-engine.ts
+67:66  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/client-error-handler.ts
+9:13  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+14:11  Warning: 'ApiErrorResponse' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+21:15  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+44:31  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/client-logger.ts
+14:18  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+22:12  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+53:42  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+53:54  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+64:32  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+68:32  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+72:33  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+80:59  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+91:63  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+112:45  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+120:56  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/data/album-service.ts
+2:29  Warning: 'Artist' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/lib/error-tracking.ts
+22:15  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+206:48  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+209:35  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+228:39  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+245:23  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/logger-examples.ts
+147:62  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+161:69  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/logger.ts
+76:18  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+83:29  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+120:33  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+124:42  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+124:54  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+132:32  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+136:32  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+140:33  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+144:33  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+162:13  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+162:23  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+175:54  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+187:59  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+198:85  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/monitoring/error-monitoring.tsx
+108:11  Warning: 'stack' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+357:42  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+358:33  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/monitoring/examples/monitoring-usage.tsx
+43:31  Warning: 'logPerformance' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+51:13  Warning: 'audioData' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+71:35  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+71:66  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+71:97  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+87:11  Warning: 'data' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/lib/monitoring/monitoring-provider.tsx
+69:22  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+70:20  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+92:20  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+93:18  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+142:22  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+143:20  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+163:22  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+164:20  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+169:22  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+170:20  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/monitoring/performance-hooks.ts
+53:48  Warning: The ref value 'renderCount.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'renderCount.current' to a variable inside the effect, and use that variable in the cleanup function.  react-hooks/exhaustive-deps
+235:6  Warning: React Hook useEffect was passed a dependency list that is not an array literal. This means we can't statically verify whether you've passed the correct dependencies.  react-hooks/exhaustive-deps
+235:6  Warning: React Hook useEffect has a missing dependency: 'performFetch'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+251:44  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+252:42  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+253:76  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+258:63  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+269:61  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+295:31  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+339:14  Warning: 'error' is defined but never used. Allowed unused caught errors must match /^_/u.  @typescript-eslint/no-unused-vars
+359:47  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+371:36  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/monitoring/rum.ts
+266:31  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+278:14  Warning: 'e' is defined but never used. Allowed unused caught errors must match /^_/u.  @typescript-eslint/no-unused-vars
+296:34  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/monitoring/sentry-config.ts
+6:10  Warning: 'ErrorCategory' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+6:25  Warning: 'ErrorSeverity' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+32:11  Warning: 'tags' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+38:33  Warning: 'level' is assigned a value but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+41:20  Warning: 'name' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+41:34  Warning: 'op' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/lib/monitoring/web-vitals.ts
+236:32  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+237:10  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+246:39  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+247:35  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/recommendations/ab-testing.ts
+196:31  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+231:32  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/recommendations/cold-start-handler.ts
+8:3  Warning: 'Track' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+72:5  Warning: 'context' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+128:5  Warning: 'strategy' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+182:5  Warning: 'strategy' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+221:5  Warning: 'strategy' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+271:5  Warning: 'strategy' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+485:38  Warning: 'userId' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/lib/recommendations/content-analyzer.ts
+3:3  Warning: 'Track' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+4:3  Warning: 'Artist' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+6:3  Warning: 'ContentMetadata' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+268:21  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+283:5  Warning: 'averageFeatures' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+284:5  Warning: 'dominantGenres' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/lib/recommendations/content-based-filter.ts
+24:11  Warning: 'recommendations' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+243:5  Warning: 'context' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+268:21  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+312:84  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+326:77  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+444:35  Warning: 'genres' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/lib/recommendations/recommendation-engine.ts
+16:3  Warning: 'TrendingData' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+18:3  Warning: 'ColdStartStrategy' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+160:5  Warning: 'context' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+359:5  Warning: 'context' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+379:22  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+380:5  Warning: 'context' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+401:21  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+402:5  Warning: 'context' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+534:37  Warning: 'refresh' is assigned a value but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/lib/recommendations/trending-analyzer.ts
+4:3  Warning: 'Track' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+119:30  Warning: 'userId' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+119:46  Warning: 'skipPoint' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+130:31  Warning: 'userId' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+138:42  Warning: 'userId' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+213:50  Warning: 'velocity' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/lib/recommendations/user-profile-manager.ts
+11:3  Warning: 'PlaybackContext' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+335:44  Warning: 'behaviors' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/lib/security/api-security.ts
+1:23  Warning: 'NextResponse' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+4:10  Warning: 'authConfig' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+214:46  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+214:52  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+224:37  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+332:12  Warning: 'error' is defined but never used. Allowed unused caught errors must match /^_/u.  @typescript-eslint/no-unused-vars
+340:43  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+340:49  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/security/monitoring.ts
+3:10  Warning: 'authConfig' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+36:28  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/subscription/ad-manager.ts
+117:49  Warning: 'user' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+143:42  Warning: 'nextTrack' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/lib/subscription/audio-quality-manager.ts
+114:47  Warning: 'track' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/lib/subscription/feature-gate.ts
+1:50  Warning: 'FeatureGate' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+116:74  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+118:14  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+120:21  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+154:72  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+154:88  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+194:70  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+200:39  Warning: 'user' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+200:51  Warning: 'trackId' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+216:33  Warning: 'user' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+216:45  Warning: 'settings' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+216:55  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+224:27  Warning: 'user' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+224:39  Warning: 'duration' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+246:36  Warning: 'user' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+246:48  Warning: 'enabled' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/lib/subscription/tier-manager.ts
+1:34  Warning: 'SubscriptionStatus' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/middleware/logging.ts
+106:49  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+106:59  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+111:50  Warning: 'startTime' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+143:40  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+143:50  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+170:40  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+170:50  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/middleware/security-headers.ts
+9:37  Warning: 'request' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./src/providers/toast-provider.tsx
+4:33  Warning: 'ToastType' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+33:6  Warning: React Hook useCallback has a missing dependency: 'removeToast'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/stores/home-feed-store.ts
+5:3  Warning: 'HomeFeedSection' is defined but never used. Allowed unused vars must match /^_|FriendActivity/u.  @typescript-eslint/no-unused-vars
+7:3  Warning: 'RecommendationScore' is defined but never used. Allowed unused vars must match /^_|FriendActivity/u.  @typescript-eslint/no-unused-vars
+9:3  Warning: 'User' is defined but never used. Allowed unused vars must match /^_|FriendActivity/u.  @typescript-eslint/no-unused-vars
+
+./src/stores/player-store.ts
+5:23  Warning: 'SkipUtils' is defined but never used. Allowed unused vars must match /^_|FriendActivity/u.  @typescript-eslint/no-unused-vars
+6:21  Warning: 'AdUtils' is defined but never used. Allowed unused vars must match /^_|FriendActivity/u.  @typescript-eslint/no-unused-vars
+7:31  Warning: 'QualityUtils' is defined but never used. Allowed unused vars must match /^_|FriendActivity/u.  @typescript-eslint/no-unused-vars
+8:10  Warning: 'featureGate' is defined but never used. Allowed unused vars must match /^_|FriendActivity/u.  @typescript-eslint/no-unused-vars
+59:41  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+70:42  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+493:52  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/stores/playlist-store.ts
+8:3  Warning: 'Track' is defined but never used. Allowed unused vars must match /^_|FriendActivity/u.  @typescript-eslint/no-unused-vars
+9:3  Warning: 'PlaylistTrack' is defined but never used. Allowed unused vars must match /^_|FriendActivity/u.  @typescript-eslint/no-unused-vars
+559:27  Warning: 'id' is defined but never used. Allowed unused args must match /^_|get/u.  @typescript-eslint/no-unused-vars
+
+./src/stores/search-store.ts
+8:3  Warning: 'SearchSuggestion' is defined but never used. Allowed unused vars must match /^_|FriendActivity/u.  @typescript-eslint/no-unused-vars
+
+./src/stores/social-store.ts
+5:3  Warning: 'FollowedArtist' is defined but never used. Allowed unused vars must match /^_|FriendActivity/u.  @typescript-eslint/no-unused-vars
+
+./src/stores/subscription-store.ts
+104:63  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+113:52  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
