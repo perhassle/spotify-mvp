@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe, HANDLED_WEBHOOK_EVENTS, mapStripeSubscriptionStatus } from '@/lib/stripe/config';
 import { headers } from 'next/headers';
+import { ApiError, AnyRecord } from '@/types/common';
 import Stripe from 'stripe';
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -34,7 +35,7 @@ export async function POST(request: NextRequest) {
     console.log(`Received webhook: ${event.type}`);
 
     // Only process events we handle
-    if (!HANDLED_WEBHOOK_EVENTS.includes(event.type as any)) {
+    if (!HANDLED_WEBHOOK_EVENTS.includes(event.type as typeof HANDLED_WEBHOOK_EVENTS[number])) {
       console.log(`Unhandled webhook event: ${event.type}`);
       return NextResponse.json({ received: true });
     }
@@ -102,9 +103,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ received: true });
 
   } catch (error) {
-    console.error('Webhook processing error:', error);
+    const apiError = error as ApiError;
+    console.error('Webhook processing error:', apiError);
     return NextResponse.json(
-      { error: 'Webhook processing failed' },
+      { error: apiError.message || 'Webhook processing failed' },
       { status: 500 }
     );
   }
@@ -190,7 +192,12 @@ async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
   console.log('Payment succeeded:', invoice.id);
   
   if ((invoice as any).subscription) {
-    const subscription = await stripe.subscriptions.retrieve((invoice as any).subscription as string);
+    const subscriptionId = typeof (invoice as any).subscription === 'string' ? (invoice as any).subscription : (invoice as any).subscription?.id;
+    if (!subscriptionId) {
+      console.error('Invalid subscription ID in invoice');
+      return;
+    }
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
     const userId = subscription.metadata.userId;
     
     if (userId) {
@@ -210,7 +217,12 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
   console.log('Payment failed:', invoice.id);
   
   if ((invoice as any).subscription) {
-    const subscription = await stripe.subscriptions.retrieve((invoice as any).subscription as string);
+    const subscriptionId = typeof (invoice as any).subscription === 'string' ? (invoice as any).subscription : (invoice as any).subscription?.id;
+    if (!subscriptionId) {
+      console.error('Invalid subscription ID in invoice');
+      return;
+    }
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
     const userId = subscription.metadata.userId;
     
     if (userId) {
@@ -258,7 +270,7 @@ async function handlePaymentMethodAttached(paymentMethod: Stripe.PaymentMethod) 
 }
 
 // Mock email service - replace with actual email implementation
-async function sendEmail(template: string, data: any) {
+async function sendEmail(template: string, data: AnyRecord) {
   console.log(`Mock email sent: ${template}`, data);
   
   // TODO: Implement actual email sending using your preferred service
@@ -266,11 +278,11 @@ async function sendEmail(template: string, data: any) {
   
   // For development, just log the email that would be sent
   const emailTemplates = {
-    subscription_welcome: `Welcome to Premium! Your trial ends on ${new Date(data.trialEnd * 1000).toLocaleDateString()}`,
+    subscription_welcome: `Welcome to Premium! Your trial ends on ${new Date((data.trialEnd as number) * 1000).toLocaleDateString()}`,
     subscription_activated: `Your Premium subscription is now active!`,
-    subscription_canceled: `Your subscription has been canceled. Access continues until ${new Date(data.endDate * 1000).toLocaleDateString()}`,
-    trial_ending: `Your free trial ends on ${data.trialEndDate.toLocaleDateString()}`,
-    payment_receipt: `Payment of ${data.amount / 100} ${data.currency.toUpperCase()} received`,
+    subscription_canceled: `Your subscription has been canceled. Access continues until ${new Date((data.endDate as number) * 1000).toLocaleDateString()}`,
+    trial_ending: `Your free trial ends on ${(data.trialEndDate as Date).toLocaleDateString()}`,
+    payment_receipt: `Payment of ${(data.amount as number) / 100} ${(data.currency as string).toUpperCase()} received`,
     payment_failed: `Payment failed. We'll retry automatically.`,
   };
   

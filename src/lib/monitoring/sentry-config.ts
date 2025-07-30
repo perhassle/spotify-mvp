@@ -23,7 +23,7 @@ export function initSentry(): void {
 
 // Stub utilities
 export const sentryUtils = {
-  setUser(user: any) {
+  setUser(_user: { id?: string; email?: string; [key: string]: unknown }) {
     // No-op
   },
   clearUser() {
@@ -32,7 +32,7 @@ export const sentryUtils = {
   setTags(tags: Record<string, string>) {
     // No-op
   },
-  addBreadcrumb(breadcrumb: any) {
+  addBreadcrumb(_breadcrumb: { category?: string; message?: string; level?: string; data?: Record<string, unknown> }) {
     // No-op
   },
   captureEvent(message: string, level: string = 'info') {

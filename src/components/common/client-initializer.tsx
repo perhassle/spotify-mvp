@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useToast } from '@/providers/toast-provider';
 import { setGlobalToastError } from '@/lib/client-error-handler';
 

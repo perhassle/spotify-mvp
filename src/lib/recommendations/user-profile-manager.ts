@@ -8,7 +8,6 @@ import type {
   AudioFeaturePreferences,
   TimeBasedPreferences,
   SocialPreferences,
-  PlaybackContext,
 } from '@/types';
 
 export class UserProfileManager {
@@ -332,7 +331,7 @@ export class UserProfileManager {
     };
   }
 
-  private calculateAudioFeaturePreferences(behaviors: UserBehavior[]): AudioFeaturePreferences {
+  private calculateAudioFeaturePreferences(_behaviors: UserBehavior[]): AudioFeaturePreferences {
     // Mock implementation - in a real app, this would analyze actual audio features
     // of tracks the user played vs skipped
     return {

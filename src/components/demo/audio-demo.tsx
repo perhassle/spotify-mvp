@@ -234,7 +234,6 @@ export function AudioDemo({ className }: AudioDemoProps) {
     initializeAudioEngine,
     currentTrack,
     isPlaying,
-    queue,
     shuffleMode,
   } = usePlayerStore();
 

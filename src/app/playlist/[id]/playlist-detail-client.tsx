@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { 
   Play, 
   Pause, 
@@ -11,9 +12,6 @@ import {
   Music, 
   Lock, 
   Users,
-  Heart,
-  HeartIcon,
-  Download,
   Share2,
   Edit3,
   Search,
@@ -23,7 +21,6 @@ import {
   SortDesc,
   Grid3X3,
   List,
-  Filter,
   X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -40,23 +37,19 @@ interface PlaylistDetailClientProps {
 
 export default function PlaylistDetailClient({ playlistId }: PlaylistDetailClientProps) {
   const { data: session } = useSession();
-  const router = useRouter();
+  const _router = useRouter();
   
   const [playlist, setPlaylist] = useState<Playlist | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const [_isEditing, setIsEditing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [showAddTrack, setShowAddTrack] = useState(false);
+  const [_showAddTrack, setShowAddTrack] = useState(false);
   const [selectedTracks, setSelectedTracks] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<'title' | 'artist' | 'album' | 'dateAdded' | 'duration'>('dateAdded');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [viewMode, setViewMode] = useState<'list' | 'compact'>('list');
   
   const { 
-    getPlaylistById,
-    updatePlaylist,
-    deletePlaylist,
-    removeTrackFromPlaylist,
-    isLoading 
+    removeTrackFromPlaylist
   } = usePlaylistStore();
   
   const { 
@@ -182,7 +175,7 @@ export default function PlaylistDetailClient({ playlistId }: PlaylistDetailClien
     setSelectedTracks([]);
   };
 
-  const formatDate = (date: Date) => {
+  const _formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
@@ -201,9 +194,11 @@ export default function PlaylistDetailClient({ playlistId }: PlaylistDetailClien
             {/* Playlist Cover */}
             <div className="w-64 h-64 rounded-lg shadow-2xl overflow-hidden bg-zinc-800 flex-shrink-0">
               {playlist.imageUrl ? (
-                <img
+                <Image
                   src={playlist.imageUrl}
                   alt={playlist.name}
+                  width={256}
+                  height={256}
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -232,9 +227,11 @@ export default function PlaylistDetailClient({ playlistId }: PlaylistDetailClien
               )}
 
               <div className="flex items-center space-x-2 text-sm text-white/70">
-                <img
+                <Image
                   src={playlist.owner.profileImage || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=32&h=32&fit=crop&crop=face'}
                   alt={playlist.owner.displayName}
+                  width={24}
+                  height={24}
                   className="w-6 h-6 rounded-full"
                 />
                 <span className="font-medium text-white">

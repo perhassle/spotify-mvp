@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
   Play, 
@@ -10,8 +10,6 @@ import {
   Lock, 
   Users,
   Share2,
-  Heart,
-  Download,
   Edit,
   Trash2
 } from 'lucide-react';

@@ -6,7 +6,7 @@ interface HealthCheckComponent {
   status: 'healthy' | 'degraded' | 'unhealthy';
   message?: string;
   responseTime?: number;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 interface HealthCheckResponse {

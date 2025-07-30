@@ -8,21 +8,17 @@ import {
   HeartIcon, 
   EllipsisHorizontalIcon,
   ShareIcon,
-  UserPlusIcon,
-  CheckBadgeIcon,
-  MusicalNoteIcon
+  CheckBadgeIcon
 } from '@heroicons/react/24/solid';
-import { HeartIcon as HeartOutlineIcon, UserPlusIcon as UserPlusOutlineIcon } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartOutlineIcon } from '@heroicons/react/24/outline';
 import { cn } from '@/lib/utils';
 import { 
   formatDuration, 
   formatDate, 
-  formatNumberShort,
-  calculateTotalDuration
+  formatNumberShort
 } from '@/lib/format-utils';
 import { ArtistPhoto, AlbumArtwork } from '@/components/common/optimized-image';
 import { GenreTags } from '@/components/common/genre-tags';
-import { SongMetadata } from '@/components/features/metadata/song-metadata';
 import { FollowButton } from '@/components/social/follow-button';
 import { usePlayerStore } from '@/stores/player-store';
 import { useSocialStore, useShareModalStore } from '@/stores/social-store';

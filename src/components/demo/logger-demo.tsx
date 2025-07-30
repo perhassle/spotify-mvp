@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { clientLogger, useLogger } from '@/lib/client-logger';
+import { useLogger } from '@/lib/client-logger';
 import { Button } from '@/components/ui/button';
 
 export function LoggerDemo() {

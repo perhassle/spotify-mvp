@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { 
   Plus, 
@@ -39,7 +39,6 @@ export default function AddToPlaylistDropdown({
   const [addingToPlaylist, setAddingToPlaylist] = useState<string | null>(null);
   
   const { 
-    playlists, 
     getUserPlaylists,
     addTrackToPlaylist,
     isLoading 
@@ -132,7 +131,7 @@ export default function AddToPlaylistDropdown({
           <div className="p-4 border-b border-zinc-800">
             <h3 className="font-semibold text-white mb-2">Add to playlist</h3>
             {trackTitle && (
-              <p className="text-sm text-zinc-400 truncate">"{trackTitle}"</p>
+              <p className="text-sm text-zinc-400 truncate">&quot;{trackTitle}&quot;</p>
             )}
           </div>
 

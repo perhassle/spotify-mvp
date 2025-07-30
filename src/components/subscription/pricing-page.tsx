@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { CheckIcon, XMarkIcon, StarIcon } from '@heroicons/react/24/solid';
+import { CheckIcon, StarIcon } from '@heroicons/react/24/solid';
 import { Button } from '@/components/ui/button';
 import { STRIPE_PRODUCTS, formatPrice } from '@/lib/stripe/config';
 import { preloadStripe } from '@/lib/stripe/lazy-stripe';

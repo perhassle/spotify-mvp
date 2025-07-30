@@ -193,7 +193,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://api.stripe.com" />
       </head>
       <body className={`${inter.className} antialiased`}>
-        <ErrorBoundary onError={handleErrorBoundaryError}>
+        <ErrorBoundary>
           <ErrorProvider>
             <ToastProvider>
               <MonitoringProvider
@@ -205,7 +205,7 @@ export default function RootLayout({
                 <PerformanceMonitor
                   enableRUM={true}
                   enableWebVitals={true}
-                  sampleRate={process.env.NODE_ENV === 'production' ? 0.1 : 1}
+                  _sampleRate={process.env.NODE_ENV === 'production' ? 0.1 : 1}
                 />
                 <AuthProvider>
                   <AppLayout>

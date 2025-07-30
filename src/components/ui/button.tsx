@@ -44,8 +44,6 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, isLoading, children, disabled, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
-    
     const content = (
       <>
         {isLoading && (
@@ -81,13 +79,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           ref={ref}
           {...props}
         >
-          {React.isValidElement(children) ? 
-            React.cloneElement(children as React.ReactElement<any>, { 
-              disabled: disabled || isLoading,
-              children: content 
-            }) : 
-            children
-          }
+          {content}
         </Slot>
       );
     }

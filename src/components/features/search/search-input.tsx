@@ -176,6 +176,7 @@ export function SearchInput({
             aria-expanded={showSuggestions}
             aria-haspopup="listbox"
             aria-autocomplete="list"
+            aria-controls={showSuggestions ? "search-suggestions" : undefined}
             autoComplete="off"
             role="combobox"
           />
@@ -214,6 +215,7 @@ export function SearchInput({
             )}
             role="listbox"
             aria-label="Search suggestions"
+            id="search-suggestions"
           >
             {allSuggestions.map((suggestion, index) => (
               <button

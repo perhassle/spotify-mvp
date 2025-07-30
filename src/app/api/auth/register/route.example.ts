@@ -6,6 +6,7 @@ import {
   ApiErrors, 
   createValidationError 
 } from '@/lib/api-error-handler';
+import { ApiError } from '@/types/common';
 
 // Example of using the error handler with the registration route
 export const POST = withErrorHandler(async (request: NextRequest) => {
@@ -36,20 +37,22 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
       }
     });
 
-  } catch (error: any) {
+  } catch (error) {
+    const apiError = error as ApiError;
+    
     // Handle specific database errors
-    if (error.code === 'P2002' || error.message?.includes('already exists')) {
+    if ('code' in apiError && apiError.code === 'P2002' || apiError.message?.includes('already exists')) {
       throw ApiErrors.conflict('User with this email or username already exists', {
-        field: error.message?.includes('email') ? 'email' : 'username'
+        field: apiError.message?.includes('email') ? 'email' : 'username'
       });
     }
 
     // Handle other database errors
-    if (error.code?.startsWith('P')) {
-      throw ApiErrors.database('user creation', { code: error.code });
+    if ('code' in apiError && apiError.code?.startsWith('P')) {
+      throw ApiErrors.database('user creation', { code: apiError.code });
     }
 
     // Re-throw unknown errors to be handled by the wrapper
-    throw error;
+    throw apiError;
   }
 });

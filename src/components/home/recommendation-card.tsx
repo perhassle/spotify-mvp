@@ -13,13 +13,13 @@ import {
   Plus,
   Info
 } from 'lucide-react';
-import type { RecommendationScore } from '@/types';
+import type { RecommendationScore, Track } from '@/types';
 import { musicDatabase } from '@/lib/data/music-database';
 
 interface RecommendationCardProps {
   recommendation: RecommendationScore;
   sectionId: string;
-  userId: string;
+  _userId: string;
   size: 'small' | 'medium' | 'large' | 'hero' | 'compact' | 'list';
   showReason?: boolean;
 }
@@ -27,11 +27,11 @@ interface RecommendationCardProps {
 export function RecommendationCard({ 
   recommendation, 
   sectionId, 
-  userId,
+  _userId,
   size,
   showReason = false
 }: RecommendationCardProps) {
-  const [track, setTrack] = useState<any>(null);
+  const [track, setTrack] = useState<Track | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   
@@ -163,7 +163,7 @@ export function RecommendationCard({
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
-            handlePlayPause(e as any);
+            handlePlayPause(e as unknown as React.MouseEvent);
           }
         }}
       >
@@ -243,7 +243,7 @@ export function RecommendationCard({
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          handlePlayPause(e as any);
+          handlePlayPause(e as unknown as React.MouseEvent);
         }
       }}
     >

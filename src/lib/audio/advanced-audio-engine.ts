@@ -64,7 +64,7 @@ export class AdvancedAudioEngine {
 
   private async initializeAudioContext(): Promise<void> {
     try {
-      this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      this.audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
       
       if (this.audioContext.state === 'suspended') {
         await this.audioContext.resume();
