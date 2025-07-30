@@ -225,6 +225,8 @@ export function calculatePerformanceScore(metrics: Record<string, number>): numb
   Object.entries(weights).forEach(([metric, weight]) => {
     if (metric in metrics) {
       const value = metrics[metric];
+      if (value === undefined) return; // Skip if no value
+      
       const budgets = WEB_VITALS_BUDGETS.filter(b => b.metric === metric);
       const goodBudget = budgets.find(b => b.severity === 'warning');
       const poorBudget = budgets.find(b => b.severity === 'error');

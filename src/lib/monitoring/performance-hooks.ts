@@ -35,6 +35,7 @@ export function useRenderPerformance(
     // Component mount
     if (renderCount.current === 0) {
       mountTime.current = startTime;
+      const currentRenderCount = renderCount.current; // Capture the value
       
       // Create performance mark
       if (performance.mark) {
@@ -60,7 +61,7 @@ export function useRenderPerformance(
               type: 'component-mount',
               component: componentName,
               duration: Math.round(mountDuration),
-              renderCount: renderCount.current,
+              renderCount: currentRenderCount, // Use captured value
               ...options.metadata,
             },
           });
@@ -80,6 +81,9 @@ export function useRenderPerformance(
     
     lastRenderTime.current = startTime;
     renderCount.current++;
+    
+    // No cleanup needed for updates
+    return undefined;
   });
 }
 
@@ -222,7 +226,8 @@ export function useDataFetchPerformance<T>(
 
   useEffect(() => {
     performFetch();
-  }, dependencies);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [performFetch, ...dependencies]);
 
   return {
     data,

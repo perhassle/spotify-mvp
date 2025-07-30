@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -48,12 +48,6 @@ export default function SharePreviewClient({
   const [isLiked, setIsLiked] = useState(false);
   const [showAppPrompt, setShowAppPrompt] = useState(false);
 
-  // Track view
-  useEffect(() => {
-    trackView();
-    fetchContent();
-  }, [contentType, contentId]);
-
   // Show app download prompt for non-users after a delay
   useEffect(() => {
     if (!session) {
@@ -65,7 +59,7 @@ export default function SharePreviewClient({
     return undefined;
   }, [session]);
 
-  const trackView = async () => {
+  const trackView = useCallback(async () => {
     try {
       await fetch(`/api/share/track-view`, {
         method: 'POST',
@@ -79,9 +73,9 @@ export default function SharePreviewClient({
     } catch (error) {
       console.error('Error tracking view:', error);
     }
-  };
+  }, [contentType, contentId, referrer]);
 
-  const fetchContent = async () => {
+  const fetchContent = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await fetch(`/api/${contentType}/${contentId}`);
@@ -97,7 +91,13 @@ export default function SharePreviewClient({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [contentType, contentId]);
+
+  // Track view - moved after function declarations
+  useEffect(() => {
+    trackView();
+    fetchContent();
+  }, [trackView, fetchContent]);
 
   const handlePlay = () => {
     if (!content) return;
