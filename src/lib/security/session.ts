@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-import { auth } from '@/auth';
+import { getServerSession } from 'next-auth/next';
 import { authConfig } from '@/lib/auth/config';
 import crypto from 'crypto';
 
@@ -87,7 +87,7 @@ export interface SessionAnomalyCheck {
 }
 
 export async function checkSessionAnomaly(request: Request): Promise<SessionAnomalyCheck> {
-  const session = await auth();
+  const session = await getServerSession(authConfig);
   
   if (!session) {
     return { isValid: true }; // No session to check
@@ -166,14 +166,9 @@ export class SecureSessionStorage {
    */
   static decrypt(encryptedData: string): string {
     const parts = encryptedData.split(':');
-    
-    if (parts.length !== 3) {
-      throw new Error('Invalid encrypted data format');
-    }
-    
-    const iv = Buffer.from(parts[0]!, 'hex');
-    const authTag = Buffer.from(parts[1]!, 'hex');
-    const encrypted = parts[2]!;
+    const iv = Buffer.from(parts[0], 'hex');
+    const authTag = Buffer.from(parts[1], 'hex');
+    const encrypted = parts[2];
     
     const decipher = crypto.createDecipheriv(
       'aes-256-gcm',
@@ -225,11 +220,6 @@ export function isSessionTimedOut(
   sessionType: keyof typeof SESSION_TIMEOUTS = 'default'
 ): boolean {
   const timeout = SESSION_TIMEOUTS[sessionType];
-  
-  if (!timeout) {
-    throw new Error(`Unknown session type: ${sessionType}`);
-  }
-  
   const now = Date.now();
   const lastActivityTime = lastActivity.getTime();
   
@@ -266,7 +256,7 @@ export async function validateSecureSession(
   request: Request,
   requireMfa: boolean = false
 ): Promise<SessionValidation> {
-  const session = await auth();
+  const session = await getServerSession(authConfig);
   
   if (!session) {
     return {

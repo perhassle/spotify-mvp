@@ -8,21 +8,19 @@ describe('Player Store', () => {
       currentTrack: null,
       isPlaying: false,
       volume: 0.5,
-      progress: 0,
+      currentTime: 0,
       duration: 0,
       queue: [],
-      currentIndex: -1,
-      repeatMode: 'off',
-      shuffleMode: false,
-      isLoading: false,
+      queueIndex: -1,
+      repeat: 'off',
+      shuffle: false,
       playbackRate: 1,
+      crossfadeEnabled: false,
       crossfadeDuration: 5,
-      isEqualizerEnabled: false,
+      equalizerEnabled: false,
       equalizerPreset: 'flat',
-      isVisualizerEnabled: false,
-      audioQuality: 'high',
-      skipCount: 0,
-      maxSkips: 6,
+      spatialAudioEnabled: false,
+      audioQuality: 'normal',
     });
   });
 
@@ -31,46 +29,17 @@ describe('Player Store', () => {
       const track = {
         id: '1',
         title: 'Test Song',
-        artist: {
-          id: 'artist-1',
-          name: 'Test Artist',
-          genres: ['rock'],
-          followers: 1000,
-          imageUrl: 'test-artist.jpg',
-          isVerified: true,
-          popularity: 80
-        },
-        album: {
-          id: 'album-1',
-          title: 'Test Album',
-          artist: {
-            id: 'artist-1',
-            name: 'Test Artist',
-            genres: ['rock'],
-            followers: 1000,
-            imageUrl: 'test-artist.jpg',
-            isVerified: true,
-            popularity: 80
-          },
-          releaseDate: new Date('2023-01-01'),
-          genres: ['rock'],
-          totalTracks: 10,
-          imageUrl: 'test-album.jpg',
-          type: 'album' as const
-        },
+        artist: 'Test Artist',
+        album: 'Test Album',
         duration: 180,
-        isExplicit: false,
-        popularity: 80,
-        genres: ['rock'],
-        releaseDate: new Date('2023-01-01'),
-        imageUrl: 'test.jpg',
-        streamUrl: 'test.mp3',
+        cover: 'test.jpg',
+        audioUrl: 'test.mp3',
       };
 
-      // Since there's no setCurrentTrack method, we'll play the track instead
-      usePlayerStore.getState().play(track);
+      usePlayerStore.getState().setCurrentTrack(track);
       
       expect(usePlayerStore.getState().currentTrack).toEqual(track);
+      expect(usePlayerStore.getState().isPlaying).toBe(false);
     });
 
     it('should play and pause', () => {
@@ -100,120 +69,9 @@ describe('Player Store', () => {
 
   describe('queue management', () => {
     const tracks = [
-      { 
-        id: '1', 
-        title: 'Song 1', 
-        artist: {
-          id: 'artist-1',
-          name: 'Artist 1',
-          genres: ['rock'],
-          followers: 1000,
-          imageUrl: 'artist1.jpg',
-          isVerified: true,
-          popularity: 80
-        },
-        album: {
-          id: 'album-1',
-          title: 'Album 1',
-          artist: {
-            id: 'artist-1',
-            name: 'Artist 1',
-            genres: ['rock'],
-            followers: 1000,
-            imageUrl: 'artist1.jpg',
-            isVerified: true,
-            popularity: 80
-          },
-          releaseDate: new Date('2023-01-01'),
-          genres: ['rock'],
-          totalTracks: 10,
-          imageUrl: 'album1.jpg',
-          type: 'album' as const
-        },
-        duration: 180, 
-        isExplicit: false,
-        popularity: 80,
-        genres: ['rock'],
-        releaseDate: new Date('2023-01-01'),
-        imageUrl: 'cover1.jpg', 
-        streamUrl: 'song1.mp3' 
-      },
-      { 
-        id: '2', 
-        title: 'Song 2', 
-        artist: {
-          id: 'artist-2',
-          name: 'Artist 2',
-          genres: ['pop'],
-          followers: 2000,
-          imageUrl: 'artist2.jpg',
-          isVerified: false,
-          popularity: 75
-        },
-        album: {
-          id: 'album-2',
-          title: 'Album 2',
-          artist: {
-            id: 'artist-2',
-            name: 'Artist 2',
-            genres: ['pop'],
-            followers: 2000,
-            imageUrl: 'artist2.jpg',
-            isVerified: false,
-            popularity: 75
-          },
-          releaseDate: new Date('2023-02-01'),
-          genres: ['pop'],
-          totalTracks: 12,
-          imageUrl: 'album2.jpg',
-          type: 'album' as const
-        },
-        duration: 200, 
-        isExplicit: false,
-        popularity: 75,
-        genres: ['pop'],
-        releaseDate: new Date('2023-02-01'),
-        imageUrl: 'cover2.jpg', 
-        streamUrl: 'song2.mp3' 
-      },
-      { 
-        id: '3', 
-        title: 'Song 3', 
-        artist: {
-          id: 'artist-3',
-          name: 'Artist 3',
-          genres: ['jazz'],
-          followers: 1500,
-          imageUrl: 'artist3.jpg',
-          isVerified: true,
-          popularity: 70
-        },
-        album: {
-          id: 'album-3',
-          title: 'Album 3',
-          artist: {
-            id: 'artist-3',
-            name: 'Artist 3',
-            genres: ['jazz'],
-            followers: 1500,
-            imageUrl: 'artist3.jpg',
-            isVerified: true,
-            popularity: 70
-          },
-          releaseDate: new Date('2023-03-01'),
-          genres: ['jazz'],
-          totalTracks: 8,
-          imageUrl: 'album3.jpg',
-          type: 'album' as const
-        },
-        duration: 220, 
-        isExplicit: false,
-        popularity: 70,
-        genres: ['jazz'],
-        releaseDate: new Date('2023-03-01'),
-        imageUrl: 'cover3.jpg', 
-        streamUrl: 'song3.mp3' 
-      },
+      { id: '1', title: 'Song 1', artist: 'Artist 1', album: 'Album 1', duration: 180, cover: 'cover1.jpg', audioUrl: 'song1.mp3' },
+      { id: '2', title: 'Song 2', artist: 'Artist 2', album: 'Album 2', duration: 200, cover: 'cover2.jpg', audioUrl: 'song2.mp3' },
+      { id: '3', title: 'Song 3', artist: 'Artist 3', album: 'Album 3', duration: 220, cover: 'cover3.jpg', audioUrl: 'song3.mp3' },
     ];
 
     it('should set queue', () => {
@@ -222,64 +80,73 @@ describe('Player Store', () => {
       setQueue(tracks);
       
       expect(usePlayerStore.getState().queue).toEqual(tracks);
-      expect(usePlayerStore.getState().currentIndex).toBe(0);
+      expect(usePlayerStore.getState().queueIndex).toBe(0);
       expect(usePlayerStore.getState().currentTrack).toEqual(tracks[0]);
     });
 
     it('should add to queue', () => {
       const { setQueue, addToQueue } = usePlayerStore.getState();
       
-      setQueue([tracks[0]!]);
-      addToQueue(tracks[1]!);
+      setQueue([tracks[0]]);
+      addToQueue(tracks[1]);
       
       expect(usePlayerStore.getState().queue).toHaveLength(2);
       expect(usePlayerStore.getState().queue[1]).toEqual(tracks[1]);
     });
 
     it('should navigate through queue', () => {
-      const { setQueue, nextTrack, previousTrack } = usePlayerStore.getState();
+      const { setQueue, skipToNext, skipToPrevious } = usePlayerStore.getState();
       
       setQueue(tracks);
       
-      nextTrack();
-      expect(usePlayerStore.getState().currentIndex).toBe(1);
+      skipToNext();
+      expect(usePlayerStore.getState().queueIndex).toBe(1);
       expect(usePlayerStore.getState().currentTrack).toEqual(tracks[1]);
       
-      previousTrack();
-      expect(usePlayerStore.getState().currentIndex).toBe(0);
+      skipToPrevious();
+      expect(usePlayerStore.getState().queueIndex).toBe(0);
       expect(usePlayerStore.getState().currentTrack).toEqual(tracks[0]);
     });
 
     it('should handle shuffle mode', () => {
       const { toggleShuffle } = usePlayerStore.getState();
       
-      expect(usePlayerStore.getState().shuffleMode).toBe(false);
+      expect(usePlayerStore.getState().shuffle).toBe(false);
       
       toggleShuffle();
-      expect(usePlayerStore.getState().shuffleMode).toBe(true);
+      expect(usePlayerStore.getState().shuffle).toBe(true);
       
       toggleShuffle();
-      expect(usePlayerStore.getState().shuffleMode).toBe(false);
+      expect(usePlayerStore.getState().shuffle).toBe(false);
     });
 
     it('should cycle through repeat modes', () => {
-      const { setRepeatMode } = usePlayerStore.getState();
-      const { repeatMode: initialRepeat } = usePlayerStore.getState();
+      const { toggleRepeat } = usePlayerStore.getState();
+      const { repeat: initialRepeat } = usePlayerStore.getState();
       
       expect(initialRepeat).toBe('off');
       
-      setRepeatMode('context');
-      expect(usePlayerStore.getState().repeatMode).toBe('context');
+      toggleRepeat();
+      expect(usePlayerStore.getState().repeat).toBe('all');
       
-      setRepeatMode('track');
-      expect(usePlayerStore.getState().repeatMode).toBe('track');
+      toggleRepeat();
+      expect(usePlayerStore.getState().repeat).toBe('one');
       
-      setRepeatMode('off');
-      expect(usePlayerStore.getState().repeatMode).toBe('off');
+      toggleRepeat();
+      expect(usePlayerStore.getState().repeat).toBe('off');
     });
   });
 
   describe('audio features', () => {
+    it('should toggle crossfade', () => {
+      const { toggleCrossfade } = usePlayerStore.getState();
+      
+      expect(usePlayerStore.getState().crossfadeEnabled).toBe(false);
+      
+      toggleCrossfade();
+      expect(usePlayerStore.getState().crossfadeEnabled).toBe(true);
+    });
+
     it('should set crossfade duration', () => {
       const { setCrossfadeDuration } = usePlayerStore.getState();
       
@@ -290,10 +157,10 @@ describe('Player Store', () => {
     it('should toggle equalizer', () => {
       const { toggleEqualizer } = usePlayerStore.getState();
       
-      expect(usePlayerStore.getState().isEqualizerEnabled).toBe(false);
+      expect(usePlayerStore.getState().equalizerEnabled).toBe(false);
       
       toggleEqualizer();
-      expect(usePlayerStore.getState().isEqualizerEnabled).toBe(true);
+      expect(usePlayerStore.getState().equalizerEnabled).toBe(true);
     });
 
     it('should set audio quality', () => {

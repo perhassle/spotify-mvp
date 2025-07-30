@@ -80,8 +80,6 @@ export function useRenderPerformance(
     
     lastRenderTime.current = startTime;
     renderCount.current++;
-    
-    return undefined; // Explicit return to satisfy TypeScript
   });
 }
 

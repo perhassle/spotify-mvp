@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { AppProviders } from "@/components/providers/app-providers";
+import { AppLayout } from "@/components/layout/app-layout";
+import { AuthProvider } from "@/lib/auth/provider";
+import { ErrorBoundary } from "@/components/common/error-boundary";
+import { ErrorProvider } from "@/providers/error-provider";
+import { ToastProvider } from "@/providers/toast-provider";
+import { ClientInitializer } from "@/components/common/client-initializer";
+import { handleErrorBoundaryError } from "@/lib/error-tracking";
+import { MonitoringProvider } from "@/lib/monitoring/monitoring-provider";
+import { PerformanceMonitor } from "@/components/monitoring/performance-monitor";
+import { DevelopmentMonitoringToolbar } from "@/components/monitoring/monitoring-dashboard";
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -184,9 +193,30 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://api.stripe.com" />
       </head>
       <body className={`${inter.className} antialiased`}>
-        <AppProviders>
-          {children}
-        </AppProviders>
+        <ErrorBoundary onError={handleErrorBoundaryError}>
+          <ErrorProvider>
+            <ToastProvider>
+              <MonitoringProvider
+                enableSentry={process.env.NODE_ENV === 'production'}
+                enableWebVitals={true}
+                enableErrorMonitoring={true}
+              >
+                <ClientInitializer />
+                <PerformanceMonitor
+                  enableRUM={true}
+                  enableWebVitals={true}
+                  sampleRate={process.env.NODE_ENV === 'production' ? 0.1 : 1}
+                />
+                <AuthProvider>
+                  <AppLayout>
+                    {children}
+                  </AppLayout>
+                </AuthProvider>
+                <DevelopmentMonitoringToolbar />
+              </MonitoringProvider>
+            </ToastProvider>
+          </ErrorProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

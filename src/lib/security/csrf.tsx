@@ -126,6 +126,51 @@ export async function csrfProtection(request: NextRequest): Promise<Response | n
 }
 
 /**
+ * React hook for CSRF token (client-side)
+ */
+export function useCsrfToken(): {
+  token: string | null;
+  refreshToken: () => Promise<void>;
+} {
+  const [token, setToken] = useState<string | null>(null);
+  
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    
+    // Get token from meta tag or cookie
+    const metaToken = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
+    setToken(metaToken || null);
+  }, []);
+  
+  const refreshToken = async () => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    
+    try {
+      const response = await fetch('/api/csrf-token');
+      const data = await response.json();
+      setToken(data.token);
+      
+      // Update meta tag
+      let meta = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]');
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.name = 'csrf-token';
+        document.head.appendChild(meta);
+      }
+      meta.content = data.token;
+    } catch (error) {
+      console.error('Failed to refresh CSRF token:', error);
+    }
+  };
+  
+  return { token, refreshToken };
+}
+
+/**
  * Fetch wrapper with automatic CSRF token inclusion
  */
 export async function secureFetch(url: string, options: RequestInit = {}): Promise<Response> {
