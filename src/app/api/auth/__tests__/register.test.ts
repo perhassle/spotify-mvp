@@ -102,7 +102,7 @@ describe('Registration Logic Tests', () => {
     const result = registrationSchema.safeParse(invalidData);
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.issues[0].path).toContain('email');
+      expect(result.error.issues[0]?.path).toContain('email');
     }
   });
 
@@ -118,7 +118,7 @@ describe('Registration Logic Tests', () => {
     const result = registrationSchema.safeParse(invalidData);
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.issues[0].path).toContain('password');
+      expect(result.error.issues[0]?.path).toContain('password');
     }
   });
 
@@ -134,7 +134,7 @@ describe('Registration Logic Tests', () => {
     const result = registrationSchema.safeParse(invalidData);
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.issues[0].message).toContain("Passwords don't match");
+      expect(result.error.issues[0]?.message).toContain("Passwords don't match");
     }
   });
 
@@ -145,8 +145,8 @@ describe('Registration Logic Tests', () => {
       username: 'testuser',
       displayName: 'Test User',
       isPremium: false,
-      subscriptionTier: 'free',
-      subscriptionStatus: 'canceled',
+      subscriptionTier: 'free' as const,
+      subscriptionStatus: 'canceled' as const,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
