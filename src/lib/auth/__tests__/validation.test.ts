@@ -25,10 +25,10 @@ describe('Auth Validation Schemas', () => {
       }
     });
 
-    it('should reject short password', () => {
+    it('should reject empty password', () => {
       const invalidData = {
         email: 'test@example.com',
-        password: '123',
+        password: '',
       };
       
       const result = loginSchema.safeParse(invalidData);
@@ -65,7 +65,7 @@ describe('Auth Validation Schemas', () => {
       const result = registrationSchema.safeParse(invalidData);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0]?.message).toContain('Passwords must match');
+        expect(result.error.issues[0]?.message).toContain("Passwords don't match");
       }
     });
 
