@@ -235,7 +235,7 @@ export default function LikedSongsClient() {
               </h1>
 
               <p className="text-white/70 text-lg mb-4 max-w-2xl">
-                Songs you've liked will appear here
+                Songs you&apos;ve liked will appear here
               </p>
 
               <div className="flex items-center space-x-2 text-sm text-white/70">

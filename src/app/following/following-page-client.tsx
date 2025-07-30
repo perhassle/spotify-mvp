@@ -250,7 +250,7 @@ export default function FollowingPageClient() {
               <UserGroupIcon className="w-24 h-24 text-gray-600 mx-auto mb-6" />
               <h2 className="text-2xl font-semibold mb-4">No artists followed yet</h2>
               <p className="text-gray-400 mb-8 max-w-md mx-auto">
-                When you follow artists, you'll see them here along with updates about new releases, concerts, and more.
+                When you follow artists, you&apos;ll see them here along with updates about new releases, concerts, and more.
               </p>
               <Link href="/search">
                 <Button className="bg-green-600 hover:bg-green-700">
@@ -493,7 +493,7 @@ export default function FollowingPageClient() {
               {filteredAndSortedArtists.length === 0 && searchQuery && (
                 <div className="text-center py-12">
                   <MagnifyingGlassIcon className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                  <p className="text-gray-400">No artists found matching "{searchQuery}"</p>
+                  <p className="text-gray-400">No artists found matching &quot;{searchQuery}&quot;</p>
                 </div>
               )}
             </>
