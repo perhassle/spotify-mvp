@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import PlaylistDetailClient from './playlist-detail-client';
+import { PlaylistSkeleton } from '@/components/skeletons/playlist-skeleton';
 
 interface PlaylistPageProps {
   params: Promise<{
@@ -20,11 +21,7 @@ export default async function PlaylistPage({ params }: PlaylistPageProps) {
   const resolvedParams = await params;
   
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-500"></div>
-      </div>
-    }>
+    <Suspense fallback={<PlaylistSkeleton />}>
       <PlaylistDetailClient playlistId={resolvedParams.id} />
     </Suspense>
   );

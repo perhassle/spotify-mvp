@@ -6,11 +6,16 @@ import { loadStripe, Stripe as StripeJS } from '@stripe/stripe-js';
  */
 
 // Server-side Stripe instance
-if (!process.env.STRIPE_SECRET_KEY) {
+// In test/CI environments, we'll use a dummy key since we're mocking
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY || (
+  process.env.NODE_ENV === 'test' || process.env.CI ? 'sk_test_dummy' : undefined
+);
+
+if (!stripeSecretKey) {
   throw new Error('STRIPE_SECRET_KEY is not defined in environment variables');
 }
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+export const stripe = new Stripe(stripeSecretKey, {
   apiVersion: '2025-06-30.basil',
   typescript: true,
 });
@@ -20,10 +25,14 @@ let stripePromise: Promise<StripeJS | null>;
 
 export const getStripe = () => {
   if (!stripePromise) {
-    if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
+    const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || (
+      process.env.NODE_ENV === 'test' || process.env.CI ? 'pk_test_dummy' : undefined
+    );
+    
+    if (!publishableKey) {
       throw new Error('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is not defined');
     }
-    stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+    stripePromise = loadStripe(publishableKey);
   }
   return stripePromise;
 };

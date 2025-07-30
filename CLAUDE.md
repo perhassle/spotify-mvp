@@ -97,6 +97,55 @@ When implementing features, verify functionality by:
 - **Never accumulate many unrelated changes** - makes it hard to track what changed and why
 - **Never commit broken code** - every commit should represent a working state
 
+## Pull Request Workflow (Copilot Style)
+
+When working on GitHub issues, follow this approach:
+
+### 1. Create Draft PR with Plan
+- Start with a **[WIP]** prefix in PR title
+- Create PR as **DRAFT** status
+- Include a plan with checkboxes in the PR description:
+  ```markdown
+  ## Plan: [Task Description]
+  
+  - [ ] Analyze current codebase and identify issues
+  - [ ] Create implementation plan
+  - [ ] Implement feature/fix
+  - [ ] Add tests if applicable
+  - [ ] Verify build and functionality
+  - [ ] Update documentation
+  
+  **Current Status:** Initial analysis in progress...
+  ```
+
+### 2. Work Incrementally
+- Start with analysis and understanding the problem
+- Make small commits as you progress
+- Update PR description with current status
+- Check off completed items in the plan
+
+### 3. PR Structure
+```markdown
+## Plan: [Title]
+
+- [x] Completed task
+- [ ] Pending task
+
+**Current Status:** Brief description of where you are
+
+**Changes Made:**
+- List of changes as you make them
+
+Fixes #[issue-number]
+```
+
+### 4. When to Convert from Draft
+- Only when all checkboxes are complete
+- Build passes without errors
+- Feature is fully tested
+- Remove [WIP] prefix from title
+- Mark PR as "Ready for review"
+
 ## Test Management
 
 - Place all tests and testresults structured in test-results
