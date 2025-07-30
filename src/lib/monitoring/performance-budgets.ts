@@ -225,25 +225,27 @@ export function calculatePerformanceScore(metrics: Record<string, number>): numb
   Object.entries(weights).forEach(([metric, weight]) => {
     if (metric in metrics) {
       const value = metrics[metric];
-      const budgets = WEB_VITALS_BUDGETS.filter(b => b.metric === metric);
-      const goodBudget = budgets.find(b => b.severity === 'warning');
-      const poorBudget = budgets.find(b => b.severity === 'error');
+      if (typeof value === 'number') {
+        const budgets = WEB_VITALS_BUDGETS.filter(b => b.metric === metric);
+        const goodBudget = budgets.find(b => b.severity === 'warning');
+        const poorBudget = budgets.find(b => b.severity === 'error');
 
-      if (goodBudget && poorBudget) {
-        let score = 0;
-        if (value <= goodBudget.budget) {
-          score = 100; // Good
-        } else if (value <= poorBudget.budget) {
-          // Linear interpolation between good and poor
-          score = 100 - ((value - goodBudget.budget) / (poorBudget.budget - goodBudget.budget)) * 50;
-        } else {
-          // Below poor threshold
-          score = 50 - ((value - poorBudget.budget) / poorBudget.budget) * 50;
-          score = Math.max(0, score);
+        if (goodBudget && poorBudget) {
+          let score = 0;
+          if (value <= goodBudget.budget) {
+            score = 100; // Good
+          } else if (value <= poorBudget.budget) {
+            // Linear interpolation between good and poor
+            score = 100 - ((value - goodBudget.budget) / (poorBudget.budget - goodBudget.budget)) * 50;
+          } else {
+            // Below poor threshold
+            score = 50 - ((value - poorBudget.budget) / poorBudget.budget) * 50;
+            score = Math.max(0, score);
+          }
+
+          totalScore += score * weight;
+          totalWeight += weight;
         }
-
-        totalScore += score * weight;
-        totalWeight += weight;
       }
     }
   });

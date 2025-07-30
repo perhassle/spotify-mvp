@@ -40,8 +40,26 @@ export function useRenderPerformance(
       if (performance.mark) {
         performance.mark(`${componentName}-mount-start`);
       }
-      
-      return () => {
+    } else {
+      // Component update
+      const updateDuration = startTime - lastRenderTime.current;
+      if (updateDuration > threshold) {
+        clientLogger.performance(`Component update: ${componentName}`, updateDuration, {
+          component: componentName,
+          renderCount: renderCount.current,
+          ...options.metadata,
+        });
+      }
+    }
+    
+    lastRenderTime.current = startTime;
+    renderCount.current++;
+  });
+
+  // Mount cleanup effect
+  useEffect(() => {
+    return () => {
+      if (renderCount.current > 0) {
         const mountDuration = performance.now() - mountTime.current;
         
         if (performance.mark && performance.measure) {
@@ -65,22 +83,9 @@ export function useRenderPerformance(
             },
           });
         }
-      };
-    }
-    
-    // Component update
-    const updateDuration = startTime - lastRenderTime.current;
-    if (renderCount.current > 0 && updateDuration > threshold) {
-      clientLogger.performance(`Component update: ${componentName}`, updateDuration, {
-        component: componentName,
-        renderCount: renderCount.current,
-        ...options.metadata,
-      });
-    }
-    
-    lastRenderTime.current = startTime;
-    renderCount.current++;
-  });
+      }
+    };
+  }, []);
 }
 
 /**

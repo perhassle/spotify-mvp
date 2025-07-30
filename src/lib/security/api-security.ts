@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getServerSession } from 'next-auth/next';
-import { authConfig } from '@/lib/auth/config';
+import { auth } from '@/auth';
 import crypto from 'crypto';
 
 /**
@@ -173,7 +172,7 @@ export async function checkEndpointAccess(
   
   // Check authentication
   if (access.requiresAuth) {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
     
     if (!session) {
       return { allowed: false, reason: 'Authentication required' };
@@ -324,7 +323,7 @@ export async function validateApiInput<T>(
     if (!result.success) {
       return {
         success: false,
-        error: result.error.errors.map(e => e.message).join(', '),
+        error: result.error.issues.map(e => e.message).join(', '),
       };
     }
     
