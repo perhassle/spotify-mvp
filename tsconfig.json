@@ -37,5 +37,14 @@
     ".next/types/**/*.ts",
     "playwright.d.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "e2e-tests/**/*",
+    "test-results/**/*",
+    "playwright-report/**/*",
+    "playwright.config.ts",
+    "jest.config.js",
+    "jest.setup.js"
+  ]
 }

@@ -321,7 +321,7 @@ export default function PlaylistsPageClient() {
                   Create your first playlist
                 </h3>
                 <p className="text-zinc-400 mb-6">
-                  It's easy, we'll help you
+                  It&apos;s easy, we&apos;ll help you
                 </p>
                 <Button
                   onClick={() => setIsCreateModalOpen(true)}

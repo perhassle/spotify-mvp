@@ -205,11 +205,13 @@ test.describe('WCAG Accessibility Audit', () => {
         await expect(main).toHaveCount(1);
         
         const navigation = page.locator('nav, [role="navigation"]');
-        await expect(navigation).toHaveCountGreaterThan(0);
+        const navCount = await navigation.count();
+        expect(navCount).toBeGreaterThan(0);
         
         // Check for live regions
         const liveRegions = page.locator('[aria-live="polite"], [aria-live="assertive"]');
-        await expect(liveRegions).toHaveCountGreaterThan(0);
+        const liveRegionCount = await liveRegions.count();
+        expect(liveRegionCount).toBeGreaterThan(0);
       });
 
       test('Form validation accessibility', async ({ page }) => {
