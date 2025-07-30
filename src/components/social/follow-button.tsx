@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { ArtistFollowStats } from '@/types';
@@ -30,12 +30,7 @@ export function FollowButton({
   const [stats, setStats] = useState<ArtistFollowStats | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch initial follow status and stats
-  useEffect(() => {
-    fetchFollowStatus();
-  }, [artistId, status]);
-
-  const fetchFollowStatus = async () => {
+  const fetchFollowStatus = useCallback(async () => {
     try {
       setError(null);
       const response = await fetch(`/api/artist/${artistId}/follow`);
@@ -51,7 +46,12 @@ export function FollowButton({
       console.error('Error fetching follow status:', error);
       setError('Failed to fetch follow status');
     }
-  };
+  }, [artistId]);
+
+  // Fetch initial follow status and stats
+  useEffect(() => {
+    fetchFollowStatus();
+  }, [artistId, status, fetchFollowStatus]);
 
   const handleFollowToggle = async () => {
     if (!session) {

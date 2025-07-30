@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Sidebar } from "./sidebar";
 import { MobileNavigation } from "./mobile-navigation";
 import dynamic from "next/dynamic";
-import { Suspense } from "react";
+// import { Suspense } from "react";
 
 // Lazy load heavy components
 const CompleteAudioPlayer = dynamic(

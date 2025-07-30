@@ -78,6 +78,74 @@ When implementing features, verify functionality by:
 - Use existing mock data services for development
 - If the site doesn't build, then always prioritize making sure the site builds. Otherwise, it's impossible to test the site.
 
+## Git Best Practices
+
+- **Always keep commits small and focused** - easier to review and revert if needed
+- **Commit frequently** - after each logical change or fix
+- **One type of change per commit** - don't mix feature additions with bug fixes
+- **ALWAYS verify before committing**:
+  1. Run `npm run build` - must complete without errors
+  2. Run `npm run dev` - site must load and function properly
+  3. Test the specific feature/fix you implemented
+  4. Only commit if everything works correctly
+- **Examples of when to commit**:
+  - After fixing a specific TypeScript error across multiple files AND verifying the build works
+  - After implementing a single feature AND testing it in the browser
+  - After fixing ESLint warnings in a component AND ensuring no regressions
+  - After updating types or interfaces AND confirming no type errors
+  - After refactoring a specific module AND testing functionality
+- **Never accumulate many unrelated changes** - makes it hard to track what changed and why
+- **Never commit broken code** - every commit should represent a working state
+
+## Pull Request Workflow (Copilot Style)
+
+When working on GitHub issues, follow this approach:
+
+### 1. Create Draft PR with Plan
+- Start with a **[WIP]** prefix in PR title
+- Create PR as **DRAFT** status
+- Include a plan with checkboxes in the PR description:
+  ```markdown
+  ## Plan: [Task Description]
+  
+  - [ ] Analyze current codebase and identify issues
+  - [ ] Create implementation plan
+  - [ ] Implement feature/fix
+  - [ ] Add tests if applicable
+  - [ ] Verify build and functionality
+  - [ ] Update documentation
+  
+  **Current Status:** Initial analysis in progress...
+  ```
+
+### 2. Work Incrementally
+- Start with analysis and understanding the problem
+- Make small commits as you progress
+- Update PR description with current status
+- Check off completed items in the plan
+
+### 3. PR Structure
+```markdown
+## Plan: [Title]
+
+- [x] Completed task
+- [ ] Pending task
+
+**Current Status:** Brief description of where you are
+
+**Changes Made:**
+- List of changes as you make them
+
+Fixes #[issue-number]
+```
+
+### 4. When to Convert from Draft
+- Only when all checkboxes are complete
+- Build passes without errors
+- Feature is fully tested
+- Remove [WIP] prefix from title
+- Mark PR as "Ready for review"
+
 ## Test Management
 
 - Place all tests and testresults structured in test-results

@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { formatPrice } from '@/lib/stripe/config';
 import { SubscriptionTier, PromoCode } from '@/types';
-import { cn } from '@/lib/utils';
 
 interface CheckoutFormProps {
   subscriptionTier: SubscriptionTier;
@@ -24,7 +23,7 @@ export function CheckoutForm({
   billingPeriod,
   amount,
   currency,
-  clientSecret,
+  clientSecret: _clientSecret,
   onSuccess,
   onError,
 }: CheckoutFormProps) {

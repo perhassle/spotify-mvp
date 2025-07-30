@@ -23,7 +23,7 @@ async function getTrackData(id: string) {
     
     const result = await response.json();
     return result.data;
-  } catch (error) {
+  } catch (_error) {
     throw new Error('Failed to fetch track data');
   }
 }
@@ -74,7 +74,7 @@ export async function generateMetadata({ params }: TrackPageProps): Promise<Meta
         images: track.imageUrl ? [track.imageUrl] : [],
       },
     };
-  } catch (error) {
+  } catch (_error) {
     return {
       title: 'Track Not Found | Spotify MVP',
       description: 'The requested track could not be found.',

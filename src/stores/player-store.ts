@@ -1,11 +1,10 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import type { PlayerState, Track, RepeatMode, PlaybackContext, User, MockAd } from "@/types";
+import type { PlayerState, Track, RepeatMode, User, MockAd } from "@/types";
 import { AdvancedAudioEngine, type AudioEngineConfig, type AudioAnalyzerData } from "@/lib/audio/advanced-audio-engine";
-import { skipTracker, SkipUtils } from "@/lib/subscription/skip-tracker";
-import { adManager, AdUtils } from "@/lib/subscription/ad-manager";
-import { audioQualityManager, QualityUtils } from "@/lib/subscription/audio-quality-manager";
-import { featureGate } from "@/lib/subscription/feature-gate";
+import { skipTracker } from "@/lib/subscription/skip-tracker";
+import { adManager } from "@/lib/subscription/ad-manager";
+import { audioQualityManager } from "@/lib/subscription/audio-quality-manager";
 import { TierManager } from "@/lib/subscription/tier-manager";
 
 interface PlayerActions {
@@ -38,7 +37,7 @@ interface PlayerActions {
   setDuration: (duration: number) => void;
   
   // Context
-  setPlaybackContext: (context: PlaybackContext) => void;
+  setPlaybackContext: (context: any) => void;
   
   // Loading States
   setLoading: (loading: boolean) => void;
@@ -432,7 +431,7 @@ const usePlayerStore = create<PlayerStore>()(
         set({ duration });
       },
       
-      setPlaybackContext: (_context) => {
+      setPlaybackContext: () => {
         // This could be expanded to store playback context
         // For now, just acknowledge the context change
       },

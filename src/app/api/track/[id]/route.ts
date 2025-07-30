@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import mockDatabase from '@/data/mock-music-database.json';
-import type { Track, Artist, Album } from '@/types';
+import type { Track } from '@/types';
 
 interface TrackDetails extends Track {
   relatedTracks: Track[];
@@ -198,43 +198,3 @@ const { id } = resolvedParams;
   }
 }
 
-/**
- * Utility function to get track with related content
- */
-async function getTrackWithRelated(trackId: string): Promise<TrackDetails> {
-  const track = mockDatabase.tracks.find(t => t.id === trackId);
-  
-  if (!track) {
-    throw new Error('Track not found');
-  }
-
-  const artist = mockDatabase.artists.find(a => a.id === track.artist);
-  const album = mockDatabase.albums.find(a => a.id === track.album);
-  
-  if (!artist || !album) {
-    throw new Error('Artist or album not found for this track');
-  }
-
-  // Implementation details same as above...
-  // (This is simplified for brevity)
-  
-  return {
-    ...track,
-    artist: artist,
-    album: {
-      id: album.id,
-      title: album.title,
-      artist: artist,
-      releaseDate: new Date(album.releaseDate),
-      totalTracks: album.totalTracks,
-      imageUrl: album.imageUrl,
-      genres: album.genres,
-      type: (album.type as "album" | "single" | "compilation") || "album",
-    },
-    releaseDate: new Date(track.releaseDate),
-    genres: track.genres || [],
-    relatedTracks: [],
-    albumTracks: [],
-    artistTopTracks: [],
-  };
-}

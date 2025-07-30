@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Download, Check, X, Wifi, WifiOff, HardDrive, Clock } from 'lucide-react';
 import { Track, User, OfflineTrack, OfflinePlaylist } from '@/types';
 import { featureGate } from '@/lib/subscription/feature-gate';
@@ -248,10 +249,12 @@ export function OfflineDownloads({ user, tracks = [], className = '' }: OfflineD
           >
             <div className="flex items-center space-x-3">
               {track.imageUrl && (
-                <img
+                <Image
                   src={track.imageUrl}
                   alt={track.title}
-                  className="w-10 h-10 rounded object-cover"
+                  width={40}
+                  height={40}
+                  className="rounded object-cover"
                 />
               )}
               <div>
@@ -341,7 +344,7 @@ export function DownloadButton({
     try {
       await offlineStorage.downloadTrack(track);
       setDownloadState('downloaded');
-    } catch (error) {
+    } catch (_error) {
       setDownloadState('error');
     }
   };

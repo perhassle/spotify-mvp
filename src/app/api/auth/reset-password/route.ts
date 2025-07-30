@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authDB } from '@/lib/auth/database';
 import { resetPasswordSchema } from '@/lib/auth/validation';
+import { ApiError } from '@/types/common';
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,8 +41,9 @@ export async function POST(request: NextRequest) {
       message: 'Password has been reset successfully'
     });
 
-  } catch (error: any) {
-    console.error('Reset password error:', error);
+  } catch (error) {
+    const apiError = error as ApiError;
+    console.error('Reset password error:', apiError);
     
     return NextResponse.json(
       { 

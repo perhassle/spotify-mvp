@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { usePlayerStore } from "@/stores/player-store";
 import { cn, formatDuration } from "@/lib/utils";
 import { Button } from "@/components/ui/button";

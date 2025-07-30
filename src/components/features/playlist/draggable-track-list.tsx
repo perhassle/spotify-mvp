@@ -1,14 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { 
   Play, 
-  Pause, 
   Heart, 
   X, 
-  Clock, 
   GripVertical,
   Music
 } from 'lucide-react';

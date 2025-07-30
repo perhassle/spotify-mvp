@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import Image from 'next/image';
 import { useForm, Controller } from 'react-hook-form';
 import { useDropzone } from 'react-dropzone';
-import { X, Upload, ImageIcon, Lock, Users, Globe, Loader2 } from 'lucide-react';
+import { X, Upload, ImageIcon, Users, Globe, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import usePlaylistStore from '@/stores/playlist-store';

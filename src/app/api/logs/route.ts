@@ -5,7 +5,7 @@ import { withLogging, performanceMiddleware } from '@/middleware/logging';
 interface ClientLogEntry {
   level: string;
   message: string;
-  data?: any;
+  data?: unknown;
   timestamp: string;
   userAgent: string;
   url?: string;
@@ -33,7 +33,7 @@ async function clientLoggingHandler(request: NextRequest) {
     // Map client log levels to server logger methods
     switch (level.toLowerCase()) {
       case 'error':
-        clientLogger.error(`[Client] ${message}`, data?.error || data);
+        clientLogger.error(`[Client] ${message}`, (data as { error?: unknown })?.error || data);
         break;
       case 'warn':
         clientLogger.warn(`[Client] ${message}`, data);

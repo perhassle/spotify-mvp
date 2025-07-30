@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { 
@@ -11,8 +11,6 @@ import {
   Lock, 
   Users,
   Share2,
-  Heart,
-  Download,
   Edit,
   Trash2
 } from 'lucide-react';

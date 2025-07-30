@@ -18,7 +18,7 @@ import {
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
-import { SkipCounter, CompactSkipCounter } from "@/components/subscription/skip-counter";
+import { CompactSkipCounter } from "@/components/subscription/skip-counter";
 import { AdPlayer, MiniAdPlayer } from "@/components/subscription/ad-player";
 import { TierBadge } from "@/components/subscription/tier-badge";
 import { UpgradePrompt, useUpgradePrompt } from "@/components/subscription/upgrade-prompt";
@@ -45,7 +45,7 @@ export function MusicPlayer({ className }: MusicPlayerProps) {
     crossfadeDuration,
     isEqualizerEnabled,
     togglePlayPause,
-    nextTrack,
+    nextTrack: _nextTrack,
     previousTrack,
     seekTo,
     setVolume,
@@ -54,7 +54,7 @@ export function MusicPlayer({ className }: MusicPlayerProps) {
     setCrossfadeDuration,
     toggleEqualizer,
     attemptSkip,
-    getSkipStatus,
+    // getSkipStatus,
     getCurrentAd,
   } = usePlayerStore();
 

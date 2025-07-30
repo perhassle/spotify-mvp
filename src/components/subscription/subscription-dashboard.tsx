@@ -249,7 +249,7 @@ export function SubscriptionDashboard() {
     return (
       <div className="text-center py-12">
         <h2 className="text-lg font-semibold text-gray-900 mb-2">No Active Subscription</h2>
-        <p className="text-gray-600 mb-4">You don't have any active subscriptions.</p>
+        <p className="text-gray-600 mb-4">You don&apos;t have any active subscriptions.</p>
         <Button onClick={() => window.location.href = '/pricing'}>
           View Plans
         </Button>
@@ -265,7 +265,7 @@ export function SubscriptionDashboard() {
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-lg shadow-sm border p-6 text-center">
           <h2 className="text-xl font-semibold text-gray-900 mb-2">No Active Subscription</h2>
-          <p className="text-gray-600">You don't have an active subscription.</p>
+          <p className="text-gray-600">You don&apos;t have an active subscription.</p>
         </div>
       </div>
     );
