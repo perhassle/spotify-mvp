@@ -222,7 +222,7 @@ export function calculatePerformanceScore(metrics: Record<string, number>): numb
   let totalScore = 0;
   let totalWeight = 0;
 
-  Object.entries(weights).forEach(([metric, weight]) => {
+  Object.entries(weights).forEach(([metric, weight]: [string, number]) => {
     if (metric in metrics) {
       const value = metrics[metric];
       if (typeof value === 'number') {
@@ -230,7 +230,7 @@ export function calculatePerformanceScore(metrics: Record<string, number>): numb
         const goodBudget = budgets.find(b => b.severity === 'warning');
         const poorBudget = budgets.find(b => b.severity === 'error');
 
-        if (goodBudget && poorBudget && value !== undefined) {
+        if (goodBudget && poorBudget) {
           let score = 0;
           if (value <= goodBudget.budget) {
             score = 100; // Good

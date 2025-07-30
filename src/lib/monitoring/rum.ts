@@ -374,6 +374,9 @@ class RealUserMonitoring {
   }
 
   private getDeviceType(): 'mobile' | 'tablet' | 'desktop' {
+    if (typeof window === 'undefined') {
+      return 'desktop'; // Default for SSR
+    }
     const width = window.innerWidth;
     if (width < 768) return 'mobile';
     if (width < 1024) return 'tablet';
@@ -381,18 +384,21 @@ class RealUserMonitoring {
   }
 
   private getConnectionType(): string | undefined {
+    if (typeof navigator === 'undefined') {
+      return undefined; // Default for SSR
+    }
     const nav = navigator as Navigator & { connection?: NetworkInformation; mozConnection?: NetworkInformation; webkitConnection?: NetworkInformation };
     const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
     return connection?.effectiveType;
   }
 
   private getFirstPaint(): number {
-    if (window.performance && window.performance.getEntriesByType) {
-      const paintEntries = window.performance.getEntriesByType('paint');
-      const firstPaint = paintEntries.find(entry => entry.name === 'first-paint');
-      return firstPaint ? Math.round(firstPaint.startTime) : 0;
+    if (typeof window === 'undefined' || !window.performance || !window.performance.getEntriesByType) {
+      return 0; // Default for SSR
     }
-    return 0;
+    const paintEntries = window.performance.getEntriesByType('paint');
+    const firstPaint = paintEntries.find(entry => entry.name === 'first-paint');
+    return firstPaint ? Math.round(firstPaint.startTime) : 0;
   }
 
   private getNavigationType(type: number): string {
@@ -441,41 +447,17 @@ class RealUserMonitoring {
   }
 }
 
-// Create singleton instance only in browser
+// Create singleton instance (lazy initialization for SSR compatibility)
 let rumInstance: RealUserMonitoring | null = null;
 
-export const rum = {
-  init() {
-    if (typeof window !== 'undefined' && !rumInstance) {
-      rumInstance = new RealUserMonitoring();
-      rumInstance.init();
-    }
-  },
-  
-  trackPageView(url?: string) {
-    if (rumInstance) {
-      rumInstance.trackPageView(url);
-    }
-  },
-  
-  trackError(error: Error, context?: Record<string, unknown>) {
-    if (rumInstance) {
-      rumInstance.trackError(error, context);
-    }
-  },
-  
-  trackCustomMetric(name: string, value: number, metadata?: Record<string, unknown>) {
-    if (rumInstance) {
-      rumInstance.trackCustomMetric(name, value, metadata);
-    }
-  },
-  
-  getSession() {
-    if (rumInstance) {
-      return rumInstance.getSession();
-    }
-    return null;
+export const getRUM = (): RealUserMonitoring | null => {
+  if (typeof window === 'undefined') {
+    return null; // Return null for SSR
   }
+  if (!rumInstance) {
+    rumInstance = new RealUserMonitoring();
+  }
+  return rumInstance;
 };
 
 // Export for custom usage

@@ -30,7 +30,7 @@ export function AppProviders({ children }: AppProvidersProps) {
             <PerformanceMonitor
               enableRUM={true}
               enableWebVitals={true}
-              sampleRate={process.env.NODE_ENV === 'production' ? 0.1 : 1}
+              _sampleRate={process.env.NODE_ENV === 'production' ? 0.1 : 1}
             />
             <AuthProvider>
               <AppLayout>
