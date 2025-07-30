@@ -45,11 +45,30 @@ class RealUserMonitoring {
       ...config,
     };
 
-    this.session = this.createSession();
+    // Only create session if we're in a browser environment
+    if (typeof window !== 'undefined') {
+      this.session = this.createSession();
+    } else {
+      // Create a minimal session for SSR
+      this.session = {
+        sessionId: 'ssr-session',
+        startTime: Date.now(),
+        deviceType: 'desktop',
+        pageViews: 0,
+        interactions: 0,
+        errors: 0,
+        metrics: {},
+      };
+    }
   }
 
   // Initialize RUM
   init(): void {
+    // Only initialize in browser environment
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     // Check if user should be sampled
     if (Math.random() > this.config.sampleRate) {
       clientLogger.info('RUM: User not sampled');
@@ -354,6 +373,7 @@ class RealUserMonitoring {
   }
 
   private getDeviceType(): 'mobile' | 'tablet' | 'desktop' {
+    if (typeof window === 'undefined') return 'desktop'; // Default for SSR
     const width = window.innerWidth;
     if (width < 768) return 'mobile';
     if (width < 1024) return 'tablet';
@@ -361,6 +381,7 @@ class RealUserMonitoring {
   }
 
   private getConnectionType(): string | undefined {
+    if (typeof navigator === 'undefined') return undefined; // Default for SSR
     const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
     return connection?.effectiveType;
   }
