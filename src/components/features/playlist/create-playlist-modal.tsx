@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useDropzone } from 'react-dropzone';
-import { X, Upload, Image, Lock, Users, Globe, Loader2 } from 'lucide-react';
+import { X, Upload, Image, Users, Globe, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import usePlaylistStore from '@/stores/playlist-store';

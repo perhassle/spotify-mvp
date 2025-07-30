@@ -10,7 +10,6 @@ import {
   ForwardIcon,
   BackwardIcon,
   ChevronUpIcon,
-  HeartIcon,
   QueueListIcon,
 } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";

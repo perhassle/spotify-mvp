@@ -161,7 +161,7 @@ function HeroLayout({ section, userId }: { section: HomeFeedSection; userId: str
         <RecommendationCard
           recommendation={featuredTrack}
           sectionId={section.id}
-          userId={userId}
+          _userId=""
           size="hero"
           showReason={section.displaySettings.showRecommendationReason}
         />
@@ -174,7 +174,7 @@ function HeroLayout({ section, userId }: { section: HomeFeedSection; userId: str
             key={track.trackId}
             recommendation={track}
             sectionId={section.id}
-            userId={userId}
+            _userId={userId}
             size="compact"
             showReason={false}
           />
@@ -196,7 +196,7 @@ function VerticalListLayout({ section, userId }: { section: HomeFeedSection; use
             <RecommendationCard
               recommendation={track}
               sectionId={section.id}
-              userId={userId}
+              _userId={userId}
               size="list"
               showReason={section.displaySettings.showRecommendationReason}
             />
@@ -215,7 +215,7 @@ function GridLayout({ section, userId }: { section: HomeFeedSection; userId: str
           key={track.trackId}
           recommendation={track}
           sectionId={section.id}
-          userId={userId}
+          _userId={userId}
           size={section.displaySettings.cardSize}
           showReason={section.displaySettings.showRecommendationReason}
         />
@@ -240,15 +240,15 @@ function HorizontalCardsLayout({
   const [canScrollLeft, setCanScrollLeft] = React.useState(false);
   const [canScrollRight, setCanScrollRight] = React.useState(true);
 
-  const checkScrollButtons = () => {
-    if (scrollContainerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
-    }
-  };
-
   React.useEffect(() => {
+    const checkScrollButtons = () => {
+      if (scrollContainerRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+        setCanScrollLeft(scrollLeft > 0);
+        setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+      }
+    };
+
     checkScrollButtons();
     const container = scrollContainerRef.current;
     if (container) {
@@ -256,7 +256,7 @@ function HorizontalCardsLayout({
       return () => container.removeEventListener('scroll', checkScrollButtons);
     }
     return undefined;
-  }, [section.tracks]);
+  }, [section.tracks, scrollContainerRef]);
 
   return (
     <div className="relative group">
@@ -306,7 +306,7 @@ function HorizontalCardsLayout({
             <RecommendationCard
               recommendation={track}
               sectionId={section.id}
-              userId={userId}
+              _userId={userId}
               size={section.displaySettings.cardSize}
               showReason={section.displaySettings.showRecommendationReason}
             />

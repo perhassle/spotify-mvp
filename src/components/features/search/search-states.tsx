@@ -82,8 +82,8 @@ export function SearchEmptyState({
         No results found
       </h3>
       <p className="text-white/60 text-center max-w-md mb-6">
-        Sorry, we couldn't find any results for{" "}
-        <span className="text-white font-medium">"{query}"</span>
+        Sorry, we couldn&apos;t find any results for{" "}
+        <span className="text-white font-medium">&quot;{query}&quot;</span>
         {hasFilters && " with the current filters"}.
       </p>
       

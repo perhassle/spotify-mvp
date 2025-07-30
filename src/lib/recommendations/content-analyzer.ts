@@ -1,9 +1,6 @@
 import type {
   TrackFeatures,
-  Track,
-  Artist,
   ItemSimilarity,
-  ContentMetadata,
 } from '@/types';
 
 export class ContentAnalyzer {
@@ -265,7 +262,7 @@ export class ContentAnalyzer {
   private calculateAverageFeatures(features: TrackFeatures[]): Partial<TrackFeatures> {
     if (features.length === 0) return {};
 
-    const averages: any = {};
+    const averages: Partial<TrackFeatures> = {};
     const numericFeatures = [
       'danceability', 'energy', 'valence', 'acousticness', 
       'instrumentalness', 'liveness', 'speechiness', 'tempo', 'loudness'
@@ -273,15 +270,15 @@ export class ContentAnalyzer {
 
     numericFeatures.forEach(feature => {
       const values = features.map(f => f[feature as keyof TrackFeatures] as number);
-      averages[feature] = values.reduce((a, b) => a + b, 0) / values.length;
+      (averages as any)[feature] = values.reduce((a, b) => a + b, 0) / values.length;
     });
 
     return averages;
   }
 
   private generatePlaylistRecommendations(
-    averageFeatures: Partial<TrackFeatures>,
-    dominantGenres: string[]
+    _averageFeatures: Partial<TrackFeatures>,
+    _dominantGenres: string[]
   ): string[] {
     // Mock implementation - in a real app, this would query the music database
     // for tracks matching the playlist characteristics

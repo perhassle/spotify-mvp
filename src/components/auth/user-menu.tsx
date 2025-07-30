@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { signOut } from 'next-auth/react';
 import { useAuthStore } from '@/stores/auth-store';
 import { 
@@ -83,10 +84,12 @@ export function UserMenu() {
           {/* Avatar */}
           <div className="flex-shrink-0">
             {user.profileImage ? (
-              <img
+              <Image
                 src={user.profileImage}
                 alt={`${user.displayName}'s avatar`}
-                className="h-8 w-8 rounded-full object-cover"
+                width={32}
+                height={32}
+                className="rounded-full object-cover"
               />
             ) : (
               <div className="h-8 w-8 rounded-full bg-gray-700 flex items-center justify-center">

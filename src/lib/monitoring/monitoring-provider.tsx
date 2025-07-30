@@ -136,7 +136,7 @@ export function MonitoringProvider({
 // Hook to use monitoring utilities
 export function useMonitoring() {
   return {
-    logEvent: (eventName: string, data?: any) => {
+    logEvent: (eventName: string, data?: Record<string, unknown>) => {
       clientLogger.info(`Event: ${eventName}`, { event: { name: eventName, ...data } });
       
       if ((window as any).Sentry) {
@@ -149,15 +149,15 @@ export function useMonitoring() {
       }
     },
     
-    logError: (error: Error, context?: any) => {
+    logError: (error: Error, context?: Record<string, unknown>) => {
       errorMonitor.captureError(error, context);
     },
     
-    logPerformance: (operation: string, duration: number, metadata?: any) => {
+    logPerformance: (operation: string, duration: number, metadata?: Record<string, unknown>) => {
       clientLogger.performance(operation, duration, metadata);
     },
     
-    setUserContext: (user: { id: string; email?: string; [key: string]: any }) => {
+    setUserContext: (user: { id: string; email?: string; [key: string]: unknown }) => {
       clientLogger.child({ userId: user.id, userEmail: user.email });
       
       if ((window as any).Sentry) {

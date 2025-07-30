@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe, TRIAL_PERIOD_DAYS } from '@/lib/stripe/config';
 import { SubscriptionTier } from '@/types';
+import { ApiError } from '@/types/common';
+import Stripe from 'stripe';
 
 export async function POST(request: NextRequest) {
   try {
@@ -49,8 +51,8 @@ export async function POST(request: NextRequest) {
     });
 
     // Get the payment intent from the subscription's latest invoice
-    const invoice = subscription.latest_invoice as any;
-    const paymentIntent = invoice?.payment_intent;
+    const invoice = subscription.latest_invoice as Stripe.Invoice;
+    const paymentIntent = (invoice as any)?.payment_intent as Stripe.PaymentIntent | null;
 
     if (paymentIntent?.status === 'requires_action') {
       return NextResponse.json({
@@ -69,9 +71,10 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Create subscription error:', error);
+    const apiError = error as ApiError;
+    console.error('Create subscription error:', apiError);
     return NextResponse.json(
-      { error: 'Failed to create subscription' },
+      { error: apiError.message || 'Failed to create subscription' },
       { status: 500 }
     );
   }

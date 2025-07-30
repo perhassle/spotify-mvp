@@ -4,8 +4,7 @@ import type {
   SearchState, 
   SearchResults, 
   SearchFilters, 
-  SearchHistoryItem,
-  SearchSuggestion 
+  SearchHistoryItem
 } from "@/types";
 
 interface SearchActions {

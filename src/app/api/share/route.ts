@@ -15,7 +15,7 @@ function generateShortUrl(_originalUrl: string): string {
 }
 
 // Generate embed code for content
-function generateEmbedCode(contentType: string, contentId: string, options: any = {}): string {
+function generateEmbedCode(contentType: string, contentId: string, options: { width?: number; height?: number; theme?: string } = {}): string {
   const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
   const width = options.width || 400;
   const height = options.height || 600;

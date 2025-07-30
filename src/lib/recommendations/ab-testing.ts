@@ -193,7 +193,7 @@ export class ABTestingManager {
     userId: string,
     testName: string,
     eventType: 'view' | 'click' | 'play' | 'skip' | 'like' | 'session_end',
-    metadata?: Record<string, any>
+    metadata?: Record<string, unknown>
   ) {
     const variant = this.getUserVariant(userId, testName);
     if (!variant) return;
@@ -216,7 +216,7 @@ export class ABTestingManager {
         variant.metrics.likeRate += 1;
         break;
       case 'session_end':
-        if (metadata?.sessionLength) {
+        if (metadata?.sessionLength && typeof metadata.sessionLength === 'number') {
           variant.metrics.sessionLength += metadata.sessionLength;
         }
         break;
@@ -228,7 +228,7 @@ export class ABTestingManager {
 
   getAlgorithmForSection(userId: string, sectionType: HomeFeedSectionType): {
     algorithm: RecommendationAlgorithm;
-    parameters: Record<string, any>;
+    parameters: Record<string, unknown>;
     variant?: string;
   } {
     // Map section types to test names

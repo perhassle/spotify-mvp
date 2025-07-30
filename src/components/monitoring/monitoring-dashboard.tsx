@@ -10,17 +10,17 @@ import { webVitalsMonitor } from '@/lib/monitoring/web-vitals';
 import { errorMonitor } from '@/lib/monitoring/error-monitoring';
 import { clientLogger } from '@/lib/client-logger';
 
-interface MetricCard {
-  name: string;
-  value: number | string;
-  unit?: string;
-  rating?: 'good' | 'needs-improvement' | 'poor';
-  trend?: 'up' | 'down' | 'stable';
-}
+// Removed unused interface MetricCard
 
 export function MonitoringDashboard() {
-  const [webVitals, setWebVitals] = useState<Record<string, any>>({});
-  const [errorStats, setErrorStats] = useState<Record<string, any>>({});
+  const [webVitals, setWebVitals] = useState<Record<string, {
+    value: number;
+    rating?: 'good' | 'needs-improvement' | 'poor';
+  }>>({});
+  const [errorStats, setErrorStats] = useState<Record<string, {
+    total?: number;
+    topErrors?: Array<{ key: string; count: number }>;
+  }>>({});
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -134,14 +134,14 @@ export function MonitoringDashboard() {
             <div className="flex justify-between items-center p-2 bg-gray-50 dark:bg-gray-800 rounded">
               <span className="text-sm text-gray-600 dark:text-gray-400">Total Errors</span>
               <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                {errorStats.total || 0}
+                {Object.values(errorStats)[0]?.total || 0}
               </span>
             </div>
             
-            {errorStats.topErrors && errorStats.topErrors.length > 0 && (
+            {Object.values(errorStats)[0]?.topErrors && Object.values(errorStats)[0]!.topErrors!.length > 0 && (
               <div className="mt-2">
                 <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Top Errors</div>
-                {errorStats.topErrors.slice(0, 3).map((error: any, index: number) => (
+                {Object.values(errorStats)[0]!.topErrors!.slice(0, 3).map((error, index) => (
                   <div
                     key={index}
                     className="text-xs p-2 bg-red-50 dark:bg-red-900/20 rounded mb-1"
@@ -167,7 +167,7 @@ export function MonitoringDashboard() {
           <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
             <div>Page Load: {performance.timing ? `${performance.timing.loadEventEnd - performance.timing.navigationStart}ms` : 'N/A'}</div>
             <div>DOM Interactive: {performance.timing ? `${performance.timing.domInteractive - performance.timing.navigationStart}ms` : 'N/A'}</div>
-            <div>Memory: {(performance as any).memory ? `${Math.round((performance as any).memory.usedJSHeapSize / 1048576)}MB` : 'N/A'}</div>
+            <div>Memory: {(performance as Performance & { memory?: { usedJSHeapSize: number } }).memory ? `${Math.round((performance as Performance & { memory?: { usedJSHeapSize: number } }).memory!.usedJSHeapSize / 1048576)}MB` : 'N/A'}</div>
           </div>
         </div>
 

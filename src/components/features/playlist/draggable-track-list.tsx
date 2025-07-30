@@ -1,13 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { 
   Play, 
-  Pause, 
   Heart, 
   X, 
-  Clock, 
   GripVertical,
   Music
 } from 'lucide-react';
