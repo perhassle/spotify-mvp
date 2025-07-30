@@ -387,7 +387,8 @@ class RealUserMonitoring {
     if (typeof navigator === 'undefined') {
       return undefined; // Default for SSR
     }
-    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    const nav = navigator as Navigator & { connection?: NetworkInformation; mozConnection?: NetworkInformation; webkitConnection?: NetworkInformation };
+    const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
     return connection?.effectiveType;
   }
 

@@ -69,7 +69,7 @@ export function useRenderPerformance(
               type: 'component-mount',
               component: componentName,
               duration: Math.round(mountDuration),
-              renderCount: currentRenderCount, // Use captured value
+              renderCount: currentRenderCount,
               ...options.metadata,
             },
           });
@@ -92,7 +92,7 @@ export function useRenderPerformance(
     
     // No cleanup needed for updates
     return undefined;
-  });
+  }, [componentName, threshold, options.metadata, logLevel]);
 }
 
 /**
