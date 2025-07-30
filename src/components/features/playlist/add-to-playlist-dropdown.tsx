@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { 
   Plus, 
@@ -231,12 +232,13 @@ export default function AddToPlaylistDropdown({
                       `}
                     >
                       {/* Playlist Cover */}
-                      <div className="w-10 h-10 rounded bg-zinc-700 overflow-hidden flex-shrink-0">
+                      <div className="w-10 h-10 rounded bg-zinc-700 overflow-hidden flex-shrink-0 relative">
                         {playlist.imageUrl ? (
-                          <img
+                          <Image
                             src={playlist.imageUrl}
                             alt={playlist.name}
-                            className="w-full h-full object-cover"
+                            fill
+                            className="object-cover"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
