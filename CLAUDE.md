@@ -153,6 +153,6 @@ Fixes #[issue-number]
 ## Claude Interaction Guidelines
 
 - When assistance is needed, play a sound to get my attention
-- Play `/docs/chime-74910.mp3` when ever you nedd my attention
-- If you need my attention please play `/docs/chime-74910.mp3`
-- Play this sound instead when you need my attention `/docs/chime-sound-7143.mp3`
+- Play `/.claude/docs/chime-74910.mp3` when ever you nedd my attention
+- If you need my attention please play `/.claude/docs/chime-74910.mp3`
+- Play this sound instead when you need my attention `/.claude/docs/chime-sound-7143.mp3`
