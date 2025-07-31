@@ -43,4 +43,36 @@ next-env.d.ts
 *.swo
 
 # OS
+.DS_Store
 Thumbs.db
+
+# Build artifacts
+*.log
+build_output.log
+
+# Test artifacts  
+test-results*/
+playwright-report/
+coverage/
+*.png
+*.jpg
+*.jpeg
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Security - Certificates and Keys
+certificates/
+*.key
+*.crt
+*.pem
+*.pfx
+*.p12
+
+# User data
+data/users.json
+
+# Session files
+.claude/
