@@ -3,8 +3,6 @@
  * Provides the same API but does nothing
  */
 
-import { ErrorCategory, ErrorSeverity } from './error-monitoring';
-
 // Sentry configuration (for when it's installed)
 export const sentryConfig = {
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
@@ -29,16 +27,16 @@ export const sentryUtils = {
   clearUser() {
     // No-op
   },
-  setTags(tags: Record<string, string>) {
+  setTags(_tags: Record<string, string>) {
     // No-op
   },
   addBreadcrumb(_breadcrumb: { category?: string; message?: string; level?: string; data?: Record<string, unknown> }) {
     // No-op
   },
-  captureEvent(message: string, level: string = 'info') {
+  captureEvent(_message: string, _level: string = 'info') {
     // No-op
   },
-  startTransaction(name: string, op: string) {
+  startTransaction(_name: string, _op: string) {
     return null;
   },
 };

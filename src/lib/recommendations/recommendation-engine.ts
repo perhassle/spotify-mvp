@@ -356,9 +356,9 @@ export class SpotifyRecommendationEngine implements RecommendationEngine {
   }
 
   private calculatePopularityScore(
-    track: Track,
+    _track: Track,
     popularity: PopularityData,
-    context: RecommendationContext
+    _context: RecommendationContext
   ): number {
     let score = popularity.playCount / 1000000; // Normalize to millions of plays
     

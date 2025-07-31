@@ -1,6 +1,5 @@
 import { cookies } from 'next/headers';
 import { auth } from '@/auth';
-import { authConfig } from '@/lib/auth/config';
 import crypto from 'crypto';
 
 /**

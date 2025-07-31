@@ -46,7 +46,7 @@ export async function generateMetadata({
   searchParams,
 }: SharePreviewPageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const resolvedSearchParams = await searchParams;
+  const _resolvedSearchParams = await searchParams;
   const { type, id } = resolvedParams;
   const content = await getContentForMetadata(type, id);
 

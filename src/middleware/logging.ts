@@ -108,7 +108,7 @@ export function withLogging<T extends (...args: any[]) => any>(
 ): T {
   return (async (...args: Parameters<T>) => {
     const request = args[0] as NextRequest;
-    const { request: modifiedRequest, requestId, startTime } = loggingMiddleware(request);
+    const { request: modifiedRequest, requestId, startTime: _startTime } = loggingMiddleware(request);
     
     const requestLogger = createLogger({ requestId });
     

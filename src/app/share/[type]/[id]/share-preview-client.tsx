@@ -8,13 +8,9 @@ import {
   PlayIcon,
   PauseIcon,
   HeartIcon,
-  ShareIcon,
-  ArrowDownTrayIcon,
-  UserPlusIcon,
   CheckBadgeIcon,
   MusicalNoteIcon,
   QueueListIcon,
-  UserIcon,
   ArrowTopRightOnSquareIcon
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
@@ -86,7 +82,7 @@ export default function SharePreviewClient({
       } else {
         setError(data.error || 'Content not found');
       }
-    } catch (error) {
+    } catch (_error) {
       setError('Failed to load content');
     } finally {
       setIsLoading(false);

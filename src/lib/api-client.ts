@@ -1,5 +1,5 @@
 import { ApiError, ApiErrors } from './api-error-handler';
-import { parseError, showError, retryRequest } from './client-error-handler';
+import { showError, retryRequest } from './client-error-handler';
 import { errorTracker } from './error-tracking';
 import React from 'react';
 
@@ -102,7 +102,7 @@ class ApiClient {
       
       // Check if it's our API error format
       if (errorData?.error) {
-        const { message, type, statusCode, details, requestId } = errorData.error;
+        const { message, type, statusCode, details, _requestId } = errorData.error;
         throw new ApiError(message, statusCode || response.status, type, details);
       }
       

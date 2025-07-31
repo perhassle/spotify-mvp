@@ -9,7 +9,7 @@ interface PlaylistPageProps {
 }
 
 export async function generateMetadata({ params }: PlaylistPageProps) {
-  const resolvedParams = await params;
+  const _resolvedParams = await params;
   // In a real app, fetch playlist data for metadata
   return {
     title: `Playlist | Spotify MVP`,

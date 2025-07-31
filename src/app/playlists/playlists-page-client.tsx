@@ -11,7 +11,6 @@ import {
   Filter, 
   SortAsc,
   SortDesc,
-  FolderPlus,
   Music,
   Clock,
   Calendar,
@@ -28,7 +27,6 @@ import usePlaylistStore from '@/stores/playlist-store';
 import CreatePlaylistModal from '@/components/features/playlist/create-playlist-modal';
 import PlaylistCard from '@/components/features/playlist/playlist-card';
 import PlaylistListItem from '@/components/features/playlist/playlist-list-item';
-import { Playlist } from '@/types';
 
 export default function PlaylistsPageClient() {
   const { data: session } = useSession();
@@ -90,7 +88,8 @@ export default function PlaylistsPageClient() {
     router.push(`/playlist/${playlistId}`);
   };
 
-  const formatDuration = (seconds: number) => {
+  // TODO: use it to format the seconds into hours and mins
+  const _formatDuration = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     

@@ -1,7 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { auth } from '@/auth';
-import { authConfig } from '@/lib/auth/config';
 import crypto from 'crypto';
 
 /**
@@ -332,7 +331,7 @@ export async function validateApiInput<T>(
     }
     
     return { success: true, data: result.data };
-  } catch (error) {
+  } catch (_error) {
     return { success: false, error: 'Invalid request body' };
   }
 }

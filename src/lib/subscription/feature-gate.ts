@@ -1,4 +1,4 @@
-import { User, SubscriptionTier, PremiumFeature, FeatureGate } from '@/types';
+import { User, SubscriptionTier, PremiumFeature } from '@/types';
 import { TierManager } from './tier-manager';
 import { skipTracker } from './skip-tracker';
 import { audioQualityManager } from './audio-quality-manager';
@@ -197,7 +197,7 @@ class FeatureGateService {
   /**
    * Handle offline download (mock implementation)
    */
-  private async handleOfflineDownload(user: User, trackId: string): Promise<{
+  private async handleOfflineDownload(_user: User, _trackId: string): Promise<{
     downloadId: string;
     estimatedSize: number;
     quality: string;
@@ -213,7 +213,7 @@ class FeatureGateService {
   /**
    * Handle equalizer access
    */
-  private handleEqualizerAccess(user: User, settings: any): boolean {
+  private handleEqualizerAccess(_user: User, _settings: any): boolean {
     // Mock implementation - in real app, this would apply EQ settings
     return true;
   }
@@ -221,7 +221,7 @@ class FeatureGateService {
   /**
    * Handle crossfade functionality
    */
-  private handleCrossfade(user: User, duration: number): boolean {
+  private handleCrossfade(_user: User, _duration: number): boolean {
     // Mock implementation - in real app, this would set crossfade duration
     return true;
   }
@@ -243,7 +243,7 @@ class FeatureGateService {
   /**
    * Handle advanced visualizer
    */
-  private handleAdvancedVisualizer(user: User, enabled: boolean): boolean {
+  private handleAdvancedVisualizer(_user: User, _enabled: boolean): boolean {
     // Mock implementation - in real app, this would toggle advanced visualizer
     return true;
   }

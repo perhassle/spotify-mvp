@@ -1,0 +1,79 @@
+name: Release Checklist
+description: Checklist for preparing a new release
+title: "[Release]: v"
+labels: ["release"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This checklist helps ensure all steps are completed for a release following GitFlow.
+
+  - type: input
+    id: version
+    attributes:
+      label: Release Version
+      description: Version number for this release (e.g., v1.0.0)
+      placeholder: v1.0.0
+    validations:
+      required: true
+
+  - type: input
+    id: branch
+    attributes:
+      label: Release Branch Name
+      description: Branch name following GitFlow convention
+      placeholder: release/v1.0.0
+    validations:
+      required: true
+
+  - type: textarea
+    id: features
+    attributes:
+      label: Features Included
+      description: List all features included in this release
+      placeholder: |
+        - Feature A (#123)
+        - Feature B (#124)
+        - Bug fix C (#125)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: pre-release
+    attributes:
+      label: Pre-release Checklist
+      options:
+        - label: All features merged to develop
+        - label: Create release branch from develop
+        - label: Update version in package.json
+        - label: Update CHANGELOG.md
+        - label: Run full test suite
+        - label: Build production bundle
+        - label: Test on staging environment
+        - label: Security audit passed
+        - label: Performance benchmarks acceptable
+        - label: Documentation updated
+
+  - type: checkboxes
+    id: release
+    attributes:
+      label: Release Checklist
+      options:
+        - label: Create PR from release branch to master
+        - label: Get required approvals
+        - label: Merge to master
+        - label: Tag release on master
+        - label: Build and deploy to production
+        - label: Verify production deployment
+        - label: Create PR from release branch to develop
+        - label: Merge back to develop
+        - label: Delete release branch
+        - label: Create GitHub release with notes
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
+      description: Any additional notes or concerns about this release
+    validations:
+      required: false

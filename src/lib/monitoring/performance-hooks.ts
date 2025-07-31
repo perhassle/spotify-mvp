@@ -43,7 +43,7 @@ export function useRenderPerformance(
     // Component mount
     if (renderCount.current === 0) {
       mountTime.current = startTime;
-      const currentRenderCount = renderCount.current; // Capture the value
+      const _currentRenderCount = renderCount.current; // Capture the value
       
       // Create performance mark
       if (performance.mark) {
@@ -342,7 +342,7 @@ export function useLongTaskMonitoring(
 
     try {
       observer.observe({ entryTypes: ['longtask'] });
-    } catch (error) {
+    } catch (_error) {
       // Long task monitoring not supported
       clientLogger.debug('Long task monitoring not supported');
     }

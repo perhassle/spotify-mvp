@@ -6,7 +6,7 @@ import { randomBytes } from 'crypto';
  * Security headers middleware
  * Adds comprehensive security headers to all responses
  */
-export function withSecurityHeaders(request: NextRequest) {
+export function withSecurityHeaders(_request: NextRequest) {
   const response = NextResponse.next();
   
   // Generate CSP nonce for inline scripts

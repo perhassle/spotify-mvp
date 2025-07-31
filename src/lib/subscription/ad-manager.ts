@@ -114,7 +114,7 @@ class AdManagerService {
   /**
    * Initialize ad session for user
    */
-  private initializeUserSession(userId: string, user: User): UserAdSession {
+  private initializeUserSession(userId: string, _user: User): UserAdSession {
     // Determine ad configuration based on user behavior
     // For demo, we'll use default config
     const config = AD_CONFIGS.default || AD_CONFIGS['default'] || {
@@ -140,7 +140,7 @@ class AdManagerService {
   /**
    * Check if an ad should be played before the next track
    */
-  public shouldPlayAd(user: User | null, nextTrack: Track): boolean {
+  public shouldPlayAd(user: User | null, _nextTrack: Track): boolean {
     if (!user || TierManager.isPremiumUser(user)) {
       return false; // No ads for premium users
     }
