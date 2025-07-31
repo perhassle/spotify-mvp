@@ -136,8 +136,11 @@ class SpotifyDataService {
       const topLists = await this.client.getFeaturedPlaylists(1);
       if (topLists.playlists.items.length === 0) return [];
       
+      const firstPlaylist = topLists.playlists.items[0];
+      if (!firstPlaylist) return [];
+      
       const playlistTracks = await this.client.getPlaylistTracks(
-        topLists.playlists.items[0].id,
+        firstPlaylist.id,
         limit
       );
       

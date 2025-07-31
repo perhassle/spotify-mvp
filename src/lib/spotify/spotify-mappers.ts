@@ -1,4 +1,4 @@
-import type { Track, Album, Artist, Playlist } from '@/types';
+import type { Track, Album, Artist, Playlist, User } from '@/types';
 import type { 
   SpotifyTrack, 
   SpotifyAlbum, 
@@ -11,19 +11,40 @@ import type {
  * Map Spotify track to our Track interface
  */
 export function mapSpotifyTrack(spotifyTrack: SpotifyTrack): Track {
+  const artist: Artist = {
+    id: spotifyTrack.artists[0]?.id || '',
+    name: spotifyTrack.artists[0]?.name || 'Unknown Artist',
+    genres: [], // Not available in track response
+    followers: 0, // Not available in track response
+    isVerified: false, // Not available in track response
+    popularity: 0, // Not available in track response
+  };
+
+  const album: Album = {
+    id: spotifyTrack.album.id,
+    title: spotifyTrack.album.name,
+    artist: artist,
+    releaseDate: new Date(spotifyTrack.album.release_date),
+    totalTracks: spotifyTrack.album.total_tracks || 0,
+    type: (spotifyTrack.album.album_type as 'album' | 'single' | 'compilation') || 'album',
+    imageUrl: spotifyTrack.album.images[0]?.url || '/placeholder-album.png',
+    genres: [], // Not available in track response
+  };
+
   return {
     id: spotifyTrack.id,
     title: spotifyTrack.name,
-    artist: spotifyTrack.artists[0]?.name || 'Unknown Artist',
-    artistId: spotifyTrack.artists[0]?.id || '',
-    album: spotifyTrack.album.name,
-    albumId: spotifyTrack.album.id,
-    duration: spotifyTrack.duration_ms,
-    coverUrl: spotifyTrack.album.images[0]?.url || '/placeholder-album.png',
-    audioUrl: spotifyTrack.preview_url || '', // 30 second preview
+    artist: artist,
+    album: album,
+    duration: Math.floor(spotifyTrack.duration_ms / 1000), // Convert to seconds
+    previewUrl: spotifyTrack.preview_url || undefined,
+    streamUrl: spotifyTrack.preview_url || undefined, // Using preview URL as stream URL
+    isExplicit: spotifyTrack.explicit,
     popularity: spotifyTrack.popularity,
-    explicit: spotifyTrack.explicit,
-    spotifyUri: spotifyTrack.uri,
+    trackNumber: spotifyTrack.track_number,
+    genres: [], // Not available in track response
+    releaseDate: new Date(spotifyTrack.album.release_date),
+    imageUrl: spotifyTrack.album.images[0]?.url || '/placeholder-album.png',
   };
 }
 
@@ -31,17 +52,24 @@ export function mapSpotifyTrack(spotifyTrack: SpotifyTrack): Track {
  * Map Spotify album to our Album interface
  */
 export function mapSpotifyAlbum(spotifyAlbum: SpotifyAlbum): Album {
+  const artist: Artist = {
+    id: spotifyAlbum.artists[0]?.id || '',
+    name: spotifyAlbum.artists[0]?.name || 'Unknown Artist',
+    genres: [], // Not available in album response
+    followers: 0, // Not available in album response
+    isVerified: false, // Not available in album response
+    popularity: 0, // Not available in album response
+  };
+
   return {
     id: spotifyAlbum.id,
     title: spotifyAlbum.name,
-    artist: spotifyAlbum.artists[0]?.name || 'Unknown Artist',
-    artistId: spotifyAlbum.artists[0]?.id || '',
-    coverUrl: spotifyAlbum.images[0]?.url || '/placeholder-album.png',
-    releaseYear: new Date(spotifyAlbum.release_date).getFullYear(),
-    trackCount: spotifyAlbum.total_tracks,
-    tracks: [], // Will be populated separately
-    type: spotifyAlbum.album_type,
-    spotifyUri: spotifyAlbum.uri,
+    artist: artist,
+    releaseDate: new Date(spotifyAlbum.release_date),
+    totalTracks: spotifyAlbum.total_tracks,
+    type: (spotifyAlbum.album_type as 'album' | 'single' | 'compilation') || 'album',
+    imageUrl: spotifyAlbum.images[0]?.url || '/placeholder-album.png',
+    genres: [], // Not available in album object
   };
 }
 
@@ -52,13 +80,11 @@ export function mapSpotifyArtist(spotifyArtist: SpotifyArtist): Artist {
   return {
     id: spotifyArtist.id,
     name: spotifyArtist.name,
-    imageUrl: spotifyArtist.images[0]?.url || '/placeholder-artist.png',
-    genres: spotifyArtist.genres,
-    followers: 0, // Not provided in basic artist object
-    monthlyListeners: 0, // Not available via API
-    bio: '', // Not available via basic API
-    verified: spotifyArtist.popularity > 50, // Approximation
-    spotifyUri: spotifyArtist.uri,
+    imageUrl: spotifyArtist.images?.[0]?.url,
+    genres: spotifyArtist.genres || [],
+    followers: 0, // Not available in simple artist object
+    isVerified: spotifyArtist.popularity > 50, // Approximation
+    popularity: spotifyArtist.popularity || 0
   };
 }
 
@@ -66,23 +92,40 @@ export function mapSpotifyArtist(spotifyArtist: SpotifyArtist): Artist {
  * Map Spotify playlist to our Playlist interface
  */
 export function mapSpotifyPlaylist(spotifyPlaylist: SpotifyPlaylist): Playlist {
+  // Create a minimal user object for owner
+  const owner: User = {
+    id: spotifyPlaylist.owner.id,
+    email: '', // Not available
+    username: spotifyPlaylist.owner.id,
+    displayName: spotifyPlaylist.owner.display_name || spotifyPlaylist.owner.id,
+    isPremium: false, // Not available
+    subscriptionTier: 'free', // Not available
+    subscriptionStatus: 'active', // Not available
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
   return {
     id: spotifyPlaylist.id,
     name: spotifyPlaylist.name,
-    description: spotifyPlaylist.description || '',
-    coverUrl: spotifyPlaylist.images[0]?.url || '/placeholder-playlist.png',
-    trackCount: spotifyPlaylist.tracks.total,
-    duration: 0, // Will need to calculate from tracks
-    isPublic: spotifyPlaylist.public,
-    owner: {
-      id: spotifyPlaylist.owner.id,
-      name: spotifyPlaylist.owner.display_name,
-    },
+    description: spotifyPlaylist.description || undefined,
+    imageUrl: spotifyPlaylist.images?.[0]?.url || undefined,
+    owner: owner,
     tracks: [], // Will be populated separately
-    followers: 0, // Not in basic response
-    createdAt: new Date().toISOString(), // Not available
-    updatedAt: new Date().toISOString(), // Not available
-    spotifyUri: spotifyPlaylist.uri,
+    isPublic: spotifyPlaylist.public ?? true,
+    collaborative: false, // Not available in basic playlist object
+    followers: 0, // Not available in basic playlist object
+    totalDuration: 0, // Will need to calculate from tracks
+    trackCount: spotifyPlaylist.tracks.total || 0,
+    tags: [], // Not available from Spotify
+    folderId: undefined,
+    createdAt: new Date(), // Not available from Spotify
+    updatedAt: new Date(), // Not available from Spotify
+    lastPlayedAt: undefined,
+    playCount: 0, // Not available from Spotify
+    shareUrl: spotifyPlaylist.external_urls?.spotify,
+    isSmartPlaylist: false, // Spotify playlists are not smart playlists
+    smartPlaylistCriteria: undefined,
   };
 }
 
@@ -99,7 +142,7 @@ export function mapSpotifyTracks(spotifyTracks: SpotifyTrack[]): Track[] {
 export function mapSpotifyPlaylistTracks(items: SpotifyPlaylistTrack[]): Track[] {
   return items
     .filter(item => item.track && item.track.type === 'track')
-    .map(item => mapSpotifyTrack(item.track));
+    .map(item => mapSpotifyTrack(item.track as SpotifyTrack));
 }
 
 /**
@@ -133,5 +176,5 @@ export function getBestImage(images: { url: string; width: number | null; height
   
   // Sort by width (largest first) and return the URL
   const sorted = [...images].sort((a, b) => (b.width || 0) - (a.width || 0));
-  return sorted[0].url;
+  return sorted[0]?.url || '/placeholder.png';
 }

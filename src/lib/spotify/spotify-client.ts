@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import type { SpotifyTrack, SpotifyArtist, SpotifyAlbum } from './spotify-types';
 
 export class SpotifyClient {
   private baseUrl = 'https://api.spotify.com/v1';
@@ -28,7 +29,7 @@ export class SpotifyClient {
     endpoint: string, 
     options: RequestInit = {}
   ): Promise<T> {
-    let accessToken = await this.getAccessToken();
+    const accessToken = await this.getAccessToken();
     
     if (!accessToken) {
       throw new Error('No access token available');
@@ -74,72 +75,80 @@ export class SpotifyClient {
   }
 
   // User endpoints
-  async getCurrentUser() {
-    return this.request('/me');
+  async getCurrentUser(): Promise<any> {
+    return this.request<any>('/me');
   }
 
-  async getUserPlaylists(limit = 20, offset = 0) {
-    return this.request(`/me/playlists?limit=${limit}&offset=${offset}`);
+  async getUserPlaylists(limit = 20, offset = 0): Promise<any> {
+    return this.request<any>(`/me/playlists?limit=${limit}&offset=${offset}`);
   }
 
   // Search endpoints
-  async search(query: string, types: string[] = ['track', 'artist', 'album'], limit = 20) {
+  async search(query: string, types: string[] = ['track', 'artist', 'album'], limit = 20): Promise<any> {
     const type = types.join(',');
     const q = encodeURIComponent(query);
-    return this.request(`/search?q=${q}&type=${type}&limit=${limit}`);
+    return this.request<any>(`/search?q=${q}&type=${type}&limit=${limit}`);
   }
 
   // Track endpoints
-  async getTrack(id: string) {
-    return this.request(`/tracks/${id}`);
+  async getTrack(id: string): Promise<SpotifyTrack> {
+    return this.request<SpotifyTrack>(`/tracks/${id}`);
   }
 
-  async getTracks(ids: string[]) {
-    return this.request(`/tracks?ids=${ids.join(',')}`);
+  async getTracks(ids: string[]): Promise<{ tracks: SpotifyTrack[] }> {
+    return this.request<{ tracks: SpotifyTrack[] }>(`/tracks?ids=${ids.join(',')}`);
   }
 
   // Album endpoints
-  async getAlbum(id: string) {
-    return this.request(`/albums/${id}`);
+  async getAlbum(id: string): Promise<SpotifyAlbum> {
+    return this.request<SpotifyAlbum>(`/albums/${id}`);
   }
 
-  async getAlbumTracks(id: string, limit = 50) {
-    return this.request(`/albums/${id}/tracks?limit=${limit}`);
+  async getAlbums(ids: string[]): Promise<{ albums: SpotifyAlbum[] }> {
+    return this.request<{ albums: SpotifyAlbum[] }>(`/albums?ids=${ids.join(',')}`);
+  }
+
+  async getAlbumTracks(id: string, limit = 50): Promise<{ items: Array<{ id: string; [key: string]: any }> }> {
+    return this.request<{ items: Array<{ id: string; [key: string]: any }> }>(`/albums/${id}/tracks?limit=${limit}`);
   }
 
   // Artist endpoints
-  async getArtist(id: string) {
-    return this.request(`/artists/${id}`);
+  async getArtist(id: string): Promise<SpotifyArtist> {
+    return this.request<SpotifyArtist>(`/artists/${id}`);
   }
 
-  async getArtistTopTracks(id: string, market = 'US') {
-    return this.request(`/artists/${id}/top-tracks?market=${market}`);
+  async getArtists(ids: string[]): Promise<{ artists: SpotifyArtist[] }> {
+    return this.request<{ artists: SpotifyArtist[] }>(`/artists?ids=${ids.join(',')}`);
   }
 
-  async getArtistAlbums(id: string, limit = 20) {
-    return this.request(`/artists/${id}/albums?limit=${limit}`);
+  async getArtistTopTracks(id: string, market = 'US'): Promise<{ tracks: SpotifyTrack[] }> {
+    return this.request<{ tracks: SpotifyTrack[] }>(`/artists/${id}/top-tracks?market=${market}`);
   }
 
-  async getRelatedArtists(id: string) {
-    return this.request(`/artists/${id}/related-artists`);
+  async getArtistAlbums(id: string, limit = 20): Promise<any> {
+    return this.request<any>(`/artists/${id}/albums?limit=${limit}`);
+  }
+
+  async getRelatedArtists(id: string): Promise<any> {
+    return this.request<any>(`/artists/${id}/related-artists`);
   }
 
   // Playlist endpoints
-  async getPlaylist(id: string) {
-    return this.request(`/playlists/${id}`);
+  async getPlaylist(id: string): Promise<any> {
+    return this.request<any>(`/playlists/${id}`);
   }
 
-  async getPlaylistTracks(id: string, limit = 100, offset = 0) {
-    return this.request(`/playlists/${id}/tracks?limit=${limit}&offset=${offset}`);
+  async getPlaylistTracks(id: string, limit = 100, offset = 0): Promise<{ items: Array<{ track: SpotifyTrack | null }> }> {
+    return this.request<{ items: Array<{ track: SpotifyTrack | null }> }>(`/playlists/${id}/tracks?limit=${limit}&offset=${offset}`);
   }
 
   // Player endpoints
-  async getCurrentPlayback() {
-    return this.request('/me/player');
+  async getCurrentPlayback(): Promise<any> {
+    return this.request<any>('/me/player');
   }
 
-  async play(context_uri?: string, uris?: string[], position_ms?: number) {
-    return this.request('/me/player/play', {
+  async play(context_uri?: string, uris?: string[], position_ms?: number): Promise<any> {
+    return this.request<any>('/me/player/play', {
       method: 'PUT',
       body: JSON.stringify({
         ...(context_uri && { context_uri }),
@@ -149,24 +158,24 @@ export class SpotifyClient {
     });
   }
 
-  async pause() {
-    return this.request('/me/player/pause', { method: 'PUT' });
+  async pause(): Promise<any> {
+    return this.request<any>('/me/player/pause', { method: 'PUT' });
   }
 
-  async next() {
-    return this.request('/me/player/next', { method: 'POST' });
+  async next(): Promise<any> {
+    return this.request<any>('/me/player/next', { method: 'POST' });
   }
 
-  async previous() {
-    return this.request('/me/player/previous', { method: 'POST' });
+  async previous(): Promise<any> {
+    return this.request<any>('/me/player/previous', { method: 'POST' });
   }
 
-  async seek(position_ms: number) {
-    return this.request(`/me/player/seek?position_ms=${position_ms}`, { method: 'PUT' });
+  async seek(position_ms: number): Promise<any> {
+    return this.request<any>(`/me/player/seek?position_ms=${position_ms}`, { method: 'PUT' });
   }
 
-  async setVolume(volume_percent: number) {
-    return this.request(`/me/player/volume?volume_percent=${volume_percent}`, { method: 'PUT' });
+  async setVolume(volume_percent: number): Promise<any> {
+    return this.request<any>(`/me/player/volume?volume_percent=${volume_percent}`, { method: 'PUT' });
   }
 
   // Recommendations
@@ -175,7 +184,7 @@ export class SpotifyClient {
     seed_tracks?: string[];
     seed_genres?: string[];
     limit?: number;
-  }) {
+  }): Promise<{ tracks: SpotifyTrack[] }> {
     const queryParams = new URLSearchParams();
     
     if (params.seed_artists?.length) {
@@ -191,20 +200,42 @@ export class SpotifyClient {
       queryParams.append('limit', params.limit.toString());
     }
 
-    return this.request(`/recommendations?${queryParams.toString()}`);
+    return this.request<{ tracks: SpotifyTrack[] }>(`/recommendations?${queryParams.toString()}`);
   }
 
   // Browse endpoints
-  async getFeaturedPlaylists(limit = 20) {
-    return this.request(`/browse/featured-playlists?limit=${limit}`);
+  async getFeaturedPlaylists(limit = 20): Promise<{ playlists: { items: Array<{ id: string; [key: string]: any }> } }> {
+    return this.request<{ playlists: { items: Array<{ id: string; [key: string]: any }> } }>(`/browse/featured-playlists?limit=${limit}`);
   }
 
-  async getNewReleases(limit = 20) {
-    return this.request(`/browse/new-releases?limit=${limit}`);
+  async getNewReleases(limit = 20): Promise<{ albums: { items: SpotifyAlbum[] } }> {
+    return this.request<{ albums: { items: SpotifyAlbum[] } }>(`/browse/new-releases?limit=${limit}`);
   }
 
-  async getCategories(limit = 20) {
-    return this.request(`/browse/categories?limit=${limit}`);
+  // Search endpoints
+  async searchTracks(query: string, limit = 20): Promise<{ tracks: { items: SpotifyTrack[] } }> {
+    return this.request<{ tracks: { items: SpotifyTrack[] } }>(`/search?q=${encodeURIComponent(query)}&type=track&limit=${limit}`);
+  }
+
+  async searchArtists(query: string, limit = 20): Promise<{ artists: { items: SpotifyArtist[] } }> {
+    return this.request<{ artists: { items: SpotifyArtist[] } }>(`/search?q=${encodeURIComponent(query)}&type=artist&limit=${limit}`);
+  }
+
+  async searchAlbums(query: string, limit = 20): Promise<{ albums: { items: SpotifyAlbum[] } }> {
+    return this.request<{ albums: { items: SpotifyAlbum[] } }>(`/search?q=${encodeURIComponent(query)}&type=album&limit=${limit}`);
+  }
+
+  // User's top items
+  async getMyTopTracks(limit = 20): Promise<{ items: SpotifyTrack[] }> {
+    return this.request<{ items: SpotifyTrack[] }>(`/me/top/tracks?limit=${limit}`);
+  }
+
+  async getMyTopArtists(limit = 20): Promise<{ items: SpotifyArtist[] }> {
+    return this.request<{ items: SpotifyArtist[] }>(`/me/top/artists?limit=${limit}`);
+  }
+
+  async getCategories(limit = 20): Promise<any> {
+    return this.request<any>(`/browse/categories?limit=${limit}`);
   }
 }
 

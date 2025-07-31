@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
         response_type: 'code',
         client_id: SPOTIFY_CLIENT_ID,
         scope: SCOPES.join(' '),
-        redirect_uri: REDIRECT_URI,
+        redirect_uri: REDIRECT_URI!,
         state: state,
       }).toString()
     );
