@@ -1,17 +1,6 @@
 {
   "users": [
     {
-      "id": "user_mdoq68mlvihtokihq",
-      "email": "per.hassle@authority.se",
-      "username": "perhassle",
-      "displayName": "Per Hassle",
-      "password": "$2b$12$ruAMghxC/Jv/4DZwqmIu.eifXgDjacN4EtN4roKkaOzogbtJXdt.q",
-      "isPremium": false,
-      "createdAt": "2025-07-29T16:02:09.837Z",
-      "updatedAt": "2025-07-29T16:02:09.837Z",
-      "emailVerified": null
-    },
-    {
       "id": "user_mdoq6tbexg8myjs9kq",
       "email": "test1753804955499@example.com",
       "username": "user1753804956318",
@@ -42,6 +31,19 @@
       "isPremium": false,
       "createdAt": "2025-07-29T16:40:15.070Z",
       "updatedAt": "2025-07-29T16:40:15.070Z",
+      "emailVerified": null
+    },
+    {
+      "id": "user_mdqid7co7rm89czxl7s",
+      "email": "per@hassle.net",
+      "username": "perhassle2",
+      "displayName": "Per Hassle",
+      "password": "$2b$12$vLDvpmj7pSgzPjs7XtCGIO5fGxOfc.NEqcURF3ll35RDJOA7jF78i",
+      "isPremium": true,
+      "subscriptionTier": "free",
+      "subscriptionStatus": "canceled",
+      "createdAt": "2025-07-30T21:59:10.200Z",
+      "updatedAt": "2025-07-30T21:59:10.200Z",
       "emailVerified": null
     }
   ]
