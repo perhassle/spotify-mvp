@@ -15,7 +15,7 @@ import type {
   RecommendationContext,
   PopularityData,
 } from '@/types';
-import { musicDatabase } from '../data/music-database';
+import { dataService } from '../data/data-service';
 import { UserProfileManager } from './user-profile-manager';
 import { ContentAnalyzer } from './content-analyzer';
 import { CollaborativeFilter } from './collaborative-filter';
@@ -258,7 +258,7 @@ export class SpotifyRecommendationEngine implements RecommendationEngine {
     request: RecommendationRequest,
     context: RecommendationContext
   ): Promise<RecommendationScore[]> {
-    const tracks = await musicDatabase.getAllTracks();
+    const tracks = await dataService.getAllTracks();
     const popularityData = await this.trendingAnalyzer.getPopularityData();
 
     return tracks
@@ -290,7 +290,7 @@ export class SpotifyRecommendationEngine implements RecommendationEngine {
     context: RecommendationContext
   ): Promise<RecommendationScore[]> {
     const timePreferences = userProfile.timeBasedPreferences[context.timeOfDay];
-    const tracks = await musicDatabase.getTracksByGenres(timePreferences.preferredGenres);
+    const tracks = await dataService.getTracksByGenres(timePreferences.preferredGenres);
 
     return tracks
       .map(track => {
@@ -323,7 +323,7 @@ export class SpotifyRecommendationEngine implements RecommendationEngine {
     userProfile: UserProfile,
     context: RecommendationContext
   ): Promise<RecommendationScore[]> {
-    const tracks = await musicDatabase.getAllTracks();
+    const tracks = await dataService.getAllTracks();
     const userAudioPrefs = userProfile.audioFeaturePreferences;
 
     const validTracks = tracks
@@ -496,7 +496,7 @@ export class SpotifyRecommendationEngine implements RecommendationEngine {
     request: RecommendationRequest,
     context: RecommendationContext
   ): Promise<RecommendationResponse> {
-    const tracks = await musicDatabase.getAllTracks();
+    const tracks = await dataService.getAllTracks();
     const recommendations = tracks
       .slice(0, request.limit)
       .map(track => ({
@@ -636,7 +636,7 @@ export class SpotifyRecommendationEngine implements RecommendationEngine {
     const userProfile = await this.userProfileManager.getUserProfile(userId);
     if (!userProfile) return [];
 
-    const track = await musicDatabase.getTrack(trackId);
+    const track = await dataService.getTrack(trackId);
     if (!track) return [];
 
     // Generate explanations based on user preferences

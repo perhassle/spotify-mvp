@@ -20,7 +20,7 @@ export function LoginForm() {
   const searchParams = useSearchParams();
   
   // Get redirect URL and success message from query params
-  const redirectTo = searchParams.get('from') || '/';
+  const redirectTo = searchParams.get('from') || '/home';
   const successMessage = searchParams.get('message');
 
   const {

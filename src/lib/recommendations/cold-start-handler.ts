@@ -6,7 +6,7 @@ import type {
   UserProfile,
   RecommendationContext,
 } from '@/types';
-import { musicDatabase } from '../data/music-database';
+import { dataService } from '../data/data-service';
 import { TrendingAnalyzer } from './trending-analyzer';
 
 export class ColdStartHandler {
@@ -311,7 +311,7 @@ export class ColdStartHandler {
     };
 
     const prefs = timePreferences[context.timeOfDay];
-    const tracks = await musicDatabase.getTracksByGenres(prefs.genres);
+    const tracks = await dataService.getTracksByGenres(prefs.genres);
     
     return tracks.slice(0, limit).map(track => ({
       trackId: track.id,
@@ -345,7 +345,7 @@ export class ColdStartHandler {
     const prefs = activityPreferences[activity as keyof typeof activityPreferences];
     if (!prefs) return [];
 
-    const tracks = await musicDatabase.getTracksByGenres(prefs.genres);
+    const tracks = await dataService.getTracksByGenres(prefs.genres);
     
     return tracks.slice(0, limit).map(track => ({
       trackId: track.id,
@@ -386,7 +386,7 @@ export class ColdStartHandler {
     const prefs = moodPreferences[mood as keyof typeof moodPreferences];
     if (!prefs) return [];
 
-    const tracks = await musicDatabase.getTracksByGenres(prefs.genres);
+    const tracks = await dataService.getTracksByGenres(prefs.genres);
     
     return tracks.slice(0, limit).map(track => ({
       trackId: track.id,
@@ -416,7 +416,7 @@ export class ColdStartHandler {
     context: RecommendationContext
   ): Promise<RecommendationScore[]> {
     // Generate diverse exploration content
-    const allTracks = await musicDatabase.getAllTracks();
+    const allTracks = await dataService.getAllTracks();
     const explorationTracks = this.shuffleArray(allTracks).slice(0, request.limit);
     
     return explorationTracks.map(track => ({
@@ -492,7 +492,7 @@ export class ColdStartHandler {
     const genres = ['Pop', 'Rock', 'Hip Hop', 'Electronic', 'Indie', 'Jazz'];
     const genreRecs = await Promise.all(
       genres.map(async (genre) => {
-        const tracks = await musicDatabase.getTracksByGenres([genre]);
+        const tracks = await dataService.getTracksByGenres([genre]);
         return {
           name: genre,
           tracks: tracks.slice(0, 5).map(track => ({
