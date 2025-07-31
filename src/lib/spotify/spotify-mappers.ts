@@ -83,7 +83,17 @@ export function mapSpotifyArtist(spotifyArtist: SpotifyArtist): Artist {
     imageUrl: spotifyArtist.images?.[0]?.url,
     genres: spotifyArtist.genres || [],
     followers: 0, // Not available in simple artist object
-    isVerified: spotifyArtist.popularity > 50, // Approximation
+    /**
+     * Artist verification status approximation
+     * 
+     * Spotify API doesn't provide a direct "verified" field.
+     * We use popularity > 50 as a rough approximation:
+     * - Most verified artists have higher popularity scores
+     * - This is a temporary solution until proper verification data is available
+     * 
+     * TODO: Replace with actual verification data when available from Spotify API
+     */
+    isVerified: spotifyArtist.popularity > 50,
     popularity: spotifyArtist.popularity || 0
   };
 }

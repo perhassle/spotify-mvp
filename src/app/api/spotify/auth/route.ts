@@ -1,9 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID!;
-const REDIRECT_URI = process.env.NODE_ENV === 'production' 
-  ? process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI_PROD 
+
+// Allowed redirect URIs for security
+const ALLOWED_REDIRECT_URIS = [
+  'https://spotify-mvp.vercel.app/api/spotify/callback',
+  'https://spotify-mvp-git-feature-spotify-api-2c42b1-perhassles-projects.vercel.app/api/spotify/callback',
+  'https://localhost:3001/api/spotify/callback',
+  'http://localhost:3000/api/spotify/callback',
+];
+
+const rawRedirectUri = process.env.NODE_ENV === 'production' 
+  ? process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI_PROD || 'https://spotify-mvp.vercel.app/api/spotify/callback'
   : process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI || 'https://localhost:3001/api/spotify/callback';
+
+const REDIRECT_URI = ALLOWED_REDIRECT_URIS.includes(rawRedirectUri)
+  ? rawRedirectUri
+  : 'https://localhost:3001/api/spotify/callback';
 
 // Scopes for Spotify API access
 const SCOPES = [

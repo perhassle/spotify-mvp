@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { testConfig } from './test-config';
 
 test.use({
   // Ignore HTTPS errors for self-signed certificate
@@ -44,8 +45,8 @@ test.describe('HTTPS Site Test', () => {
     await page.goto('https://localhost:3001/auth/login');
     
     // Fill login form
-    await page.getByPlaceholder(/email/i).fill('per@hassle.net');
-    await page.getByPlaceholder(/password/i).fill('123!#asd');
+    await page.getByPlaceholder(/email/i).fill(testConfig.testUser.email);
+    await page.getByPlaceholder(/password/i).fill(testConfig.testUser.password);
     
     // Click sign in
     await page.getByRole('button', { name: /sign in/i }).click();

@@ -10,8 +10,17 @@ import { cookies } from 'next/headers';
 class DataService {
   private async isSpotifyConnected(): Promise<boolean> {
     if (typeof window !== 'undefined') {
-      // Client-side check
-      return document.cookie.includes('spotify_access_token');
+      // Client-side check via API call
+      try {
+        const response = await fetch('/api/spotify-connected');
+        if (response.ok) {
+          const data = await response.json();
+          return data.connected;
+        }
+      } catch (error) {
+        console.error('Failed to check Spotify connection:', error);
+      }
+      return false;
     }
     
     // Server-side check

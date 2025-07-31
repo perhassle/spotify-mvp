@@ -11,7 +11,11 @@ export class SpotifyClient {
 
   private async refreshAccessToken(): Promise<string | null> {
     try {
-      const response = await fetch('/api/spotify/refresh', {
+      const baseUrl = typeof window !== 'undefined' 
+        ? window.location.origin 
+        : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+      
+      const response = await fetch(`${baseUrl}/api/spotify/refresh`, {
         method: 'POST',
       });
       

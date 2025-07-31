@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID!;
 const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET!;
 const REDIRECT_URI = process.env.NODE_ENV === 'production' 
-  ? process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI_PROD 
+  ? process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI_PROD || 'https://spotify-mvp.vercel.app/api/spotify/callback'
   : process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI || 'https://localhost:3001/api/spotify/callback';
 
 export async function GET(request: NextRequest) {
@@ -23,6 +23,14 @@ export async function GET(request: NextRequest) {
 
   // Verify state to prevent CSRF attacks
   if (!state || state !== storedState) {
+    console.error('State mismatch error detected', {
+      receivedState: state,
+      storedState: storedState,
+      url: request.url,
+      timestamp: new Date().toISOString(),
+      userAgent: request.headers.get('user-agent'),
+      ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip'),
+    });
     return NextResponse.redirect(new URL('/spotify/error?error=state_mismatch', request.url));
   }
 
