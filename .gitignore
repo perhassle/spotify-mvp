@@ -44,3 +44,24 @@ next-env.d.ts
 
 # OS
 Thumbs.db
+
+# Security - Certificates and Keys
+certificates/
+*.key
+*.crt
+*.pem
+*.pfx
+*.p12
+
+# User data
+data/users.json
+
+# Test artifacts
+playwright-report/
+test-results/
+*.png
+*.jpg
+*.jpeg
+
+# Session files
+.claude/
