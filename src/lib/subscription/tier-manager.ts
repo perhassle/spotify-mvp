@@ -1,4 +1,4 @@
-import { User, SubscriptionTier, SubscriptionStatus, PremiumFeature, FeatureGate } from '@/types';
+import { User, SubscriptionTier, PremiumFeature, FeatureGate } from '@/types';
 
 /**
  * Comprehensive subscription tier management system

@@ -1,6 +1,5 @@
 import { NextRequest } from 'next/server';
 import { auth } from '@/auth';
-import { authConfig } from '@/lib/auth/config';
 
 /**
  * Security monitoring and logging utilities

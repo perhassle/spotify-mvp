@@ -111,7 +111,7 @@ class AudioQualityManagerService {
   /**
    * Get optimal quality for track playback
    */
-  public getOptimalQuality(user: User | null, track: Track): {
+  public getOptimalQuality(user: User | null, _track: Track): {
     quality: AudioQuality;
     reason: string;
     isDowngraded: boolean;

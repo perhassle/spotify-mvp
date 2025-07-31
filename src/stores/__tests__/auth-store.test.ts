@@ -235,7 +235,7 @@ describe('Auth Store', () => {
 
   describe('Store Persistence', () => {
     it('should only persist specified fields', () => {
-      const store = useAuthStore;
+      const _store = useAuthStore;
       
       // Test the partialize function
       const fullState = {

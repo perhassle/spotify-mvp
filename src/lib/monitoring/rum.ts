@@ -221,7 +221,7 @@ class RealUserMonitoring {
   }
 
   // Track page views (SPA navigation)
-  public trackPageView(url?: string): void {
+  public trackPageView(_url?: string): void {
     const viewMetrics = {
       url: window.location.href,
       referrer: document.referrer,
@@ -275,7 +275,7 @@ class RealUserMonitoring {
 
     try {
       observer.observe({ entryTypes: ['resource'] });
-    } catch (e) {
+    } catch (_e) {
       clientLogger.debug('Resource timing not supported');
     }
   }

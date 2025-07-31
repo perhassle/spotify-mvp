@@ -11,7 +11,7 @@ export interface ClientError {
 }
 
 // API response error structure
-interface ApiErrorResponse {
+interface _ApiErrorResponse {
   error: {
     message: string;
     type: string;
