@@ -107,7 +107,21 @@ npm run build      # Build for production
 npm run start      # Start production server
 npm run lint       # Run ESLint
 npm run type-check # Run TypeScript type checking
+npm run test       # Run unit tests in watch mode
+npm run test:ci    # Run unit tests with coverage for CI
+npm run test:e2e   # Run Playwright E2E tests
 ```
+
+### CI/CD Pipeline
+
+This project includes a comprehensive GitHub Actions CI/CD pipeline:
+
+- **Continuous Integration**: Automated linting, testing, building, and security scanning
+- **E2E Testing**: 72 Playwright tests covering all major functionality
+- **Deployment**: Automatic deployment to Vercel on main branch
+- **Security**: npm audit and Trivy security scanning
+
+📖 **[See full CI/CD documentation](docs/CI_CD_PIPELINE.md)** for setup instructions, environment variables, and troubleshooting.
 
 ### Code Quality
 
