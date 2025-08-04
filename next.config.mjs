@@ -35,6 +35,11 @@ const nextConfig = {
   },
   // Enable compression (already enabled by default, but explicit is better)
   compress: true,
+  // Optimize production build
+  compiler: {
+    // Remove console.log in production
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
   // Add custom headers for static assets
   async headers() {
     return [

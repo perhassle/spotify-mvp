@@ -2,14 +2,42 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Elements } from '@stripe/react-stripe-js';
+import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { getStripe, STRIPE_PRODUCTS } from '@/lib/stripe/config';
-import { CheckoutForm } from '@/components/subscription/checkout-form';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/stores/auth-store';
 import { SubscriptionTier } from '@/types';
+
+// Lazy load Stripe components since they're only needed during checkout
+const Elements = dynamic(
+  () => import('@stripe/react-stripe-js').then((mod) => ({ default: mod.Elements })),
+  {
+    loading: () => (
+      <div className="animate-pulse space-y-4">
+        <div className="h-12 bg-zinc-800 rounded"></div>
+        <div className="h-12 bg-zinc-800 rounded"></div>
+        <div className="h-12 bg-zinc-800 rounded"></div>
+      </div>
+    ),
+    ssr: false,
+  }
+);
+
+const CheckoutForm = dynamic(
+  () => import('@/components/subscription/checkout-form').then((mod) => ({ default: mod.CheckoutForm })),
+  {
+    loading: () => (
+      <div className="animate-pulse space-y-4">
+        <div className="h-12 bg-zinc-800 rounded"></div>
+        <div className="h-12 bg-zinc-800 rounded"></div>
+        <div className="h-12 bg-zinc-800 rounded"></div>
+      </div>
+    ),
+    ssr: false,
+  }
+);
 
 interface SubscribePageProps {
   params: Promise<{

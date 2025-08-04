@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { 
   Play, 
   Pause, 
@@ -29,7 +30,21 @@ import usePlaylistStore from '@/stores/playlist-store';
 import usePlayerStore from '@/stores/player-store';
 import { Playlist, PlaylistTrack } from '@/types';
 import { formatDuration } from '@/lib/format-utils';
-import DraggableTrackList from '@/components/features/playlist/draggable-track-list';
+
+// Lazy load the draggable track list since it includes heavy drag & drop functionality
+const DraggableTrackList = dynamic(
+  () => import('@/components/features/playlist/draggable-track-list'),
+  {
+    loading: () => (
+      <div className="space-y-2 animate-pulse">
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className="h-14 bg-zinc-800 rounded"></div>
+        ))}
+      </div>
+    ),
+    ssr: false,
+  }
+);
 
 interface PlaylistDetailClientProps {
   playlistId: string;

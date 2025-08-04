@@ -28,7 +28,16 @@ import {
   UserGroupIcon as UserGroupIconSolid,
 } from "@heroicons/react/24/solid";
 import usePlaylistStore from "@/stores/playlist-store";
-import CreatePlaylistModal from "@/components/features/playlist/create-playlist-modal";
+import dynamic from "next/dynamic";
+
+// Lazy load the create playlist modal
+const CreatePlaylistModal = dynamic(
+  () => import("@/components/features/playlist/create-playlist-modal"),
+  {
+    loading: () => null, // No loading state needed for sidebar modal
+    ssr: false,
+  }
+);
 import { useAuthStore } from "@/stores/auth-store";
 import { TierManager } from "@/lib/subscription/tier-manager";
 
