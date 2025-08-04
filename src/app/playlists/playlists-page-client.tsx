@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { 
   Plus, 
   Search, 
@@ -25,10 +26,31 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import usePlaylistStore from '@/stores/playlist-store';
-import CreatePlaylistModal from '@/components/features/playlist/create-playlist-modal';
 import PlaylistCard from '@/components/features/playlist/playlist-card';
 import PlaylistListItem from '@/components/features/playlist/playlist-list-item';
 import { Playlist } from '@/types';
+
+// Lazy load the create playlist modal since it's only used when creating playlists
+const CreatePlaylistModal = dynamic(
+  () => import('@/components/features/playlist/create-playlist-modal'),
+  {
+    loading: () => (
+      <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+        <div className="bg-zinc-900 rounded-xl w-full max-w-2xl max-h-[90vh] p-6">
+          <div className="animate-pulse space-y-4">
+            <div className="h-6 bg-zinc-800 rounded w-1/3"></div>
+            <div className="h-48 bg-zinc-800 rounded"></div>
+            <div className="space-y-2">
+              <div className="h-4 bg-zinc-800 rounded"></div>
+              <div className="h-4 bg-zinc-800 rounded w-3/4"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+    ssr: false, // Only load on client side
+  }
+);
 
 export default function PlaylistsPageClient() {
   const { data: session } = useSession();
