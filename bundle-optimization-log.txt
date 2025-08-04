@@ -1,0 +1,10 @@
+BASELINE MEASUREMENTS (before optimization):
+=================================
+First Load JS shared by all: 100 kB
+Heavy pages:
+- /playlist/[id]: 36.3 kB (169 kB total)
+- /playlists: 6.69 kB (169 kB total)
+- /pricing: 6.05 kB (186 kB total)
+- /subscribe/[plan]: 11.3 kB (191 kB total)
+- /subscription/manage: 5.21 kB (185 kB total)
+
