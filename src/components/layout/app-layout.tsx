@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Sidebar } from "./sidebar";
 import { MobileNavigation } from "./mobile-navigation";
+import { ErrorBoundaryWithFallback } from "@/components/common/error-boundary-with-fallback";
+import { PlayerErrorBoundary } from "@/components/common/player-error-boundary";
 import dynamic from "next/dynamic";
 // import { Suspense } from "react";
 
@@ -70,10 +72,26 @@ export function AppLayout({ children, className }: AppLayoutProps) {
       </nav>
 
       {/* Mobile Navigation */}
-      <MobileNavigation className="md:hidden" />
+      <ErrorBoundaryWithFallback
+        fallback={
+          <div className="md:hidden p-4 bg-red-50 text-red-600">
+            <p>Navigation unavailable. Please refresh the page.</p>
+          </div>
+        }
+      >
+        <MobileNavigation className="md:hidden" />
+      </ErrorBoundaryWithFallback>
       
       {/* Desktop Sidebar Navigation */}
-      <Sidebar className="hidden md:block" />
+      <ErrorBoundaryWithFallback
+        fallback={
+          <div className="hidden md:block w-64 p-4 bg-red-50 text-red-600">
+            <p>Sidebar unavailable. Please refresh the page.</p>
+          </div>
+        }
+      >
+        <Sidebar className="hidden md:block" />
+      </ErrorBoundaryWithFallback>
 
       {/* Main Content */}
       <main
@@ -92,16 +110,26 @@ export function AppLayout({ children, className }: AppLayoutProps) {
           className,
         )}
       >
-        {children}
+        <ErrorBoundaryWithFallback>
+          {children}
+        </ErrorBoundaryWithFallback>
       </main>
 
       {/* Enhanced Audio Player */}
       <section id="music-player" aria-label="Music player controls">
-        <CompleteAudioPlayer />
+        <PlayerErrorBoundary>
+          <CompleteAudioPlayer />
+        </PlayerErrorBoundary>
       </section>
 
       {/* Share Modal */}
-      <ShareModal />
+      <ErrorBoundaryWithFallback
+        fallback={
+          <div className="sr-only">Share modal unavailable</div>
+        }
+      >
+        <ShareModal />
+      </ErrorBoundaryWithFallback>
     </div>
   );
 }
