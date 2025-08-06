@@ -1,64 +1,38 @@
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 import mockDatabase from "@/data/mock-music-database.json";
 import type { SearchResults, SearchFilters } from "@/types";
-import { sanitizeSearchQuery } from '@/lib/security/sanitization';
-import { handleApiError } from '@/lib/api-error-handler';
+import { 
+  createSuccessResponse, 
+  getRequestPath 
+} from '@/lib/api/error-responses';
+import { 
+  validateQueryParams, 
+  searchParamsSchema 
+} from '@/lib/api/validate-request';
+import { withStandardMiddleware } from '@/lib/api/middleware';
 
-// Validation schema for search parameters with sanitization
-const searchParamsSchema = z.object({
-  q: z.string().min(1, "Search query is required").max(100).transform(sanitizeSearchQuery),
-  type: z.enum(["all", "track", "artist", "album", "playlist"]).optional().default("all"),
-  genre: z.string().max(50).optional(),
-  year: z.coerce.number().min(1900).max(new Date().getFullYear() + 1).optional(),
-  explicit: z.coerce.boolean().optional(),
-  sortBy: z.enum(["relevance", "popularity", "release_date", "alphabetical"]).optional().default("relevance"),
-  sortOrder: z.enum(["asc", "desc"]).optional().default("desc"),
-  limit: z.coerce.number().min(1).max(50).optional().default(20),
-  offset: z.coerce.number().min(0).max(10000).optional().default(0),
-});
-
-export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    
-    // Validate and sanitize search parameters
-    const validatedParams = searchParamsSchema.parse({
-      q: searchParams.get("q"),
-      type: searchParams.get("type"),
-      genre: searchParams.get("genre"),
-      year: searchParams.get("year"),
-      explicit: searchParams.get("explicit"),
-      sortBy: searchParams.get("sortBy"),
-      sortOrder: searchParams.get("sortOrder"),
-      limit: searchParams.get("limit"),
-      offset: searchParams.get("offset"),
-    });
-
-    const { q: query, limit, offset, ...filters } = validatedParams;
-    
-    // Perform search
-    const results = await performSearch(query, filters, limit, offset);
-    
-    return NextResponse.json({
-      success: true,
-      data: results,
-      pagination: {
-        limit,
-        offset,
-        total: results.totalResults,
-        hasNext: offset + limit < results.totalResults,
-        hasPrev: offset > 0,
-      },
-    });
-  } catch (error) {
-    console.error('Search API error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+async function searchHandler(request: NextRequest): Promise<NextResponse> {
+  const { searchParams } = new URL(request.url);
+  
+  // Validate and sanitize search parameters
+  const validation = validateQueryParams(searchParamsSchema, searchParams, request);
+  if ('error' in validation) {
+    return validation.error;
   }
+
+  const { q: query, limit, offset, ...filters } = validation.data;
+  
+  // Perform search
+  const results = await performSearch(query, filters, limit, offset);
+  
+  return createSuccessResponse(results, {
+    page: Math.floor(offset / limit) + 1,
+    limit,
+    total: results.totalResults,
+  });
 }
+
+export const GET = withStandardMiddleware(searchHandler);
 
 async function performSearch(
   query: string, 
