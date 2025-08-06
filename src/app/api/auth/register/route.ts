@@ -5,38 +5,38 @@ import { logger } from '@/lib/logger';
 import { withLogging, auditMiddleware, performanceMiddleware } from '@/middleware/logging';
 import { BruteForceDetector, SecurityLogger, SecurityEventType } from '@/lib/security/monitoring';
 import { sanitizeObject } from '@/lib/security/sanitization';
-import { handleApiError, ApiErrors } from '@/lib/api-error-handler';
+import { 
+  createSuccessResponse, 
+  rateLimited, 
+  getRequestPath 
+} from '@/lib/api/error-responses';
+import { 
+  validateRequest, 
+  registerSchema 
+} from '@/lib/api/validate-request';
+import { withStandardMiddleware } from '@/lib/api/middleware';
 import { extractRequestMetadata } from '@/lib/security/monitoring';
 
-async function registerHandler(request: NextRequest) {
+async function registerHandler(request: NextRequest): Promise<NextResponse> {
   // Get request ID from headers (set by middleware)
   const requestId = request.headers.get('x-request-id') || crypto.randomUUID();
   const requestLogger = logger.child({ requestId, operation: 'user.register' });
   const metadata = extractRequestMetadata(request);
+  const path = getRequestPath(request);
 
   try {
     requestLogger.info('Processing user registration');
     const rawBody = await request.json();
     const body = sanitizeObject(rawBody);
 
-    // Validate request body
-    const validatedFields = registrationSchema.safeParse(body);
-
-    if (!validatedFields.success) {
-      requestLogger.warn('Registration validation failed', {
-        errors: validatedFields.error.flatten().fieldErrors
-      });
-      return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Validation failed',
-          errors: validatedFields.error.flatten().fieldErrors
-        },
-        { status: 400 }
-      );
+    // Validate request body using standardized validation
+    const validation = validateRequest(registerSchema)(body, request);
+    if ('error' in validation) {
+      requestLogger.warn('Registration validation failed');
+      return validation.error;
     }
 
-    const { email, username, displayName, password } = validatedFields.data;
+    const { email, username, displayName, password } = validation.data;
 
     // Check for brute force attempts
     const bruteForceCheck = await BruteForceDetector.checkBruteForce(
@@ -51,7 +51,10 @@ async function registerHandler(request: NextRequest) {
         severity: 'high',
         details: { email: email.replace(/(.{2})(.*)(@.*)/, '$1***$3') },
       });
-      throw ApiErrors.rateLimitExceeded(15 * 60); // 15 minutes
+      return rateLimited('Too many registration attempts. Please try again later.', {
+        retryAfter: 15 * 60, // 15 minutes
+        blocked: true
+      }, path);
     }
 
     // Log registration attempt (without sensitive data)
@@ -92,15 +95,11 @@ async function registerHandler(request: NextRequest) {
       registrationMethod: 'email'
     });
 
-    return NextResponse.json({
-      success: true,
-      message: 'User created successfully',
-      data: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        displayName: user.displayName,
-      }
+    return createSuccessResponse({
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      displayName: user.displayName,
     });
 
   } catch (error) {
@@ -128,14 +127,16 @@ async function registerHandler(request: NextRequest) {
       },
     });
     
-    // Use centralized error handler
-    return handleApiError(error);
+    // Re-throw to be handled by middleware error handler
+    throw error;
   }
 }
 
-// Export the handler with logging, performance, and audit middleware
+// Export the handler with new middleware and existing logging
 export const POST = withLogging(
   performanceMiddleware('auth.register')(
-    auditMiddleware('user', 'create')(registerHandler)
+    auditMiddleware('user', 'create')(
+      withStandardMiddleware(registerHandler)
+    )
   )
 );
