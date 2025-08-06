@@ -1,56 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authDB } from '@/lib/auth/database';
 import { resetPasswordSchema } from '@/lib/auth/validation';
-import { ApiError } from '@/types/common';
+import { 
+  createSuccessResponse,
+  badRequest,
+  getRequestPath 
+} from '@/lib/api/error-responses';
+import { 
+  validateRequest 
+} from '@/lib/api/validate-request';
+import { withStandardMiddleware } from '@/lib/api/middleware';
 
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
+async function resetPasswordHandler(request: NextRequest): Promise<NextResponse> {
+  const body = await request.json();
+  const path = getRequestPath(request);
 
-    // Validate request body
-    const validatedFields = resetPasswordSchema.safeParse(body);
-
-    if (!validatedFields.success) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Validation failed',
-          errors: validatedFields.error.flatten().fieldErrors
-        },
-        { status: 400 }
-      );
-    }
-
-    const { token, password } = validatedFields.data;
-
-    // Reset password
-    const success = await authDB.resetPassword(token, password);
-
-    if (!success) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Invalid or expired reset token' 
-        },
-        { status: 400 }
-      );
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: 'Password has been reset successfully'
-    });
-
-  } catch (error) {
-    const apiError = error as ApiError;
-    console.error('Reset password error:', apiError);
-    
-    return NextResponse.json(
-      { 
-        success: false, 
-        message: 'An error occurred while resetting your password' 
-      },
-      { status: 500 }
-    );
+  // Validate request body
+  const validation = validateRequest(resetPasswordSchema)(body, request);
+  if ('error' in validation) {
+    return validation.error;
   }
+
+  const { token, password } = validation.data;
+
+  // Reset password
+  const success = await authDB.resetPassword(token, password);
+
+  if (!success) {
+    return badRequest('Invalid or expired reset token', undefined, path);
+  }
+
+  return createSuccessResponse({
+    message: 'Password has been reset successfully'
+  });
 }
+
+export const POST = withStandardMiddleware(resetPasswordHandler);

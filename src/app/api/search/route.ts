@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import mockDatabase from "@/data/mock-music-database.json";
 import type { SearchResults, SearchFilters } from "@/types";
-import { sanitizeSearchQuery } from '@/lib/security/sanitization';
 import { 
   createSuccessResponse, 
-  serverError, 
   getRequestPath 
 } from '@/lib/api/error-responses';
 import { 
@@ -15,7 +13,6 @@ import { withStandardMiddleware } from '@/lib/api/middleware';
 
 async function searchHandler(request: NextRequest): Promise<NextResponse> {
   const { searchParams } = new URL(request.url);
-  const path = getRequestPath(request);
   
   // Validate and sanitize search parameters
   const validation = validateQueryParams(searchParamsSchema, searchParams, request);
