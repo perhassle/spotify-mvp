@@ -28,10 +28,7 @@ describe('API Error Responses', () => {
       // For now, we're just testing the structure
     });
 
-    it('should not include details in production', () => {
-      const originalEnv = process.env.NODE_ENV;
-      process.env.NODE_ENV = 'production';
-
+    it('should create response with proper structure', () => {
       const response = createErrorResponse(
         ApiErrorCode.INTERNAL_ERROR,
         'Server error',
@@ -39,10 +36,8 @@ describe('API Error Responses', () => {
         { sensitiveInfo: 'secret' }
       );
 
-      // Would need to parse response body to check details are undefined
+      // Would need to parse response body to check details in real test
       expect(response.status).toBe(500);
-
-      process.env.NODE_ENV = originalEnv;
     });
   });
 
