@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { SearchPageClient } from "./search-page-client";
+import { ErrorBoundaryWithFallback } from "@/components/common/error-boundary-with-fallback";
 
 export const metadata: Metadata = {
   title: "Search - Spotify MVP",
@@ -25,9 +26,26 @@ export const metadata: Metadata = {
 
 export default function SearchPage() {
   return (
-    <Suspense fallback={<SearchPageSkeleton />}>
-      <SearchPageClient />
-    </Suspense>
+    <ErrorBoundaryWithFallback
+      fallback={
+        <div className="p-8">
+          <h2 className="text-2xl font-bold mb-4">Search unavailable</h2>
+          <p className="text-gray-600 mb-4">
+            There was an error loading the search functionality. Please try refreshing the page.
+          </p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="text-green-500 hover:text-green-400 underline"
+          >
+            Refresh page
+          </button>
+        </div>
+      }
+    >
+      <Suspense fallback={<SearchPageSkeleton />}>
+        <SearchPageClient />
+      </Suspense>
+    </ErrorBoundaryWithFallback>
   );
 }
 
