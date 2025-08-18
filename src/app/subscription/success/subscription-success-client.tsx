@@ -10,7 +10,7 @@ import { useAuthStore } from '@/stores/auth-store';
 export default function SubscriptionSuccessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user, updateUser } = useAuthStore();
+  const { user } = useAuthStore();
   const [isLoading, setIsLoading] = useState(true);
 
   const subscriptionId = searchParams.get('subscription');

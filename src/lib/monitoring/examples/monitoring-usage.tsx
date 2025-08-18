@@ -40,7 +40,7 @@ export function MonitoredMusicPlayer() {
   const { measureAsync } = usePerformanceMeasure('audio-load');
 
   // General monitoring utilities
-  const { logEvent, logError, logPerformance } = useMonitoring();
+  const { logEvent, logError, logPerformance: _logPerformance } = useMonitoring();
 
   // Track play button clicks with performance monitoring
   const handlePlay = trackInteraction(async () => {
@@ -48,7 +48,7 @@ export function MonitoredMusicPlayer() {
       logEvent('music-play-clicked', { trackId: 'abc123' });
       
       // Measure audio loading performance
-      const audioData = await measureAsync(async () => {
+      const _audioData = await measureAsync(async () => {
         // Simulate loading audio
         const response = await fetch('/api/tracks/abc123/stream');
         return response.blob();
@@ -84,7 +84,7 @@ export function MonitoredMusicPlayer() {
 
 // Example of data fetching with performance monitoring
 export function MonitoredTrackList() {
-  const { data, loading, error, refetch } = useDataFetchPerformance(
+  const { data: _data, loading, error, refetch } = useDataFetchPerformance(
     'fetch-tracks',
     async () => {
       const response = await fetch('/api/tracks');

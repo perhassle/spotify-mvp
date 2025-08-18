@@ -1,5 +1,5 @@
 import mockDatabase from '@/data/mock-music-database.json';
-import type { Album, Track, Artist } from '@/types';
+import type { Album, Track } from '@/types';
 
 export interface AlbumDetails extends Album {
   tracks: Track[];

@@ -43,10 +43,9 @@ async function getContentForMetadata(type: string, id: string) {
 
 export async function generateMetadata({
   params,
-  searchParams,
+  searchParams: _searchParams,
 }: SharePreviewPageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const resolvedSearchParams = await searchParams;
   const { type, id } = resolvedParams;
   const content = await getContentForMetadata(type, id);
 

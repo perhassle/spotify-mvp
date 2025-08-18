@@ -105,7 +105,7 @@ class ErrorMonitor {
   // Categorize error based on type and message
   private categorizeError(error: Error): ErrorCategory {
     const message = error.message.toLowerCase();
-    const stack = error.stack?.toLowerCase() || '';
+    const _stack = error.stack?.toLowerCase() || '';
 
     // Network errors
     if (

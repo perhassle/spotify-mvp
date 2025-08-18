@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { ToastContainer, Toast, ToastType } from '@/components/ui/toast';
+import { ToastContainer, Toast } from '@/components/ui/toast';
 
 interface ToastContextType {
   showToast: (options: Omit<Toast, 'id'>) => string;
