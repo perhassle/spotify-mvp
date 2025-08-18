@@ -5,8 +5,6 @@ import {
   PlaylistFolder, 
   PlaylistCreateRequest, 
   PlaylistUpdateRequest, 
-  Track, 
-  PlaylistTrack,
   PlaylistTemplate,
   PlaylistShareSettings 
 } from '@/types';
@@ -556,7 +554,7 @@ const usePlaylistStore = create<PlaylistState>()(
           return playlist?.totalDuration || 0;
         },
         
-        isPlaylistLiked: (id) => {
+        isPlaylistLiked: (_id) => {
           // This would typically check a liked playlists state
           // For now, return false as placeholder
           return false;

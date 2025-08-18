@@ -43,8 +43,8 @@ jest.mock('@/lib/logger', () => ({
 // Mock middleware
 jest.mock('@/middleware/logging', () => ({
   withLogging: (handler: any) => handler,
-  auditMiddleware: (entity: string, action: string) => (handler: any) => handler,
-  performanceMiddleware: (operation: string) => (handler: any) => handler,
+  auditMiddleware: (_entity: string, _action: string) => (handler: any) => handler,
+  performanceMiddleware: (_operation: string) => (handler: any) => handler,
 }));
 
 // Mock API error handler
