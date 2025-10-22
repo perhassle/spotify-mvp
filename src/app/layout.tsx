@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+// import { Inter } from "next/font/google";
 import "./globals.css";
 import { AppLayout } from "@/components/layout/app-layout";
 import { AuthProvider } from "@/lib/auth/provider";
@@ -12,11 +12,12 @@ import { MonitoringProvider } from "@/lib/monitoring/monitoring-provider";
 import { PerformanceMonitor } from "@/components/monitoring/performance-monitor";
 import { DevelopmentMonitoringToolbar } from "@/components/monitoring/monitoring-dashboard";
 
-const inter = Inter({ 
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: 'swap', // Optimize font loading
-});
+// Use system fonts instead of Google Fonts for offline compatibility
+// const inter = Inter({
+//   subsets: ["latin"],
+//   variable: "--font-inter",
+//   display: 'swap', // Optimize font loading
+// });
 
 export const metadata: Metadata = {
   // Basic metadata
@@ -192,7 +193,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://api.stripe.com" />
       </head>
-      <body className={`${inter.className} antialiased`}>
+      <body className="antialiased font-sans">
         <ErrorBoundary onError={typeof window !== 'undefined' ? handleErrorBoundaryError : undefined}>
           <ErrorProvider>
             <ToastProvider>
